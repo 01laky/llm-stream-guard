@@ -1,0 +1,27 @@
+flowchart LR
+	subgraph CHUNKS["TCP chunk split"]
+		C1["chunk 1<br/>…sk-proj-ab"]
+		C2["chunk 2<br/>cdefghij…"]
+	end
+
+	subgraph BUFFER["Byte guard state"]
+		LOOK["Rolling lookback buffer"]
+		SCAN["Pattern scan · UTF-8 safe"]
+		REDACT["Replace match → REDACTED"]
+	end
+
+	subgraph OUT["Downstream"]
+		SAFE(["No secret reassembly"])
+	end
+
+	C1 --> LOOK
+	C2 --> LOOK
+	LOOK --> SCAN --> REDACT --> SAFE
+
+	classDef chunk fill:#0f172a,stroke:#38bdf8,stroke-width:2px,color:#e0f2fe
+	classDef core fill:#042f2e,stroke:#2dd4bf,stroke-width:2px,color:#ccfbf1
+	classDef safe fill:#134e4a,stroke:#5eead4,stroke-width:2px,color:#f0fdfa
+
+	class C1,C2 chunk
+	class LOOK,SCAN,REDACT core
+	class SAFE safe

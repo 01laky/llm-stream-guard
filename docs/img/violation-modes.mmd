@@ -1,0 +1,33 @@
+flowchart LR
+	subgraph INPUT["Policy check"]
+		RULE["Rule transform"]
+		HIT{"Violation?"}
+	end
+
+	subgraph MODES["Violation mode"]
+		BLOCK["block<br/>safe substitute"]
+		WARN["warn<br/>transform + log"]
+		AUDIT["audit<br/>log only"]
+	end
+
+	subgraph OUT["Downstream"]
+		STREAM(["Safe stream"])
+		CB["onViolation()"]
+	end
+
+	RULE --> HIT
+	HIT -->|no| STREAM
+	HIT -->|yes + block| BLOCK --> STREAM
+	HIT -->|yes + warn| WARN --> STREAM
+	HIT -->|yes + audit| AUDIT --> STREAM
+	WARN --> CB
+	AUDIT --> CB
+	BLOCK --> CB
+
+	classDef rule fill:#431407,stroke:#fb923c,stroke-width:2px,color:#ffedd5
+	classDef mode fill:#1e1b4b,stroke:#818cf8,stroke-width:2px,color:#ede9fe
+	classDef out fill:#042f2e,stroke:#2dd4bf,stroke-width:2px,color:#ccfbf1
+
+	class RULE,HIT rule
+	class BLOCK,WARN,AUDIT mode
+	class STREAM,CB out

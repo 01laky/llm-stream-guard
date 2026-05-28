@@ -1,0 +1,30 @@
+flowchart LR
+	subgraph OPTIONAL["Optional · no hard dependency"]
+		ASM["llm-stream-assemble<br/>parse provider bytes"]
+	end
+
+	subgraph GUARD["llm-stream-guard"]
+		G["Policy + redaction"]
+	end
+
+	subgraph APPS["Your stack"]
+		PROXY["Proxy"]
+		AGENT["Agent runtime"]
+	end
+
+	PROVIDER(["LLM provider"]) --> PROXY
+	PROVIDER --> ASM
+	PROVIDER --> G
+	ASM --> G
+	G --> PROXY
+	G --> AGENT
+
+	classDef provider fill:#0f172a,stroke:#38bdf8,stroke-width:2px,color:#e0f2fe
+	classDef optional fill:#1e1b4b,stroke:#818cf8,stroke-width:2px,color:#ede9fe
+	classDef guard fill:#042f2e,stroke:#2dd4bf,stroke-width:2px,color:#ccfbf1
+	classDef app fill:#172554,stroke:#60a5fa,stroke-width:2px,color:#dbeafe
+
+	class PROVIDER provider
+	class ASM optional
+	class G guard
+	class PROXY,AGENT app

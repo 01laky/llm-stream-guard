@@ -1,0 +1,44 @@
+flowchart TB
+	subgraph UPSTREAM["Upstream LLM stream"]
+		direction LR
+		BYTES(["Raw bytes · SSE / opaque"])
+		PARSED(["Parsed events · any parser"])
+	end
+
+	subgraph GUARD["llm-stream-guard · zero runtime deps"]
+		direction TB
+		BYTE["createByteGuard()<br/>TransformStream"]
+		EVENT["guardEvents()<br/>GuardTransform pipeline"]
+		RULES["Rules · redactSecrets · allowTools · blockToolArgs · …"]
+		SAFE_BYTES(["Safe bytes"])
+		SAFE_EVENTS(["Safe GuardEvent stream"])
+		BYTES --> BYTE --> SAFE_BYTES
+		PARSED --> EVENT --> SAFE_EVENTS
+		RULES -.-> BYTE
+		RULES -.-> EVENT
+	end
+
+	subgraph APPS["Your application"]
+		direction LR
+		PROXY["Browser proxy"]
+		AGENT["Agent tool gate"]
+		LOGS["Audit / SIEM"]
+		UI["Chat UI"]
+	end
+
+	SAFE_BYTES --> PROXY
+	SAFE_EVENTS --> AGENT
+	SAFE_EVENTS --> UI
+	EVENT -. onViolation .-> LOGS
+
+	classDef upstream fill:#0f172a,stroke:#38bdf8,stroke-width:2px,color:#e0f2fe
+	classDef guard fill:#042f2e,stroke:#2dd4bf,stroke-width:2px,color:#ccfbf1
+	classDef io fill:#134e4a,stroke:#5eead4,stroke-width:2px,color:#f0fdfa
+	classDef rules fill:#431407,stroke:#fb923c,stroke-width:2px,color:#ffedd5
+	classDef app fill:#172554,stroke:#60a5fa,stroke-width:2px,color:#dbeafe
+
+	class BYTES,PARSED upstream
+	class BYTE,EVENT guard
+	class SAFE_BYTES,SAFE_EVENTS io
+	class RULES rules
+	class PROXY,AGENT,LOGS,UI app

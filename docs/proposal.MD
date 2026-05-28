@@ -32,9 +32,7 @@ Existing middleware (ShieldStack, CloakLLM, etc.) often filters **raw bytes befo
 Drop-in guard on upstream `response.body` without parsing provider SSE:
 
 ```ts
-response.body.pipeThrough(
-  createByteGuard({ redactSecrets: true, sanitizeErrors: true })
-);
+response.body.pipeThrough(createByteGuard({ redactSecrets: true, sanitizeErrors: true }));
 ```
 
 Use when the app forwards provider-shaped SSE (or opaque bytes) and wants secret redaction + error sanitization without an assembly layer.
@@ -55,12 +53,12 @@ Use when tool names and complete JSON arguments are available — especially **b
 
 **This is a fresh library, not an extraction from assemble.**
 
-| | llm-stream-assemble | llm-stream-guard |
-|---|---|---|
-| Question | *What did the provider send?* | *What may go downstream?* |
-| Input | Raw bytes / provider payloads | Raw bytes **or** parsed events |
-| Output | Unified `StreamEvent` (assembly) | Safe bytes / safe events |
-| Dependency | — | **None** on assemble |
+|            | llm-stream-assemble              | llm-stream-guard               |
+| ---------- | -------------------------------- | ------------------------------ |
+| Question   | _What did the provider send?_    | _What may go downstream?_      |
+| Input      | Raw bytes / provider payloads    | Raw bytes **or** parsed events |
+| Output     | Unified `StreamEvent` (assembly) | Safe bytes / safe events       |
+| Dependency | —                                | **None** on assemble           |
 
 Assemble solves **parsing and assembly** (SSE line splits, fragmented tool JSON, reasoning channels, provider adapters). Guard solves **policy and redaction** — a different domain, threat model, and test matrix.
 
@@ -94,13 +92,13 @@ Two npm packages, same author, zero runtime deps, MIT — an ecosystem, not a re
 
 Guard defines its own minimal event union — not `StreamEvent`, not provider types:
 
-| Type | Shape | Notes |
-|------|--------|-------|
-| `text` | `{ type, phase: "delta" \| "done", text }` | User-visible model text |
-| `tool_call` | `{ type, phase, id?, name?, args?, argsText? }` | Policy target for tools |
-| `reasoning` | `{ type, phase, text }` | Hidden reasoning channels |
-| `error` | `{ type, message, code? }` | Sanitized downstream |
-| `finish` | `{ type, reason? }` | Stream termination |
+| Type        | Shape                                           | Notes                     |
+| ----------- | ----------------------------------------------- | ------------------------- |
+| `text`      | `{ type, phase: "delta" \| "done", text }`      | User-visible model text   |
+| `tool_call` | `{ type, phase, id?, name?, args?, argsText? }` | Policy target for tools   |
+| `reasoning` | `{ type, phase, text }`                         | Hidden reasoning channels |
+| `error`     | `{ type, message, code? }`                      | Sanitized downstream      |
+| `finish`    | `{ type, reason? }`                             | Stream termination        |
 
 Intentionally excludes citations, logprobs, usage, metadata — guard does not need provenance events.
 
@@ -110,40 +108,42 @@ Apps using assemble (or others) map their event types to `GuardEvent` in a few l
 
 ## MVP Rules (v0.1)
 
-| Rule | Purpose |
-|------|---------|
-| `redactSecrets()` | API keys, bearer tokens, JWT-shaped strings, common PAT patterns |
-| `redactPII({ ... })` | Opt-in categories (email, phone, etc.) |
-| `allowTools([])` | Allowlist tool names |
-| `denyTools([])` | Blocklist tool names |
-| `blockToolArgs(pattern \| RegExp \| fn)` | Block dangerous argument content |
-| `maxToolArgsBytes(n)` | Cap streaming / final argument size |
-| `sanitizeErrors()` | Generic error messages for downstream |
-| `onViolation(callback)` | Audit / log / metrics hook |
+| Rule                                     | Purpose                                                          |
+| ---------------------------------------- | ---------------------------------------------------------------- |
+| `redactSecrets()`                        | API keys, bearer tokens, JWT-shaped strings, common PAT patterns |
+| `redactPII({ ... })`                     | Opt-in categories (email, phone, etc.)                           |
+| `allowTools([])`                         | Allowlist tool names                                             |
+| `denyTools([])`                          | Blocklist tool names                                             |
+| `blockToolArgs(pattern \| RegExp \| fn)` | Block dangerous argument content                                 |
+| `maxToolArgsBytes(n)`                    | Cap streaming / final argument size                              |
+| `sanitizeErrors()`                       | Generic error messages for downstream                            |
+| `onViolation(callback)`                  | Audit / log / metrics hook                                       |
 
 ### Composition
 
 ```ts
-guardEvents(events, ...transforms)
-pipeGuard(...transforms)           // byte-mode pipeline
-createByteGuard(options)           // TransformStream factory
+guardEvents(events, ...transforms);
+pipeGuard(...transforms); // byte-mode pipeline
+createByteGuard(options); // TransformStream factory
 ```
 
 ### Violation modes
 
-| Mode | Behavior |
-|------|----------|
+| Mode    | Behavior                                                                            |
+| ------- | ----------------------------------------------------------------------------------- |
 | `block` | Substitute safe content; optionally emit `finish` with `reason: "policy_violation"` |
-| `warn` | Transform + invoke `onViolation` |
-| `audit` | Pass through (or redact only) + invoke `onViolation` for logging |
+| `warn`  | Transform + invoke `onViolation`                                                    |
+| `audit` | Pass through (or redact only) + invoke `onViolation` for logging                    |
 
 Global config (recommended):
 
 ```ts
 guardEvents(events, {
-  mode: "block",
-  transforms: [redactSecrets(), allowTools(["search"])],
-  onViolation: (v) => { /* log */ },
+	mode: "block",
+	transforms: [redactSecrets(), allowTools(["search"])],
+	onViolation: (v) => {
+		/* log */
+	},
 });
 ```
 
@@ -153,13 +153,13 @@ guardEvents(events, {
 
 ### When to evaluate rules
 
-| Rule | When |
-|------|------|
-| `allowTools` / `denyTools` | On first known `name` (delta or done) |
-| `blockToolArgs` | **Primarily on `done`** when full JSON is valid |
-| `maxToolArgsBytes` | During delta (streaming limit) and on done |
-| `redactSecrets` / `redactPII` | All text/reasoning deltas and done |
-| `sanitizeErrors` | On `error` events (and byte-mode error payloads) |
+| Rule                          | When                                             |
+| ----------------------------- | ------------------------------------------------ |
+| `allowTools` / `denyTools`    | On first known `name` (delta or done)            |
+| `blockToolArgs`               | **Primarily on `done`** when full JSON is valid  |
+| `maxToolArgsBytes`            | During delta (streaming limit) and on done       |
+| `redactSecrets` / `redactPII` | All text/reasoning deltas and done               |
+| `sanitizeErrors`              | On `error` events (and byte-mode error payloads) |
 
 Evaluating `blockToolArgs` on incomplete JSON during delta phase causes false positives (e.g. fragment `"rm -"` inside a larger string).
 
@@ -193,7 +193,7 @@ Byte mode MVP should treat input as **opaque bytes** for secret scanning. Option
 PII in code/JSON streams has high false-positive risk. MVP should use **opt-in categories**:
 
 ```ts
-redactPII({ email: true, phone: false })
+redactPII({ email: true, phone: false });
 ```
 
 Default: conservative or all-off except secrets.
@@ -207,10 +207,7 @@ Redaction must be UTF-8 safe; test emoji and multi-byte characters split across 
 ## Transform API (Sketch)
 
 ```ts
-type GuardTransform = (
-  event: GuardEvent,
-  ctx: GuardContext,
-) => GuardEvent | GuardEvent[] | null;
+type GuardTransform = (event: GuardEvent, ctx: GuardContext) => GuardEvent | GuardEvent[] | null;
 // null = drop event
 ```
 
@@ -233,16 +230,16 @@ Byte-mode equivalent operates on `Uint8Array` chunks with shared `GuardContext` 
 
 ## Tech Stack
 
-| Item | Choice |
-|------|--------|
-| Language | TypeScript |
-| Build | tsup → ESM + CJS + declarations |
-| Runtime deps | **Zero** (CI: `verify:deps`) |
-| Runtimes | Node 18+, Bun, Deno, Cloudflare Workers (Web Streams) |
-| Tests | Vitest + SSE fixtures with chunk-boundary edge cases |
-| License | MIT |
-| npm | `llm-stream-guard` |
-| GitHub | `01laky/llm-stream-guard` |
+| Item         | Choice                                                |
+| ------------ | ----------------------------------------------------- |
+| Language     | TypeScript                                            |
+| Build        | tsup → ESM + CJS + declarations                       |
+| Runtime deps | **Zero** (CI: `verify:deps`)                          |
+| Runtimes     | Node 18+, Bun, Deno, Cloudflare Workers (Web Streams) |
+| Tests        | Vitest + SSE fixtures with chunk-boundary edge cases  |
+| License      | MIT                                                   |
+| npm          | `llm-stream-guard`                                    |
+| GitHub       | `01laky/llm-stream-guard`                             |
 
 Reuse **project culture** from assemble (fixture style, golden tests, CI patterns) — not code.
 
@@ -280,12 +277,12 @@ Follow assemble-style IDs for traceability, e.g. `LSG-C01` chunk split, `LSG-R01
 
 ## Competition / Positioning
 
-| | Enterprise middleware | llm-stream-guard |
-|---|---|---|
-| Scope | Often broad platform | Focused stream guard |
-| Parsing | Bytes-first common | Bytes **+** parsed events |
-| Tool policy | Varies | First-class |
-| Dependencies | Varies | Zero runtime |
+|              | Enterprise middleware | llm-stream-guard          |
+| ------------ | --------------------- | ------------------------- |
+| Scope        | Often broad platform  | Focused stream guard      |
+| Parsing      | Bytes-first common    | Bytes **+** parsed events |
+| Tool policy  | Varies                | First-class               |
+| Dependencies | Varies                | Zero runtime              |
 
 Marketing: **“TransformStream guard for LLM proxies and agent tool gates.”**
 
@@ -301,13 +298,13 @@ YAML policy (v0.2) waits until the transform pipeline API is stable — otherwis
 
 **Goal:** Ship a trustworthy zero-dep library for proxy byte pipelines and agent tool gates.
 
-| Area | Deliverables |
-|------|----------------|
-| **Core API** | `createByteGuard()`, `guardEvents()`, `pipeGuard()`, `GuardEvent` types, `GuardContext`, violation modes (`block` \| `warn` \| `audit`) |
-| **MVP rules** | `redactSecrets()`, `redactPII({ ... })`, `allowTools()`, `denyTools()`, `blockToolArgs()`, `maxToolArgsBytes()`, `sanitizeErrors()`, `onViolation()` |
-| **Byte mode hard problems** | Rolling lookback buffer, UTF-8-safe redaction, mid-chunk SSE split fixtures (**LSG-C***) |
-| **Event mode semantics** | Tool name policy on first known `name`; arg policy primarily on `done`; safe substitution on block |
-| **Quality bar** | Golden fixtures (**LSG-R***, **LSG-T***), idempotency tests, 1 MB smoke, `verify:deps` CI |
+| Area                        | Deliverables                                                                                                                                         |
+| --------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Core API**                | `createByteGuard()`, `guardEvents()`, `pipeGuard()`, `GuardEvent` types, `GuardContext`, violation modes (`block` \| `warn` \| `audit`)              |
+| **MVP rules**               | `redactSecrets()`, `redactPII({ ... })`, `allowTools()`, `denyTools()`, `blockToolArgs()`, `maxToolArgsBytes()`, `sanitizeErrors()`, `onViolation()` |
+| **Byte mode hard problems** | Rolling lookback buffer, UTF-8-safe redaction, mid-chunk SSE split fixtures (**LSG-C\***)                                                            |
+| **Event mode semantics**    | Tool name policy on first known `name`; arg policy primarily on `done`; safe substitution on block                                                   |
+| **Quality bar**             | Golden fixtures (**LSG-R\***, **LSG-T\***), idempotency tests, 1 MB smoke, `verify:deps` CI                                                          |
 
 **v0.1 stretch (if time — still in 0.1.x, not blocking release):**
 
@@ -323,12 +320,12 @@ YAML policy (v0.2) waits until the transform pipeline API is stable — otherwis
 
 **Goal:** Teams configure guard once in YAML/JSON and run the same policy in app code and offline scans.
 
-| Area | Deliverables |
-|------|----------------|
-| **Policy file** | Versioned schema: rules list, global `mode`, per-rule overrides, tool allowlists |
-| **CLI** | `llm-stream-guard scan <file|dir>` — lint SSE fixtures, sample logs, or captured streams against policy |
-| **Loaders** | `loadPolicy(path)` → runtime transforms; validate schema with actionable errors |
-| **Profiles** | Built-in presets: `proxy-strict`, `agent-gate`, `audit-only` (starting points, not magic) |
+| Area            | Deliverables                                                                              |
+| --------------- | ----------------------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
+| **Policy file** | Versioned schema: rules list, global `mode`, per-rule overrides, tool allowlists          |
+| **CLI**         | `llm-stream-guard scan <file                                                              | dir>` — lint SSE fixtures, sample logs, or captured streams against policy |
+| **Loaders**     | `loadPolicy(path)` → runtime transforms; validate schema with actionable errors           |
+| **Profiles**    | Built-in presets: `proxy-strict`, `agent-gate`, `audit-only` (starting points, not magic) |
 
 **Interesting additions:**
 
@@ -345,12 +342,12 @@ YAML policy (v0.2) waits until the transform pipeline API is stable — otherwis
 
 **Goal:** Lower adoption friction; show guard in real stacks without pulling frameworks into the package.
 
-| Area | Deliverables |
-|------|----------------|
-| **Cookbook** | Hono / Express / Cloudflare Workers proxy patterns (byte + event mode) |
-| **Event mappers** | Copy-paste recipes: assemble `StreamEvent` → `GuardEvent`, Vercel AI SDK chunks, LangChain callbacks |
-| **Agent gate pattern** | “Guard before execute” loop with violation handling and user-facing error copy |
-| **Examples repo folder** | Runnable minimal examples (no provider SDK deps in core) |
+| Area                     | Deliverables                                                                                         |
+| ------------------------ | ---------------------------------------------------------------------------------------------------- |
+| **Cookbook**             | Hono / Express / Cloudflare Workers proxy patterns (byte + event mode)                               |
+| **Event mappers**        | Copy-paste recipes: assemble `StreamEvent` → `GuardEvent`, Vercel AI SDK chunks, LangChain callbacks |
+| **Agent gate pattern**   | “Guard before execute” loop with violation handling and user-facing error copy                       |
+| **Examples repo folder** | Runnable minimal examples (no provider SDK deps in core)                                             |
 
 **Interesting additions:**
 
@@ -365,18 +362,18 @@ YAML policy (v0.2) waits until the transform pipeline API is stable — otherwis
 
 **Goal:** Catch unsafe tool definitions and policy drift before deploy — static analysis, not live stream middleware.
 
-| Area | Deliverables |
-|------|----------------|
-| **GitHub Action** | `llm-stream-guard/action@v1` — scan policy + tool manifests on PR |
-| **Static targets** | Tool JSON schemas in repo, OpenAPI `x-tool` blocks, MCP server tool lists, agent config YAML |
-| **PR annotations** | Fail or warn with file/line when tool allowlist and declared tools diverge |
-| **Pre-commit recipe** | Optional hook snippet in docs (policy validate + fixture smoke) |
+| Area                  | Deliverables                                                                                 |
+| --------------------- | -------------------------------------------------------------------------------------------- |
+| **GitHub Action**     | `llm-stream-guard/action@v1` — scan policy + tool manifests on PR                            |
+| **Static targets**    | Tool JSON schemas in repo, OpenAPI `x-tool` blocks, MCP server tool lists, agent config YAML |
+| **PR annotations**    | Fail or warn with file/line when tool allowlist and declared tools diverge                   |
+| **Pre-commit recipe** | Optional hook snippet in docs (policy validate + fixture smoke)                              |
 
 **Interesting additions:**
 
 - **Allowlist drift detection** — policy allows `search` but codebase registers `web_search` → flagged.
 - **Dangerous arg pattern catalog** — bundled ruleset for shell injection, `curl | sh`, base64-encoded payloads in args (scan static tool examples/docs).
-- **Fixture gate in CI** — run golden **LSG-*** fixtures against pinned policy in Action (regression safety net).
+- **Fixture gate in CI** — run golden **LSG-\*** fixtures against pinned policy in Action (regression safety net).
 - **SARIF preview** — early SARIF output for GitHub Advanced Security integration (full format stabilized in v1.0).
 
 ---
@@ -385,12 +382,12 @@ YAML policy (v0.2) waits until the transform pipeline API is stable — otherwis
 
 **Goal:** Semver promise, production reporting, and operability at scale.
 
-| Area | Deliverables |
-|------|----------------|
-| **API freeze** | Documented public surface; breaking changes only in 2.x |
-| **Violation reports** | JSON export + **SARIF 2.1.0** for CI and security dashboards |
-| **Aggregates** | Per-stream summary: violation counts by rule, first/last offset, tool names touched |
-| **Docs** | Full API reference, policy schema reference, threat model, performance notes |
+| Area                  | Deliverables                                                                        |
+| --------------------- | ----------------------------------------------------------------------------------- |
+| **API freeze**        | Documented public surface; breaking changes only in 2.x                             |
+| **Violation reports** | JSON export + **SARIF 2.1.0** for CI and security dashboards                        |
+| **Aggregates**        | Per-stream summary: violation counts by rule, first/last offset, tool names touched |
+| **Docs**              | Full API reference, policy schema reference, threat model, performance notes        |
 
 **Interesting additions:**
 
@@ -406,15 +403,15 @@ YAML policy (v0.2) waits until the transform pipeline API is stable — otherwis
 
 Features that fit the guard mission but need design time or clearer demand:
 
-| Feature | Why it’s interesting |
-|---------|----------------------|
-| **`blockShellMetachars()`** | Opinionated preset for tool args targeting shell execution (`;`, `\|`, `$()`, backticks). |
-| **`rateLimitToolCalls(n)`** | Stop runaway agent loops invoking tools too fast in one stream. |
-| **`allowRegexToolNames()`** | Allow `read_*` tools without enumerating every variant. |
-| **`redactStructuredFields()`** | Redact JSON keys by name in tool args (`password`, `apiKey`) even when values aren’t secret-shaped. |
-| **`syncPolicyRemote()`** | Pull signed policy from URL (enterprise); optional, likely separate package to keep core zero-dep. |
-| **`@llm-stream-guard/recipes` subpath** | Optional published mappers if docs-only recipes aren’t enough — only if demand is clear. |
-| **WebSocket binary mode** | Same byte guard on non-SSE streaming transports (Realtime APIs). |
+| Feature                                 | Why it’s interesting                                                                                |
+| --------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| **`blockShellMetachars()`**             | Opinionated preset for tool args targeting shell execution (`;`, `\|`, `$()`, backticks).           |
+| **`rateLimitToolCalls(n)`**             | Stop runaway agent loops invoking tools too fast in one stream.                                     |
+| **`allowRegexToolNames()`**             | Allow `read_*` tools without enumerating every variant.                                             |
+| **`redactStructuredFields()`**          | Redact JSON keys by name in tool args (`password`, `apiKey`) even when values aren’t secret-shaped. |
+| **`syncPolicyRemote()`**                | Pull signed policy from URL (enterprise); optional, likely separate package to keep core zero-dep.  |
+| **`@llm-stream-guard/recipes` subpath** | Optional published mappers if docs-only recipes aren’t enough — only if demand is clear.            |
+| **WebSocket binary mode**               | Same byte guard on non-SSE streaming transports (Realtime APIs).                                    |
 
 Explicitly **not** on the roadmap: LLM-as-judge classification, autonomous tool execution, hosted guard SaaS, provider adapters (assemble’s job).
 
@@ -441,15 +438,15 @@ Explicitly **not** on the roadmap: LLM-as-judge classification, autonomous tool 
 import { createByteGuard } from "llm-stream-guard";
 
 return new Response(
-  upstream.body!.pipeThrough(
-    createByteGuard({
-      redactSecrets: true,
-      sanitizeErrors: true,
-      mode: "warn",
-      onViolation: (v) => logger.warn(v),
-    }),
-  ),
-  { headers: { "Content-Type": "text/event-stream" } },
+	upstream.body!.pipeThrough(
+		createByteGuard({
+			redactSecrets: true,
+			sanitizeErrors: true,
+			mode: "warn",
+			onViolation: (v) => logger.warn(v),
+		}),
+	),
+	{ headers: { "Content-Type": "text/event-stream" } },
 );
 ```
 
@@ -459,15 +456,15 @@ return new Response(
 import { guardEvents, allowTools, blockToolArgs, redactSecrets } from "llm-stream-guard";
 
 for await (const event of guardEvents(
-  parsedEvents,
-  { mode: "block" },
-  redactSecrets(),
-  allowTools(["search", "read_file"]),
-  blockToolArgs(/curl\s+.*\|\s*sh/),
+	parsedEvents,
+	{ mode: "block" },
+	redactSecrets(),
+	allowTools(["search", "read_file"]),
+	blockToolArgs(/curl\s+.*\|\s*sh/),
 )) {
-  if (event.type === "tool_call" && event.phase === "done") {
-    await executeTool(event);
-  }
+	if (event.type === "tool_call" && event.phase === "done") {
+		await executeTool(event);
+	}
 }
 ```
 
@@ -478,19 +475,19 @@ import { assembleStream, openaiChatAdapter } from "llm-stream-assemble";
 import { guardEvents, redactSecrets, sanitizeErrors } from "llm-stream-guard";
 
 function toGuardEvent(e: StreamEvent): GuardEvent | null {
-  // app-local mapper — not shipped in guard core
+	// app-local mapper — not shipped in guard core
 }
 
 const raw = assembleStream(body, openaiChatAdapter());
 const mapped = (async function* () {
-  for await (const e of raw) {
-    const g = toGuardEvent(e);
-    if (g) yield g;
-  }
+	for await (const e of raw) {
+		const g = toGuardEvent(e);
+		if (g) yield g;
+	}
 })();
 
 for await (const event of guardEvents(mapped, redactSecrets(), sanitizeErrors())) {
-  // safe events
+	// safe events
 }
 ```
 

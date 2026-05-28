@@ -1,0 +1,20 @@
+flowchart TD
+	START(["Where are you in the pipeline?"]) --> Q1{"Forwarding raw provider<br/>bytes to a browser?"}
+	Q1 -->|Yes| BYTE["Byte mode<br/>createByteGuard()"]
+	Q1 -->|No| Q2{"Have parsed tool_call<br/>with JSON args?"}
+	Q2 -->|Yes| EVENT["Event mode<br/>guardEvents() + tool policy"]
+	Q2 -->|No| Q3{"Only need secret redaction<br/>on opaque stream?"}
+	Q3 -->|Yes| BYTE
+	Q3 -->|No| PARSE["Parse first · assemble / AI SDK / custom<br/>then guardEvents()"]
+
+	BYTE --> NOTE1["Rolling buffer · mid-chunk redaction<br/>LSG-C fixtures"]
+	EVENT --> NOTE2["allowTools · blockToolArgs on done<br/>LSG-T fixtures"]
+	PARSE --> EVENT
+
+	classDef decision fill:#1e1b4b,stroke:#818cf8,stroke-width:2px,color:#ede9fe
+	classDef mode fill:#042f2e,stroke:#2dd4bf,stroke-width:2px,color:#ccfbf1
+	classDef note fill:#431407,stroke:#fb923c,stroke-width:2px,color:#ffedd5
+
+	class START,Q1,Q2,Q3 decision
+	class BYTE,EVENT,PARSE mode
+	class NOTE1,NOTE2 note
