@@ -1,6 +1,6 @@
 # FAQ
 
-**Status:** **0.0.1 scaffold** — passthrough API ships; rules and npm publish in later versions.
+**Status:** **0.1.1 scaffold** — passthrough API ships; rules and npm publish in later versions.
 
 ## General
 
@@ -14,11 +14,11 @@ No. Use **byte mode** on raw `response.body`, or map any parsed events to `Guard
 
 ### Is this on npm?
 
-Not yet — `"private": true` until first intentional release. Install from git or wait for **0.1.0+**.
+Not yet — `"private": true` until first intentional release. Install from git or wait for a published release.
 
-### What works in 0.0.1?
+### What works in 0.1.1?
 
-Passthrough `guardEvents()`, `createByteGuard()`, `pipeGuard()`, and `createGuardContext()` with full TypeScript types. Options like `redactSecrets: true` are accepted but **no-op** until **0.1.0** rule implementations land.
+Passthrough `guardEvents()`, `createByteGuard()`, `pipeGuard()`, and `createGuardContext()` with full TypeScript types. Options like `redactSecrets: true` are accepted but **no-op** until **0.2.0** rule implementations land.
 
 ## Modes
 

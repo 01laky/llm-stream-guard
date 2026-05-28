@@ -1,6 +1,6 @@
 {
 	"name": "llm-stream-guard",
-	"version": "0.0.1",
+	"version": "0.1.1",
 	"private": true,
 	"description": "Zero-dependency TypeScript security filter for LLM streams — redact secrets, enforce tool policy, byte and event modes.",
 	"license": "MIT",

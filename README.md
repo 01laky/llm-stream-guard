@@ -1,17 +1,17 @@
 # llm-stream-guard
 
-![core](https://img.shields.io/badge/core-0.0.1-orange)
+![core](https://img.shields.io/badge/core-0.1.1-orange)
 ![node](https://img.shields.io/badge/node-%3E%3D18-339933)
 ![runtime deps](https://img.shields.io/badge/runtime_deps-0-brightgreen)
 ![tests](https://img.shields.io/badge/tests-47_passing-brightgreen)
 [![ci](https://github.com/01laky/llm-stream-guard/actions/workflows/ci.yml/badge.svg)](https://github.com/01laky/llm-stream-guard/actions/workflows/ci.yml)
-![status](https://img.shields.io/badge/status-0.0.1_scaffold-orange)
+![status](https://img.shields.io/badge/status-0.1.1_scaffold-orange)
 
 **Security filter for LLM streams** — redact secrets and PII, enforce tool-call policy, sanitize errors. Works on raw bytes (`TransformStream`) and parsed event streams.
 
 > A standalone, zero-dependency TypeScript library for proxy and agent pipelines: byte mode for browser-facing SSE, event mode for tool gates before execution. **No dependency on [llm-stream-assemble](https://github.com/01laky/llm-stream-assemble).**
 
-**Status:** **0.0.1 scaffold** — passthrough `guardEvents()`, `createByteGuard()`, and `pipeGuard()` ship with full types and test harness; **guard rules land in 0.1.0**. Review [CHANGELOG.md](./CHANGELOG.md) before upgrades.
+**Status:** **0.1.1 scaffold** — passthrough `guardEvents()`, `createByteGuard()`, and `pipeGuard()` ship with full types and test harness; **guard rules land in 0.2.0**. Review [CHANGELOG.md](./CHANGELOG.md) before upgrades.
 
 ---
 
@@ -161,7 +161,7 @@ return new Response(
 );
 ```
 
-`redactSecrets` / `sanitizeErrors` flags are wired in options but **no-op until 0.1.0**.
+`redactSecrets` / `sanitizeErrors` flags are wired in options but **no-op until 0.2.0**.
 
 ### Agent (event mode)
 
@@ -175,7 +175,7 @@ for await (const event of guardEvents(parsedEvents, { mode: "block" })) {
 }
 ```
 
-Rule factories (`redactSecrets`, `allowTools`, `blockToolArgs`, …) ship in **0.1.0**.
+Rule factories (`redactSecrets`, `allowTools`, `blockToolArgs`, …) ship in **0.2.0**.
 
 ---
 
@@ -186,7 +186,7 @@ Pick byte vs event mode in ~30 seconds:
 Use the [modes diagram](#two-modes) above, or:
 
 - **Raw SSE to browser, no parser** → `createByteGuard()`
-- **Tool gate before execute** → `guardEvents()` + tool policy rules (0.1.0)
+- **Tool gate before execute** → `guardEvents()` + tool policy rules (0.2.0)
 - **Parse with assemble / AI SDK first** → map to `GuardEvent`, then `guardEvents()`
 
 ---
