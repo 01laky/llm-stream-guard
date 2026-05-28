@@ -71,30 +71,28 @@ if (pkg.private === true) {
 	ok("package.json is not private");
 }
 
-if (!readme.includes(`**${version} scaffold**`)) {
-	errors.push(`README.md missing **${version} scaffold** status line`);
+if (!readme.includes(`Stable \`${version}\``)) {
+	errors.push(`README.md missing Stable \`${version}\` status line`);
 } else {
-	ok(`README scaffold status references ${version}`);
+	ok(`README stable status references ${version}`);
 }
 
-const scaffoldStatusBadge = `status-${version}_scaffold-orange`;
-if (!readme.includes(scaffoldStatusBadge)) {
-	errors.push(`README.md missing ${scaffoldStatusBadge} status badge`);
+const stableStatusBadge = `status-stable_${version}-brightgreen`;
+if (!readme.includes(stableStatusBadge)) {
+	errors.push(`README.md missing ${stableStatusBadge} status badge`);
 } else {
-	ok(`README status badge is scaffold orange (${scaffoldStatusBadge})`);
+	ok(`README status badge is stable green (${stableStatusBadge})`);
 }
 
-const coreBadge = `core-${version}-orange`;
+const coreBadge = `core-${version}-brightgreen`;
 if (!readme.includes(coreBadge)) {
 	errors.push(`README.md missing ${coreBadge} core badge`);
 } else {
 	ok(`README core badge matches version (${coreBadge})`);
 }
 
-if (/status-stable_|status-beta_|status-pre_|_rc-orange|_beta-yellow/i.test(readme)) {
-	errors.push(
-		"README.md has stable/beta/pre-release status badge — use scaffold orange until stable",
-	);
+if (/status-0\.|_scaffold-orange|core-0\.[0-9]+\.x-orange/i.test(readme)) {
+	errors.push("README.md has scaffold-orange badges — use stable green for 0.2.0+");
 }
 
 if (!changelog.includes(`## [${version}]`)) {

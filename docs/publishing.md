@@ -21,25 +21,17 @@
    - Optional draft: `.local-playground/release-X.Y.Z.md` (gitignored).
 5. Verify `npm view llm-stream-guard version`.
 
-## Badge conventions (Phase 0 scaffold)
-
-Until guard rules ship and the API is stable:
+## Badge conventions (stable 0.2.0+)
 
 | Badge      | Pattern                                          |
 | ---------- | ------------------------------------------------ |
-| **core**   | `core-X.Y.Z-orange`                              |
-| **status** | `status-X.Y.Z_scaffold-orange`                   |
+| **core**   | `core-X.Y.Z-brightgreen`                         |
+| **status** | `status-stable_X.Y.Z-brightgreen`                |
 | **tests**  | `tests-N_passing-brightgreen` (N = vitest count) |
 
-README status line: **`X.Y.Z scaffold`**.
+README status line: **Stable `X.Y.Z`**.
 
-When moving to stable (post–0.2.0 rules MVP), switch to green badges like assemble:
-
-- `core-X.Y.Z-brightgreen`
-- `status-stable_X.Y.Z-brightgreen`
-- README status: **Stable `X.Y.Z`**
-
-Update `scripts/release-prep.mjs` gates when that happens.
+`scripts/release-prep.mjs` rejects scaffold-orange badges for stable releases.
 
 ## npm provenance (optional, later)
 

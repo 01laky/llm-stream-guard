@@ -6,7 +6,7 @@ flowchart LR
 
 	subgraph BUFFER["Byte guard state"]
 		LOOK["Rolling lookback buffer"]
-		SCAN["Pattern scan · UTF-8 safe"]
+		SCAN["Pattern scan · byte-preserving"]
 		REDACT["Replace match → REDACTED"]
 	end
 

@@ -44,9 +44,10 @@ git config core.hooksPath   # should print: .githooks
 | **LSG-C**   | Chunk-boundary byte streams   |
 | **LSG-R**   | Redaction golden fixtures     |
 | **LSG-T**   | Tool policy tests             |
+| **LSG-P**   | Performance smoke (local)     |
 | **LSG-REL** | Release / publish readiness   |
 
-Document new IDs in test headers; maintain `test/fixtures/REGISTRY.md` from Phase 1 onward.
+Document new IDs in test headers; maintain `test/fixtures/REGISTRY.md`; run `pnpm fixtures:audit-registry` to enforce parity. Rule edge cases: **LSG-E18–E38** in `test/edge-cases-rules.test.ts`.
 
 ## Releases
 

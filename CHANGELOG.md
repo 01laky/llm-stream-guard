@@ -5,6 +5,27 @@ Format based on [Keep a Changelog](https://keepachangelog.com/); versioning foll
 
 ## [Unreleased]
 
+## [0.2.0]
+
+### Added
+
+- **MVP rule factories** — `redactSecrets()`, `redactPII()`, `allowTools()`, `denyTools()`, `blockToolArgs()`, `maxToolArgsBytes()`, `sanitizeErrors()` with exported options types (`RedactSecretsOptions`, `RedactPIIOptions`, `SanitizeErrorsOptions`, `BlockToolArgsMatcher`).
+- **Byte redaction** — rolling lookback buffer (128 B), latin1-preserving scan, `flush` handler; `createByteGuard({ redactSecrets, sanitizeErrors })` active.
+- **Event pipeline** — `guardEvents()` executes transforms when provided; composable `GuardTransform` ordering documented.
+- **Tests** — **LSG-C01–C14** chunk boundary + cross-mode parity + byte audit; **LSG-R01–R16** redaction; **LSG-T01–T12** tool policy + ordering; **LSG-P01–P03** performance smoke; **LSG-E18–E38** rule edge cases (patterns, modes, fuzz, stress); **355** tests total.
+- **Fixtures** — `test/fixtures/` + `REGISTRY.md`; `pnpm fixtures:check-redaction`, `pnpm fixtures:audit-registry`; `pnpm bench:smoke`.
+- **Docs** — README stable quickstart; [`docs/integration-cookbook.md`](./docs/integration-cookbook.md) mapper recipe; updated testing strategy, FAQ, comparison, diagrams.
+
+### Changed
+
+- **Breaking** — `guardEvents(..., transform)` now invokes transforms; `createByteGuard({ redactSecrets: true })` mutates bytes.
+- **release-prep** — stable green badge gates for 0.2.0+.
+
+### Notes
+
+- **Secrets always redact** in all violation modes (including `audit`); tool policy `audit` passes events through with `onViolation`.
+- YAML policy + CLI → repo **0.3.0** (proposal v0.2).
+
 ## [0.1.2]
 
 ### Added

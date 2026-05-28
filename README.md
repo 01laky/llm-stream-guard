@@ -1,17 +1,17 @@
 # llm-stream-guard
 
-![core](https://img.shields.io/badge/core-0.1.2-orange)
+![core](https://img.shields.io/badge/core-0.2.0-brightgreen)
 ![node](https://img.shields.io/badge/node-%3E%3D18-339933)
 ![runtime deps](https://img.shields.io/badge/runtime_deps-0-brightgreen)
-![tests](https://img.shields.io/badge/tests-162_passing-brightgreen)
+![tests](https://img.shields.io/badge/tests-355_passing-brightgreen)
 [![ci](https://github.com/01laky/llm-stream-guard/actions/workflows/ci.yml/badge.svg)](https://github.com/01laky/llm-stream-guard/actions/workflows/ci.yml)
-![status](https://img.shields.io/badge/status-0.1.2_scaffold-orange)
+![status](https://img.shields.io/badge/status-stable_0.2.0-brightgreen)
 
 **Security filter for LLM streams** — redact secrets and PII, enforce tool-call policy, sanitize errors. Works on raw bytes (`TransformStream`) and parsed event streams.
 
 > A standalone, zero-dependency TypeScript library for proxy and agent pipelines: byte mode for browser-facing SSE, event mode for tool gates before execution. **No dependency on [llm-stream-assemble](https://github.com/01laky/llm-stream-assemble).**
 
-**Status:** **0.1.2 scaffold** — passthrough `guardEvents()`, `createByteGuard()`, and `pipeGuard()` ship with full types and test harness; **guard rules land in 0.2.0**. Review [CHANGELOG.md](./CHANGELOG.md) before upgrades.
+**Status:** Stable `0.2.0` — MVP guard rules ship (secret redaction, tool policy, error sanitization). Review [CHANGELOG.md](./CHANGELOG.md) before upgrades.
 
 ---
 
@@ -46,7 +46,7 @@ Many filters scan **raw bytes only** and miss precise policy on assembled `tool_
 
 ![Chunk redaction: secrets split across TCP reads](https://raw.githubusercontent.com/01laky/llm-stream-guard/main/docs/img/chunk-redaction.svg)
 
-- **Mid-chunk splits** — secrets split across TCP reads need a rolling buffer, not per-chunk regex (**LSG-C** fixtures in v0.1).
+- **Mid-chunk splits** — secrets split across TCP reads use a rolling buffer + prefix holdback (**LSG-C**).
 - **Tool policy timing** — evaluate names early; validate args on `done` when JSON is complete (**LSG-T**).
 - **Violation modes** — `block`, `warn`, or `audit` with `onViolation` for SIEM-friendly logs.
 
@@ -105,11 +105,11 @@ Full spec: [`docs/proposal.MD`](./docs/proposal.MD#guardevent-model-independent)
 
 ![block / warn / audit](https://raw.githubusercontent.com/01laky/llm-stream-guard/main/docs/img/violation-modes.svg)
 
-| Mode    | Behavior                                      |
-| ------- | --------------------------------------------- |
-| `block` | Safe substitute + optional terminal `finish`  |
-| `warn`  | Transform + `onViolation`                     |
-| `audit` | Pass through (or redact-only) + `onViolation` |
+| Mode    | Secrets / PII                          | Tool policy                                 |
+| ------- | -------------------------------------- | ------------------------------------------- |
+| `block` | Always redact                          | Safe substitute + `policy_violation` finish |
+| `warn`  | Always redact                          | Block tool + `onViolation`                  |
+| `audit` | Always redact + `onViolation` on match | Pass tool through + `onViolation`           |
 
 ---
 
@@ -136,12 +136,12 @@ pnpm install
 pnpm verify
 ```
 
-Then pipe bytes through the identity byte guard (Phase 0 passthrough):
+Then pipe bytes through the byte guard:
 
 ```ts
 import { createByteGuard } from "llm-stream-guard";
 
-const guarded = sourceStream.pipeThrough(createByteGuard({ mode: "warn" }));
+const guarded = sourceStream.pipeThrough(createByteGuard({ redactSecrets: true, mode: "warn" }));
 ```
 
 ---
@@ -161,21 +161,42 @@ return new Response(
 );
 ```
 
-`redactSecrets` / `sanitizeErrors` flags are wired in options but **no-op until 0.2.0**.
+`redactSecrets` and `sanitizeErrors` are active on `createByteGuard()` options.
 
 ### Agent (event mode)
 
 ```ts
-import { guardEvents } from "llm-stream-guard";
+import {
+	allowTools,
+	blockToolArgs,
+	guardEvents,
+	redactSecrets,
+	sanitizeErrors,
+} from "llm-stream-guard";
 
-for await (const event of guardEvents(parsedEvents, { mode: "block" })) {
+for await (const event of guardEvents(
+	parsedEvents,
+	{ mode: "block", onViolation: (v) => console.warn(v.rule, v.message) },
+	redactSecrets(),
+	allowTools(["search", "read_file"]),
+	blockToolArgs(/rm\s+-rf/),
+	sanitizeErrors(),
+)) {
 	if (event.type === "tool_call" && event.phase === "done") {
 		await executeTool(event);
 	}
 }
 ```
 
-Rule factories (`redactSecrets`, `allowTools`, `blockToolArgs`, …) ship in **0.2.0**.
+### Transform ordering
+
+Recommended pipeline:
+
+```text
+redactSecrets() → redactPII()? → allowTools/denyTools → blockToolArgs → maxToolArgsBytes → sanitizeErrors()
+```
+
+Reversing order is explicit — see [`docs/integration-cookbook.md`](./docs/integration-cookbook.md).
 
 ---
 
@@ -186,7 +207,7 @@ Pick byte vs event mode in ~30 seconds:
 Use the [modes diagram](#two-modes) above, or:
 
 - **Raw SSE to browser, no parser** → `createByteGuard()`
-- **Tool gate before execute** → `guardEvents()` + tool policy rules (0.2.0)
+- **Tool gate before execute** → `guardEvents()` + rule factories
 - **Parse with assemble / AI SDK first** → map to `GuardEvent`, then `guardEvents()`
 
 ---
@@ -198,7 +219,7 @@ Use the [modes diagram](#two-modes) above, or:
 - [Publishing checklist](./docs/publishing.md) _(maintainers)_
 - [Architecture diagrams](./docs/img/README.md)
 - [How this compares](./docs/comparison.md)
-- [Integration cookbook](./docs/integration-cookbook.md) _(v0.3 — planned)_
+- [Integration cookbook](./docs/integration-cookbook.md)
 - [FAQ](./docs/faq.md)
 - [Contributing](./CONTRIBUTING.md)
 
@@ -239,14 +260,15 @@ pnpm install
 pnpm verify
 ```
 
-| Command               | Description                                         |
-| --------------------- | --------------------------------------------------- |
-| `pnpm verify`         | format + typecheck + build + test + smoke:package   |
-| `pnpm verify:deps`    | fail if runtime dependencies are added              |
-| `pnpm release:prep`   | pre-tag checks (version, CHANGELOG, dist, npm pack) |
-| `pnpm diagrams:build` | regenerate README SVGs from Mermaid sources         |
-| `pnpm test`           | Vitest (LSG-S, LSG-B, LSG-E, LSG-REL)               |
-| `pnpm build`          | tsup → ESM + CJS + declarations                     |
+| Command               | Description                                          |
+| --------------------- | ---------------------------------------------------- |
+| `pnpm verify`         | format + typecheck + build + test + fixtures + smoke |
+| `pnpm verify:deps`    | fail if runtime dependencies are added               |
+| `pnpm release:prep`   | pre-tag checks (version, CHANGELOG, dist, npm pack)  |
+| `pnpm diagrams:build` | regenerate README SVGs from Mermaid sources          |
+| `pnpm test`           | Vitest (LSG-S/B/E/C/R/T/P, LSG-REL)                  |
+| `pnpm bench:smoke`    | local byte/event timing (informational)              |
+| `pnpm build`          | tsup → ESM + CJS + declarations                      |
 
 ---
 

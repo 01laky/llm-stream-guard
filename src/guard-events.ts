@@ -1,5 +1,5 @@
-import { applyGuardTransforms } from "./apply-guard-transforms.js";
 import { createGuardContext } from "./create-guard-context.js";
+import { applyGuardTransforms } from "./apply-guard-transforms.js";
 import type { GuardEvent, GuardEventsConfig, GuardTransform } from "./types.js";
 
 function isGuardEventsConfig(
@@ -27,7 +27,7 @@ function resolveGuardEventsArgs(
 	return { config: undefined, transforms: extraTransforms };
 }
 
-/** Guard parsed event streams. Phase 0: passthrough — transforms wired but not executed. */
+/** Guard parsed event streams with composable rule transforms. */
 export async function* guardEvents(
 	source: AsyncIterable<GuardEvent>,
 	configOrTransform?: GuardEventsConfig | GuardTransform,
@@ -35,10 +35,10 @@ export async function* guardEvents(
 ): AsyncGenerator<GuardEvent> {
 	const { config, transforms } = resolveGuardEventsArgs(configOrTransform, extraTransforms);
 	const ctx = createGuardContext(config);
+	const execute = transforms.length > 0;
 
 	for await (const event of source) {
-		// Phase 1: flip executeTransforms to true
-		for (const out of applyGuardTransforms(event, ctx, transforms, false)) {
+		for (const out of applyGuardTransforms(event, ctx, transforms, execute)) {
 			yield out;
 		}
 	}

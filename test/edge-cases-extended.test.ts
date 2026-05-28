@@ -35,30 +35,36 @@ async function expectBytePassthrough(payload: Uint8Array, chunks: Uint8Array[]):
 	expect(bytesEqual(out, payload)).toBe(true);
 }
 
-describe("LSG-E08: Phase 0 transform non-execution", () => {
-	it("guardEvents never calls transforms (config.transforms)", async () => {
+describe("LSG-E08: transform execution", () => {
+	it("guardEvents calls transforms when provided (config.transforms)", async () => {
 		let calls = 0;
 		const trap: GuardTransform = (event) => {
 			calls++;
-			return null;
+			return event;
 		};
 		const event: GuardEvent = { type: "text", phase: "delta", text: "x" };
 		const out = await collectEvents(
 			guardEvents(eventsFrom([event]), { mode: "block", transforms: [trap] }),
 		);
-		expect(calls).toBe(0);
+		expect(calls).toBe(1);
 		expect(out).toEqual([event]);
 	});
 
-	it("guardEvents never calls spread transform overload", async () => {
+	it("guardEvents calls spread transform overload", async () => {
 		let calls = 0;
-		const trap: GuardTransform = () => {
+		const trap: GuardTransform = (event) => {
 			calls++;
-			return null;
+			return event;
 		};
 		const event: GuardEvent = { type: "finish", reason: "stop" };
 		const out = await collectEvents(guardEvents(eventsFrom([event]), trap, trap));
-		expect(calls).toBe(0);
+		expect(calls).toBe(2);
+		expect(out).toEqual([event]);
+	});
+
+	it("guardEvents passthrough when no transforms", async () => {
+		const event: GuardEvent = { type: "text", phase: "delta", text: "x" };
+		const out = await collectEvents(guardEvents(eventsFrom([event])));
 		expect(out).toEqual([event]);
 	});
 
@@ -332,14 +338,16 @@ describe("LSG-E13: createByteGuard split matrices", () => {
 		expect(bytesEqual(await collectBytes(stream), payload)).toBe(true);
 	});
 
-	it("accepts byte options without applying redaction (Phase 0)", async () => {
-		const secret = utf8("Authorization: Bearer sk-secret-xyz");
+	it("redacts secrets when redactSecrets option is enabled", async () => {
+		const secret = "sk-secret-1234567890";
+		const payload = utf8(`Authorization: Bearer ${secret}`);
 		const out = await collectBytes(
-			readableFromChunks([secret]).pipeThrough(
+			readableFromChunks([payload]).pipeThrough(
 				createByteGuard({ redactSecrets: true, sanitizeErrors: true, mode: "block" }),
 			),
 		);
-		expect(bytesEqual(out, secret)).toBe(true);
+		expect(utf8String(out)).not.toContain(secret);
+		expect(utf8String(out)).toContain("[REDACTED]");
 	});
 });
 
@@ -384,6 +392,7 @@ describe("LSG-E15: createGuardContext lifecycle", () => {
 		expect(ctx.violations).toHaveLength(0);
 		expect(getGuardContextState(ctx).byteLookback.length).toBe(0);
 		expect(getGuardContextState(ctx).pendingUtf8.length).toBe(0);
+		expect(getGuardContextState(ctx).toolArgsBytesById.size).toBe(0);
 	});
 
 	it("retains onViolation callback after reset", () => {

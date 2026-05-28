@@ -16,6 +16,7 @@ export function createGuardContextState(): GuardContextState {
 	return {
 		byteLookback: emptyBytes(),
 		pendingUtf8: emptyBytes(),
+		toolArgsBytesById: new Map(),
 	};
 }
 
@@ -52,6 +53,7 @@ export function createGuardContext(options: CreateGuardContextOptions = {}): Gua
 			if (state) {
 				state.byteLookback = emptyBytes();
 				state.pendingUtf8 = emptyBytes();
+				state.toolArgsBytesById.clear();
 			}
 		},
 	};

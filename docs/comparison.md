@@ -1,6 +1,6 @@
 # How llm-stream-guard compares
 
-**Status:** **0.1.2 scaffold** — passthrough API; guard rules in **0.2.0**. See [`proposal.MD`](./proposal.MD).
+**Status:** **Stable 0.2.0** — MVP rules ship. See [`proposal.MD`](./proposal.MD).
 
 ## At a glance
 

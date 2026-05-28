@@ -52,7 +52,7 @@ describe("LSG-S02: guardEvents passthrough", () => {
 		expect(out).toEqual([]);
 	});
 
-	it("accepts config object with transforms (ignored in Phase 0)", async () => {
+	it("accepts config object with transforms and executes identity transform", async () => {
 		const noop: GuardTransform = (event) => event;
 		const out = await collectEvents(
 			guardEvents(eventsFrom([{ type: "text", phase: "delta", text: "x" }]), {
@@ -64,7 +64,7 @@ describe("LSG-S02: guardEvents passthrough", () => {
 		expect(out).toEqual([{ type: "text", phase: "delta", text: "x" }]);
 	});
 
-	it("accepts spread transform overload (ignored in Phase 0)", async () => {
+	it("accepts spread transform overload and executes transforms", async () => {
 		const noop: GuardTransform = (event) => event;
 		const out = await collectEvents(
 			guardEvents(eventsFrom([{ type: "finish", reason: "stop" }]), noop, (e) => e),
@@ -212,6 +212,7 @@ describe("LSG-S07: Violation JSON contract + context reset", () => {
 		const state = getGuardContextState(ctx);
 		expect(state.byteLookback.length).toBe(0);
 		expect(state.pendingUtf8.length).toBe(0);
+		expect(state.toolArgsBytesById.size).toBe(0);
 	});
 });
 

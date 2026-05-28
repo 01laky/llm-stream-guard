@@ -50,6 +50,11 @@ describe("build-artifacts.test.ts", () => {
 			expect(text).toContain("createGuardContext");
 			expect(text).toContain("guardEvents");
 			expect(text).toContain("createByteGuard");
+			expect(text).toContain("RedactSecretsOptions");
+			expect(text).toContain("SanitizeErrorsOptions");
+			expect(text).toContain("BlockToolArgsMatcher");
+			expect(text).toContain("redactSecrets");
+			expect(text).toContain("allowTools");
 		});
 	});
 

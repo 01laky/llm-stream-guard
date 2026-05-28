@@ -1,76 +1,69 @@
 # Testing strategy
 
-**Status:** Phase 0 scaffold — passthrough pipeline tests with exhaustive edge-case wiring. Phase 1 adds golden redaction and tool policy fixtures.
+**Status:** Phase 1 shipped — MVP rules, golden fixtures, fixture audit scripts, **350+** tests.
 
 ## Test ID prefixes
 
-| Prefix      | Purpose                                                              |
-| ----------- | -------------------------------------------------------------------- |
-| **LSG-S**   | Scaffold smoke (build, deps, passthrough API)                        |
-| **LSG-B**   | Build artifacts and dist hygiene                                     |
-| **LSG-E**   | Extended edge-case wiring (chunk splits, pipeline order, SSE shapes) |
-| **LSG-C**   | Chunk-boundary byte redaction (Phase 1)                              |
-| **LSG-R**   | Redaction golden input → output (Phase 1)                            |
-| **LSG-T**   | Tool policy (Phase 1)                                                |
-| **LSG-REL** | Release / publish readiness                                          |
+| Prefix      | Purpose                                       |
+| ----------- | --------------------------------------------- |
+| **LSG-S**   | Scaffold smoke (build, deps, passthrough API) |
+| **LSG-B**   | Build artifacts and dist hygiene              |
+| **LSG-E**   | Extended edge-case wiring (LSG-E01–E38)       |
+| **LSG-C**   | Chunk-boundary byte redaction                 |
+| **LSG-R**   | Redaction golden input → output               |
+| **LSG-T**   | Tool policy + transform ordering              |
+| **LSG-P**   | Performance smoke (local timing, not CI gate) |
+| **LSG-REL** | Release / publish readiness                   |
 
-## Phase 0 coverage
-
-### Event mode (`guardEvents`)
-
-- Mixed `GuardEvent` union passthrough (text, tool_call, reasoning, error, finish).
-- Exhaustive variant matrix — empty text, unicode, nested args, optional fields (**LSG-E09**).
-- Empty source, config + spread transform overloads; transforms **not invoked** in Phase 0 (**LSG-E08**).
-- Stress: 2000 events, staggered async generator, source error propagation (**LSG-E10**).
-- `applyGuardTransforms` wiring with `executeTransforms: true`: identity, drop (`null`), expand (array), empty-array drop, cartesian multi-step (**LSG-E05**, **LSG-E11**).
-- Concurrent iterators use independent contexts (**LSG-E01**).
+## Phase 1 coverage
 
 ### Byte mode (`createByteGuard`)
 
-- Two-chunk passthrough (TCP split wiring).
-- Empty stream, 64-chunk stress, UTF-8 split mid-codepoint (bytes preserved; redaction in Phase 1).
-- Every-byte split matrix on multi-script UTF-8 payload (**LSG-E13**).
-- SSE-shaped payloads split at arbitrary byte indices (**LSG-E04**, **LSG-E07**).
-- Binary non-UTF-8, CRLF frames, 1-byte chunks, chained guards (**LSG-E13**).
-- Deterministic random split fuzz — 4 payloads × 5 seeds (**LSG-E14**).
-- 1 MiB passthrough with 1024-byte chunks (**LSG-E17**).
-- Independent `createByteGuard()` instances do not share state.
+- Rolling 128 B lookback + incomplete-prefix holdback; latin1-preserving scan; `flush` on stream close (**LSG-C01–C14**).
+- Cross-mode parity with event `redactSecrets()` (**LSG-C13**).
+- Byte `audit` mode: secrets redacted + `onViolation` fired (**LSG-C14**).
+- 1 MiB streams, random split fuzz, binary preservation (**LSG-C05, C09, C10, LSG-P**).
 
-### `pipeGuard` / context
+### Event mode (`guardEvents`)
 
-- Zero-arg identity, multi-transform compose, empty byte drop (**LSG-E12**).
-- `createGuardContext` mode defaults, reset idempotency, WeakMap byte slot isolation (**LSG-E06**, **LSG-E15**).
+- Rule factories: secrets, PII (opt-in), tool allow/deny, arg block, max args bytes, error sanitize (**LSG-R**, **LSG-T**).
+- Transform execution when provided; passthrough when no transforms (**LSG-E08**).
+- Idempotency — no `[REDACTED][REDACTED]` (**LSG-R13**).
+- `redactSecrets` no-op on `finish` / `error` (**LSG-R16**).
 
-### Package hygiene
+### Fixtures
 
-- `verify-zero-deps` — no runtime, optional, or peer dependencies.
-- `smoke-package` — npm pack contains only `dist/`, `LICENSE`, `README.md`.
-- **LSG-B** — `.d.ts` export surface, no leaked `../src` paths, ESM + CJS import smoke.
-- **LSG-REL** — `release:prep` gates, npm pack dry-run, scaffold badge alignment (**LSG-REL01–REL14**).
+- Golden pairs under `test/fixtures/` with `REGISTRY.md`.
+- `pnpm fixtures:check-redaction` — drift check in `pnpm verify`.
+- `pnpm fixtures:audit-registry` — every fixture file listed in REGISTRY.
 
 ## Test files
 
-| File                               | IDs              | Focus                         |
-| ---------------------------------- | ---------------- | ----------------------------- |
-| `test/scaffold.test.ts`            | LSG-S\*, E01–E02 | Core smoke + concurrency      |
-| `test/edge-cases.test.ts`          | LSG-E03–E07      | SSE splits, transform order   |
-| `test/edge-cases-extended.test.ts` | LSG-E08–E17      | Exhaustive Phase 0 edge cases |
-| `test/build-artifacts.test.ts`     | LSG-B\*          | dist hygiene                  |
-| `test/exports.test.ts`             | LSG-S06          | public export surface         |
-| `test/release-readiness.test.ts`   | LSG-REL\*        | publish prep gates            |
+| File                               | IDs              | Focus                        |
+| ---------------------------------- | ---------------- | ---------------------------- |
+| `test/chunk-redaction.test.ts`     | LSG-C\*          | Byte chunk redaction         |
+| `test/redact-secrets.test.ts`      | LSG-R\*          | Event redaction + violations |
+| `test/tool-policy.test.ts`         | LSG-T\*          | Tool policy                  |
+| `test/idempotency.test.ts`         | LSG-R13          | Double-pass redaction        |
+| `test/cross-mode-parity.test.ts`   | LSG-C13          | Event vs byte parity         |
+| `test/transform-ordering.test.ts`  | LSG-T08          | Transform order contract     |
+| `test/performance-smoke.test.ts`   | LSG-P\*          | 1 MiB smoke + bounded buffer |
+| `test/scaffold.test.ts`            | LSG-S\*, E01–E02 | Core smoke                   |
+| `test/edge-cases.test.ts`          | LSG-E03–E07      | SSE splits, transform order  |
+| `test/edge-cases-extended.test.ts` | LSG-E08–E17      | Extended edge cases          |
+| `test/edge-cases-rules.test.ts`    | LSG-E18–E38      | Rule edge cases + fuzz       |
+| `test/build-artifacts.test.ts`     | LSG-B\*          | dist hygiene                 |
+| `test/exports.test.ts`             | LSG-S06          | public export surface        |
+| `test/release-readiness.test.ts`   | LSG-REL\*        | publish prep gates           |
 
 ## Running tests
 
 ```bash
-pnpm verify    # format + typecheck + build + test + smoke:package
-pnpm test      # vitest only
+pnpm verify                      # format + typecheck + build + test + fixtures + smoke
+pnpm test                        # vitest only
+pnpm fixtures:check-redaction    # golden drift check
+pnpm fixtures:audit-registry     # REGISTRY.md parity
+pnpm bench:smoke                 # local MB/s timing (informational)
 ```
-
-## Phase 1 additions (planned)
-
-- Golden fixtures under `test/fixtures/` with `REGISTRY.md`.
-- Property-style random chunk split fuzz for secret patterns (**LSG-C**).
-- Idempotency: double `guardEvents` must not double-redact.
-- Redaction-specific every-byte splits on secret token boundaries.
 
 See [CONTRIBUTING.md](../CONTRIBUTING.md) and [proposal.MD](./proposal.MD#test-strategy).

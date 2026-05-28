@@ -1,6 +1,6 @@
 # FAQ
 
-**Status:** **0.1.2 scaffold** — passthrough API ships; npm publish-ready via [`docs/publishing.md`](./publishing.md).
+**Status:** **Stable 0.2.0** — MVP rules ship; npm publish via [`docs/publishing.md`](./publishing.md).
 
 ## General
 
@@ -20,9 +20,9 @@ Publish-ready — run [`pnpm release:prep`](./publishing.md) then `npm publish` 
 pnpm add github:01laky/llm-stream-guard
 ```
 
-### What works in 0.1.2?
+### What works in 0.2.0?
 
-Passthrough `guardEvents()`, `createByteGuard()`, `pipeGuard()`, and `createGuardContext()` with full TypeScript types. Options like `redactSecrets: true` are accepted but **no-op** until **0.2.0** rule implementations land.
+`redactSecrets()`, `redactPII()`, tool policy factories, `sanitizeErrors()`, byte flags on `createByteGuard()`, and golden fixtures (**LSG-C/R/T**). YAML policy + CLI → **0.3.0**.
 
 ## Modes
 

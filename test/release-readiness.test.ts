@@ -31,16 +31,16 @@ describe("LSG-REL: release readiness", () => {
 		expect(read("README.md")).toContain("## Non-goals");
 	});
 
-	it("LSG-REL04: README scaffold status matches package.json version", () => {
+	it("LSG-REL04: README stable status matches package.json version", () => {
 		const pkg = JSON.parse(read("package.json")) as { version: string };
-		expect(read("README.md")).toContain(`**${pkg.version} scaffold**`);
+		expect(read("README.md")).toContain(`Stable \`${pkg.version}\``);
 	});
 
 	it("LSG-REL05: README core and status badges match package.json version", () => {
 		const pkg = JSON.parse(read("package.json")) as { version: string };
 		const readme = read("README.md");
-		expect(readme).toContain(`core-${pkg.version}-orange`);
-		expect(readme).toContain(`status-${pkg.version}_scaffold-orange`);
+		expect(readme).toContain(`core-${pkg.version}-brightgreen`);
+		expect(readme).toContain(`status-stable_${pkg.version}-brightgreen`);
 	});
 
 	it("LSG-REL06: npm pack dry-run includes dist README and LICENSE", () => {
@@ -84,10 +84,11 @@ describe("LSG-REL: release readiness", () => {
 		expect(script).toContain("LSG-REL04");
 	});
 
-	it("LSG-REL11: release-prep validates scaffold orange badges", () => {
+	it("LSG-REL11: release-prep validates stable green badges", () => {
 		const script = read("scripts/release-prep.mjs");
+		expect(script).toContain("status-stable_");
+		expect(script).toContain("core-${version}-brightgreen");
 		expect(script).toContain("_scaffold-orange");
-		expect(script).toContain("core-${version}-orange");
 	});
 
 	it("LSG-REL12: CHANGELOG has version header matching package.json", () => {

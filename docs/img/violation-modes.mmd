@@ -1,13 +1,12 @@
 flowchart LR
-	subgraph INPUT["Policy check"]
-		RULE["Rule transform"]
-		HIT{"Violation?"}
+	subgraph SECRETS["Secrets · redactSecrets / redactPII"]
+		SR["Always redact matches"]
 	end
 
-	subgraph MODES["Violation mode"]
-		BLOCK["block<br/>safe substitute"]
-		WARN["warn<br/>transform + log"]
-		AUDIT["audit<br/>log only"]
+	subgraph TOOLS["Tool policy · allowTools / denyTools / blockToolArgs"]
+		TB["block → error + policy_violation finish"]
+		TW["warn → block + onViolation"]
+		TA["audit → pass through + onViolation"]
 	end
 
 	subgraph OUT["Downstream"]
@@ -15,19 +14,18 @@ flowchart LR
 		CB["onViolation()"]
 	end
 
-	RULE --> HIT
-	HIT -->|no| STREAM
-	HIT -->|yes + block| BLOCK --> STREAM
-	HIT -->|yes + warn| WARN --> STREAM
-	HIT -->|yes + audit| AUDIT --> STREAM
-	WARN --> CB
-	AUDIT --> CB
-	BLOCK --> CB
+	SR --> STREAM
+	TB --> STREAM
+	TW --> STREAM
+	TA --> STREAM
+	TW --> CB
+	TA --> CB
+	TB --> CB
 
-	classDef rule fill:#431407,stroke:#fb923c,stroke-width:2px,color:#ffedd5
+	classDef secret fill:#134e4a,stroke:#5eead4,stroke-width:2px,color:#f0fdfa
 	classDef mode fill:#1e1b4b,stroke:#818cf8,stroke-width:2px,color:#ede9fe
 	classDef out fill:#042f2e,stroke:#2dd4bf,stroke-width:2px,color:#ccfbf1
 
-	class RULE,HIT rule
-	class BLOCK,WARN,AUDIT mode
+	class SR secret
+	class TB,TW,TA mode
 	class STREAM,CB out

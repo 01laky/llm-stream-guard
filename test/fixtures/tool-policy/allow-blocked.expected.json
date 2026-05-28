@@ -1,0 +1,10 @@
+[
+	{
+		"type": "error",
+		"message": "Policy violation"
+	},
+	{
+		"type": "finish",
+		"reason": "policy_violation"
+	}
+]
