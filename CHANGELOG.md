@@ -3,8 +3,6 @@
 All notable changes to this project are documented here.
 Format based on [Keep a Changelog](https://keepachangelog.com/); versioning follows [Semantic Versioning](https://semver.org/).
 
-Version headers only — no dates (`## [0.1.1]`, not `## [0.1.1] - 2026-05-28`).
-
 ## [Unreleased]
 
 ### Added
