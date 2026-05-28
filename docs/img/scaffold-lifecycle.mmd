@@ -1,0 +1,30 @@
+flowchart TB
+	subgraph STATELESS["Stateless · per call"]
+		PIPE["pipeGuard()"]
+		APPLY["applyGuardTransforms()"]
+	end
+
+	subgraph STATEFUL["Stateful · one per stream"]
+		CTX["createGuardContext()"]
+		BYTE["createByteGuard()"]
+		EVENT["guardEvents()"]
+	end
+
+	REQ(["New HTTP request / stream"]) --> CTX
+	CTX --> BYTE
+	CTX --> EVENT
+	PIPE --> BYTE
+	APPLY --> EVENT
+
+	CTX --> RESET["ctx.reset() · violations + byte buffer cleared"]
+	RESET --> CTX
+
+	NOTE["Never share GuardContext across concurrent streams"]
+
+	classDef stateless fill:#431407,stroke:#fb923c,stroke-width:2px,color:#ffedd5
+	classDef stateful fill:#042f2e,stroke:#2dd4bf,stroke-width:2px,color:#ccfbf1
+	classDef io fill:#134e4a,stroke:#5eead4,stroke-width:2px,color:#f0fdfa
+
+	class PIPE,APPLY stateless
+	class CTX,BYTE,EVENT,RESET stateful
+	class REQ,NOTE io

@@ -1,16 +1,17 @@
 # llm-stream-guard
 
-![core](https://img.shields.io/badge/core-0.0.1_draft-orange)
+![core](https://img.shields.io/badge/core-0.0.1-orange)
 ![node](https://img.shields.io/badge/node-%3E%3D18-339933)
 ![runtime deps](https://img.shields.io/badge/runtime_deps-0-brightgreen)
+![tests](https://img.shields.io/badge/tests-47_passing-brightgreen)
 [![ci](https://github.com/01laky/llm-stream-guard/actions/workflows/ci.yml/badge.svg)](https://github.com/01laky/llm-stream-guard/actions/workflows/ci.yml)
-![status](https://img.shields.io/badge/status-pre--implementation-orange)
+![status](https://img.shields.io/badge/status-0.0.1_scaffold-orange)
 
 **Security filter for LLM streams** — redact secrets and PII, enforce tool-call policy, sanitize errors. Works on raw bytes (`TransformStream`) and parsed event streams.
 
 > A standalone, zero-dependency TypeScript library for proxy and agent pipelines: byte mode for browser-facing SSE, event mode for tool gates before execution. **No dependency on [llm-stream-assemble](https://github.com/01laky/llm-stream-assemble).**
 
-**Status:** Pre-implementation — [`docs/proposal.MD`](./docs/proposal.MD) and architecture diagrams are in place; package scaffold lands in **0.0.1**, MVP rules in **0.1.0**. Review [CHANGELOG.md](./CHANGELOG.md) before upgrades.
+**Status:** **0.0.1 scaffold** — passthrough `guardEvents()`, `createByteGuard()`, and `pipeGuard()` ship with full types and test harness; **guard rules land in 0.1.0**. Review [CHANGELOG.md](./CHANGELOG.md) before upgrades.
 
 ---
 
@@ -22,6 +23,7 @@
 - [GuardEvent model](#guardevent-model)
 - [Violation modes](#violation-modes)
 - [Install](#install)
+- [First success in 30 seconds](#first-success-in-30-seconds)
 - [Quickstart](#quickstart)
 - [Mode decision guide](#mode-decision-guide)
 - [Documentation](#documentation)
@@ -71,6 +73,12 @@ Optional pairing with **llm-stream-assemble** (parse → guard) — cookbook onl
 
 ![Ecosystem: optional assemble + guard](https://raw.githubusercontent.com/01laky/llm-stream-guard/main/docs/img/ecosystem.svg)
 
+### Lifecycle and concurrency
+
+Create **one `GuardContext` per stream** — never share across concurrent requests. Stateless helpers (`pipeGuard`, internal transform pipeline) compose into stateful entry points.
+
+![GuardContext lifecycle](https://raw.githubusercontent.com/01laky/llm-stream-guard/main/docs/img/scaffold-lifecycle.svg)
+
 Diagram sources: [`docs/img/`](./docs/img/) (Mermaid `.mmd` + committed SVG). Regenerate with `pnpm diagrams:build`.
 
 ---
@@ -114,7 +122,27 @@ pnpm add llm-stream-guard
 
 **Requirements:** Node.js 18+ · Bun / Deno / Workers (Web Streams)
 
-_Not on npm yet — pre-implementation._
+_Not on npm yet — `"private": true` until first release._
+
+---
+
+## First success in 30 seconds
+
+```bash
+git clone git@github.com:01laky/llm-stream-guard.git
+cd llm-stream-guard
+pnpm install
+./scripts/setup-githooks.sh
+pnpm verify
+```
+
+Then pipe bytes through the identity byte guard (Phase 0 passthrough):
+
+```ts
+import { createByteGuard } from "llm-stream-guard";
+
+const guarded = sourceStream.pipeThrough(createByteGuard({ mode: "warn" }));
+```
 
 ---
 
@@ -133,25 +161,21 @@ return new Response(
 );
 ```
 
+`redactSecrets` / `sanitizeErrors` flags are wired in options but **no-op until 0.1.0**.
+
 ### Agent (event mode)
 
 ```ts
-import { guardEvents, allowTools, blockToolArgs, redactSecrets } from "llm-stream-guard";
+import { guardEvents } from "llm-stream-guard";
 
-for await (const event of guardEvents(
-	parsedEvents,
-	{ mode: "block" },
-	redactSecrets(),
-	allowTools(["search", "read_file"]),
-	blockToolArgs(/curl\s+.*\|\s*sh/),
-)) {
+for await (const event of guardEvents(parsedEvents, { mode: "block" })) {
 	if (event.type === "tool_call" && event.phase === "done") {
 		await executeTool(event);
 	}
 }
 ```
 
-_API stubs land in 0.0.1; rules land in 0.1.0._
+Rule factories (`redactSecrets`, `allowTools`, `blockToolArgs`, …) ship in **0.1.0**.
 
 ---
 
@@ -162,7 +186,7 @@ Pick byte vs event mode in ~30 seconds:
 Use the [modes diagram](#two-modes) above, or:
 
 - **Raw SSE to browser, no parser** → `createByteGuard()`
-- **Tool gate before execute** → `guardEvents()` + `allowTools` / `blockToolArgs`
+- **Tool gate before execute** → `guardEvents()` + tool policy rules (0.1.0)
 - **Parse with assemble / AI SDK first** → map to `GuardEvent`, then `guardEvents()`
 
 ---
@@ -170,6 +194,7 @@ Use the [modes diagram](#two-modes) above, or:
 ## Documentation
 
 - [Product & technical proposal](./docs/proposal.MD)
+- [Testing strategy](./docs/testing-strategy.md)
 - [Architecture diagrams](./docs/img/README.md)
 - [How this compares](./docs/comparison.md)
 - [Integration cookbook](./docs/integration-cookbook.md) _(v0.3 — planned)_
@@ -218,7 +243,7 @@ pnpm verify
 | `pnpm verify`         | format + typecheck + build + test + smoke:package |
 | `pnpm verify:deps`    | fail if runtime dependencies are added            |
 | `pnpm diagrams:build` | regenerate README SVGs from Mermaid sources       |
-| `pnpm test`           | Vitest                                            |
+| `pnpm test`           | Vitest (LSG-S, LSG-B, LSG-E)                      |
 | `pnpm build`          | tsup → ESM + CJS + declarations                   |
 
 ---

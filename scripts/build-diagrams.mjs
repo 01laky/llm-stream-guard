@@ -13,6 +13,7 @@ const diagrams = [
 	"violation-modes.mmd",
 	"chunk-redaction.mmd",
 	"ecosystem.mmd",
+	"scaffold-lifecycle.mmd",
 ];
 
 for (const name of diagrams) {

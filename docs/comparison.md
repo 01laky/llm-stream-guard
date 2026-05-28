@@ -1,6 +1,6 @@
 # How llm-stream-guard compares
 
-**Status:** Pre-implementation — see [`proposal.MD`](./proposal.MD).
+**Status:** **0.0.1 scaffold** — passthrough API; guard rules in **0.1.0**. See [`proposal.MD`](./proposal.MD).
 
 ## At a glance
 

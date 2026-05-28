@@ -1,0 +1,71 @@
+{
+	"name": "llm-stream-guard",
+	"version": "0.0.1",
+	"private": true,
+	"description": "Zero-dependency TypeScript security filter for LLM streams — redact secrets, enforce tool policy, byte and event modes.",
+	"license": "MIT",
+	"author": "Ladislav Kostolny <01laky@gmail.com>",
+	"type": "module",
+	"sideEffects": false,
+	"engines": {
+		"node": ">=18"
+	},
+	"files": [
+		"dist",
+		"LICENSE",
+		"README.md"
+	],
+	"main": "./dist/index.cjs",
+	"module": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"import": "./dist/index.js",
+			"require": "./dist/index.cjs"
+		}
+	},
+	"scripts": {
+		"preinstall": "npx only-allow pnpm",
+		"build": "tsup",
+		"typecheck": "tsc --noEmit -p tsconfig.json && tsc --noEmit -p tsconfig.test.json",
+		"format": "prettier --check .",
+		"format:fix": "prettier --write .",
+		"test": "vitest run",
+		"verify": "pnpm verify:deps && pnpm format && pnpm typecheck && pnpm build && pnpm test && pnpm smoke:package",
+		"verify:deps": "node scripts/verify-zero-deps.mjs",
+		"smoke:package": "node scripts/smoke-package.mjs",
+		"diagrams:build": "node scripts/build-diagrams.mjs"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/01laky/llm-stream-guard.git"
+	},
+	"keywords": [
+		"llm",
+		"stream",
+		"security",
+		"redact",
+		"secrets",
+		"pii",
+		"tool-calling",
+		"transformstream",
+		"sse",
+		"proxy",
+		"agent",
+		"typescript"
+	],
+	"packageManager": "pnpm@9.15.9",
+	"pnpm": {
+		"overrides": {
+			"vite": "6.3.5"
+		}
+	},
+	"devDependencies": {
+		"@types/node": "^22.15.29",
+		"prettier": "^3.5.3",
+		"tsup": "^8.5.0",
+		"typescript": "^5.8.3",
+		"vitest": "^3.2.1"
+	}
+}

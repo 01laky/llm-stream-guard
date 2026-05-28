@@ -40,6 +40,7 @@ git config core.hooksPath   # should print: .githooks
 | --------- | ----------------------------- |
 | **LSG-S** | Scaffold / smoke              |
 | **LSG-B** | Build artifact / dist hygiene |
+| **LSG-E** | Extended edge-case wiring     |
 | **LSG-C** | Chunk-boundary byte streams   |
 | **LSG-R** | Redaction golden fixtures     |
 | **LSG-T** | Tool policy tests             |
