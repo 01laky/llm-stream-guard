@@ -4,14 +4,15 @@
 
 ## Test ID prefixes
 
-| Prefix    | Purpose                                                              |
-| --------- | -------------------------------------------------------------------- |
-| **LSG-S** | Scaffold smoke (build, deps, passthrough API)                        |
-| **LSG-B** | Build artifacts and dist hygiene                                     |
-| **LSG-E** | Extended edge-case wiring (chunk splits, pipeline order, SSE shapes) |
-| **LSG-C** | Chunk-boundary byte redaction (Phase 1)                              |
-| **LSG-R** | Redaction golden input → output (Phase 1)                            |
-| **LSG-T** | Tool policy (Phase 1)                                                |
+| Prefix      | Purpose                                                              |
+| ----------- | -------------------------------------------------------------------- |
+| **LSG-S**   | Scaffold smoke (build, deps, passthrough API)                        |
+| **LSG-B**   | Build artifacts and dist hygiene                                     |
+| **LSG-E**   | Extended edge-case wiring (chunk splits, pipeline order, SSE shapes) |
+| **LSG-C**   | Chunk-boundary byte redaction (Phase 1)                              |
+| **LSG-R**   | Redaction golden input → output (Phase 1)                            |
+| **LSG-T**   | Tool policy (Phase 1)                                                |
+| **LSG-REL** | Release / publish readiness                                          |
 
 ## Phase 0 coverage
 
@@ -45,6 +46,7 @@
 - `verify-zero-deps` — no runtime, optional, or peer dependencies.
 - `smoke-package` — npm pack contains only `dist/`, `LICENSE`, `README.md`.
 - **LSG-B** — `.d.ts` export surface, no leaked `../src` paths, ESM + CJS import smoke.
+- **LSG-REL** — `release:prep` gates, npm pack dry-run, scaffold badge alignment (**LSG-REL01–REL14**).
 
 ## Test files
 
@@ -55,6 +57,7 @@
 | `test/edge-cases-extended.test.ts` | LSG-E08–E17      | Exhaustive Phase 0 edge cases |
 | `test/build-artifacts.test.ts`     | LSG-B\*          | dist hygiene                  |
 | `test/exports.test.ts`             | LSG-S06          | public export surface         |
+| `test/release-readiness.test.ts`   | LSG-REL\*        | publish prep gates            |
 
 ## Running tests
 

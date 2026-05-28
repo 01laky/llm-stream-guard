@@ -1,7 +1,6 @@
 {
 	"name": "llm-stream-guard",
-	"version": "0.1.1",
-	"private": true,
+	"version": "0.1.2",
 	"description": "Zero-dependency TypeScript security filter for LLM streams — redact secrets, enforce tool policy, byte and event modes.",
 	"license": "MIT",
 	"author": "Ladislav Kostolny <01laky@gmail.com>",
@@ -35,6 +34,7 @@
 		"verify": "pnpm verify:deps && pnpm format && pnpm typecheck && pnpm build && pnpm test && pnpm smoke:package",
 		"verify:deps": "node scripts/verify-zero-deps.mjs",
 		"smoke:package": "node scripts/smoke-package.mjs",
+		"release:prep": "node scripts/release-prep.mjs",
 		"diagrams:build": "node scripts/build-diagrams.mjs"
 	},
 	"repository": {

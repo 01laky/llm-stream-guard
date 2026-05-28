@@ -5,9 +5,17 @@ Format based on [Keep a Changelog](https://keepachangelog.com/); versioning foll
 
 ## [Unreleased]
 
+## [0.1.2]
+
 ### Added
 
-- **Tests** — **LSG-E08–E17** extended edge-case suite (`test/edge-cases-extended.test.ts`): Phase 0 transform non-execution traps, exhaustive `GuardEvent` union matrix, 2000-event stress, source error propagation, `applyGuardTransforms` / `pipeGuard` combinatorics, every-byte UTF-8 split matrix, binary/CRLF SSE payloads, deterministic random split fuzz (20 seeds × 4 payloads), context lifecycle isolation, 1 MiB byte smoke; **148** tests total.
+- **Publishing** — `scripts/release-prep.mjs`, `pnpm release:prep`, [`docs/publishing.md`](./docs/publishing.md) (manual tag + npm + GitHub Release flow aligned with llm-stream-assemble); **LSG-REL01–REL14** release-readiness tests; npm publish-ready (`"private": true` removed).
+- **Tests** — **LSG-E08–E17** extended edge-case suite (`test/edge-cases-extended.test.ts`): Phase 0 transform non-execution traps, exhaustive `GuardEvent` union matrix, 2000-event stress, source error propagation, `applyGuardTransforms` / `pipeGuard` combinatorics, every-byte UTF-8 split matrix, binary/CRLF SSE payloads, deterministic random split fuzz (20 seeds × 4 payloads), context lifecycle isolation, 1 MiB byte smoke; **162** tests total.
+
+### Changed
+
+- **README / FAQ** — install via npm when published; maintainer release steps linked from [`docs/publishing.md`](./docs/publishing.md).
+- **CONTRIBUTING** — **LSG-REL** test prefix and release checklist.
 
 ## [0.1.1]
 
@@ -23,5 +31,4 @@ Format based on [Keep a Changelog](https://keepachangelog.com/); versioning foll
 ### Notes
 
 - **Passthrough only** — no `redactSecrets`, tool policy, or byte redaction logic yet; Phase 1 targets **0.2.0** per [`docs/proposal.MD`](./docs/proposal.MD).
-- **Not published to npm** — `"private": true`.
 - **pnpm** — `vite@6.3.5` override for Node 18+ compatibility in CI.

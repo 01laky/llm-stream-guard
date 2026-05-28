@@ -1,6 +1,6 @@
 # FAQ
 
-**Status:** **0.1.1 scaffold** — passthrough API ships; rules and npm publish in later versions.
+**Status:** **0.1.2 scaffold** — passthrough API ships; npm publish-ready via [`docs/publishing.md`](./publishing.md).
 
 ## General
 
@@ -14,9 +14,13 @@ No. Use **byte mode** on raw `response.body`, or map any parsed events to `Guard
 
 ### Is this on npm?
 
-Not yet — `"private": true` until first intentional release. Install from git or wait for a published release.
+Publish-ready — run [`pnpm release:prep`](./publishing.md) then `npm publish` + GitHub Release (same flow as [llm-stream-assemble](https://github.com/01laky/llm-stream-assemble)). Until the first tag is published, install from git:
 
-### What works in 0.1.1?
+```bash
+pnpm add github:01laky/llm-stream-guard
+```
+
+### What works in 0.1.2?
 
 Passthrough `guardEvents()`, `createByteGuard()`, `pipeGuard()`, and `createGuardContext()` with full TypeScript types. Options like `redactSecrets: true` are accepted but **no-op** until **0.2.0** rule implementations land.
 

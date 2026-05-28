@@ -36,16 +36,21 @@ git config core.hooksPath   # should print: .githooks
 
 ## Fixture and test ID convention
 
-| Prefix    | Purpose                       |
-| --------- | ----------------------------- |
-| **LSG-S** | Scaffold / smoke              |
-| **LSG-B** | Build artifact / dist hygiene |
-| **LSG-E** | Extended edge-case wiring     |
-| **LSG-C** | Chunk-boundary byte streams   |
-| **LSG-R** | Redaction golden fixtures     |
-| **LSG-T** | Tool policy tests             |
+| Prefix      | Purpose                       |
+| ----------- | ----------------------------- |
+| **LSG-S**   | Scaffold / smoke              |
+| **LSG-B**   | Build artifact / dist hygiene |
+| **LSG-E**   | Extended edge-case wiring     |
+| **LSG-C**   | Chunk-boundary byte streams   |
+| **LSG-R**   | Redaction golden fixtures     |
+| **LSG-T**   | Tool policy tests             |
+| **LSG-REL** | Release / publish readiness   |
 
 Document new IDs in test headers; maintain `test/fixtures/REGISTRY.md` from Phase 1 onward.
+
+## Releases
+
+Maintainers follow [`docs/publishing.md`](./docs/publishing.md) — `pnpm release:prep`, git tag `vX.Y.Z`, `npm publish`, GitHub Release from CHANGELOG (no dates in CHANGELOG headers).
 
 ## Architecture diagrams
 

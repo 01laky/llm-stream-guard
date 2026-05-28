@@ -1,17 +1,17 @@
 # llm-stream-guard
 
-![core](https://img.shields.io/badge/core-0.1.1-orange)
+![core](https://img.shields.io/badge/core-0.1.2-orange)
 ![node](https://img.shields.io/badge/node-%3E%3D18-339933)
 ![runtime deps](https://img.shields.io/badge/runtime_deps-0-brightgreen)
-![tests](https://img.shields.io/badge/tests-148_passing-brightgreen)
+![tests](https://img.shields.io/badge/tests-162_passing-brightgreen)
 [![ci](https://github.com/01laky/llm-stream-guard/actions/workflows/ci.yml/badge.svg)](https://github.com/01laky/llm-stream-guard/actions/workflows/ci.yml)
-![status](https://img.shields.io/badge/status-0.1.1_scaffold-orange)
+![status](https://img.shields.io/badge/status-0.1.2_scaffold-orange)
 
 **Security filter for LLM streams** — redact secrets and PII, enforce tool-call policy, sanitize errors. Works on raw bytes (`TransformStream`) and parsed event streams.
 
 > A standalone, zero-dependency TypeScript library for proxy and agent pipelines: byte mode for browser-facing SSE, event mode for tool gates before execution. **No dependency on [llm-stream-assemble](https://github.com/01laky/llm-stream-assemble).**
 
-**Status:** **0.1.1 scaffold** — passthrough `guardEvents()`, `createByteGuard()`, and `pipeGuard()` ship with full types and test harness; **guard rules land in 0.2.0**. Review [CHANGELOG.md](./CHANGELOG.md) before upgrades.
+**Status:** **0.1.2 scaffold** — passthrough `guardEvents()`, `createByteGuard()`, and `pipeGuard()` ship with full types and test harness; **guard rules land in 0.2.0**. Review [CHANGELOG.md](./CHANGELOG.md) before upgrades.
 
 ---
 
@@ -117,12 +117,12 @@ Full spec: [`docs/proposal.MD`](./docs/proposal.MD#guardevent-model-independent)
 
 ```bash
 pnpm add llm-stream-guard
-# npm install llm-stream-guard  — when published
+# or npm install llm-stream-guard
 ```
 
 **Requirements:** Node.js 18+ · Bun / Deno / Workers (Web Streams)
 
-_Not on npm yet — `"private": true` until first release._
+Maintainers: run [`pnpm release:prep`](./docs/publishing.md) before tagging and `npm publish`. GitHub Release notes from `CHANGELOG.md`.
 
 ---
 
@@ -195,6 +195,7 @@ Use the [modes diagram](#two-modes) above, or:
 
 - [Product & technical proposal](./docs/proposal.MD)
 - [Testing strategy](./docs/testing-strategy.md)
+- [Publishing checklist](./docs/publishing.md) _(maintainers)_
 - [Architecture diagrams](./docs/img/README.md)
 - [How this compares](./docs/comparison.md)
 - [Integration cookbook](./docs/integration-cookbook.md) _(v0.3 — planned)_
@@ -238,13 +239,14 @@ pnpm install
 pnpm verify
 ```
 
-| Command               | Description                                       |
-| --------------------- | ------------------------------------------------- |
-| `pnpm verify`         | format + typecheck + build + test + smoke:package |
-| `pnpm verify:deps`    | fail if runtime dependencies are added            |
-| `pnpm diagrams:build` | regenerate README SVGs from Mermaid sources       |
-| `pnpm test`           | Vitest (LSG-S, LSG-B, LSG-E)                      |
-| `pnpm build`          | tsup → ESM + CJS + declarations                   |
+| Command               | Description                                         |
+| --------------------- | --------------------------------------------------- |
+| `pnpm verify`         | format + typecheck + build + test + smoke:package   |
+| `pnpm verify:deps`    | fail if runtime dependencies are added              |
+| `pnpm release:prep`   | pre-tag checks (version, CHANGELOG, dist, npm pack) |
+| `pnpm diagrams:build` | regenerate README SVGs from Mermaid sources         |
+| `pnpm test`           | Vitest (LSG-S, LSG-B, LSG-E, LSG-REL)               |
+| `pnpm build`          | tsup → ESM + CJS + declarations                     |
 
 ---
 
