@@ -1,3 +1,4 @@
+import { PACKAGE_VERSION } from "../version.js";
 import type { DriftFinding, StaticPatternFinding, StaticScanReport } from "./types.js";
 
 type SarifResult = {
@@ -12,15 +13,11 @@ type SarifResult = {
 	}>;
 };
 
-function toSarifLevel(severity: "error" | "warning"): "error" | "warning" {
-	return severity;
-}
-
 function findingToResult(f: DriftFinding | StaticPatternFinding): SarifResult {
 	return {
 		ruleId: f.code,
-		level: toSarifLevel(f.severity),
-		message: { text: "message" in f && "tool" in f ? f.message : f.message },
+		level: f.severity,
+		message: { text: f.message },
 		locations: [
 			{
 				physicalLocation: {
@@ -48,7 +45,7 @@ export function staticScanToSarif(report: StaticScanReport): Record<string, unkn
 				tool: {
 					driver: {
 						name: "llm-stream-guard",
-						version: report.summary.policyVersion ?? "0.5.0",
+						version: report.summary.policyVersion ?? PACKAGE_VERSION,
 						rules: [],
 					},
 				},

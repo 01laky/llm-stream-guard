@@ -1,5 +1,5 @@
 import { defineConfig } from "tsup";
-import { cpSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { cpSync, mkdirSync } from "node:fs";
 import { join } from "node:path";
 
 const shared = {
@@ -25,20 +25,13 @@ export default defineConfig([
 	},
 	{
 		...shared,
+		entry: { "audit/index": "src/audit/index.ts" },
+		clean: false,
+	},
+	{
+		...shared,
 		entry: { cli: "src/cli/main.ts" },
 		clean: false,
-		onSuccess: async () => {
-			for (const file of ["dist/cli.js", "dist/cli.cjs"]) {
-				const path = join(process.cwd(), file);
-				try {
-					const content = readFileSync(path, "utf8");
-					if (!content.startsWith("#!")) {
-						writeFileSync(path, `#!/usr/bin/env node\n${content}`);
-					}
-				} catch {
-					/* ignore */
-				}
-			}
-		},
+		banner: { js: "#!/usr/bin/env node" },
 	},
 ]);

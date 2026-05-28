@@ -1,6 +1,4 @@
-import { readFileSync } from "node:fs";
-import { extname } from "node:path";
-import { parsePolicyYaml } from "../policy/parse-yaml-minimal.js";
+import { readStructuredFile } from "../shared/structured-file.js";
 
 export type ManifestValidationError = { path: string; message: string };
 
@@ -38,17 +36,8 @@ export function validateManifestDocument(doc: unknown): ManifestValidationError[
 /** Validate manifest file on disk. */
 export function validateManifestFile(filePath: string): ManifestValidationError[] {
 	try {
-		const text = readFileSync(filePath, "utf8");
-		const ext = extname(filePath).toLowerCase();
-		const doc =
-			ext === ".yaml" || ext === ".yml" ? parsePolicyYaml(text) : (JSON.parse(text) as unknown);
-		return validateManifestDocument(doc);
+		return validateManifestDocument(readStructuredFile(filePath));
 	} catch (err) {
 		return [{ path: "", message: String(err) }];
 	}
-}
-
-/** Validate from parsed object (used after YAML/JSON parse). */
-export function validateManifestParsed(doc: unknown): ManifestValidationError[] {
-	return validateManifestDocument(doc);
 }

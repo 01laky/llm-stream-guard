@@ -3,6 +3,7 @@ export { scanBlockToolArgsStatic } from "./block-tool-args-static.js";
 export { DANGEROUS_PATTERNS, scanDangerousStrings } from "./dangerous-patterns.js";
 export { computeDrift } from "./drift.js";
 export { parseManifestFile, parseManifestText } from "./extract-tools.js";
+export { loadPoliciesForScan, type LoadedPolicyEntry } from "./load-policies.js";
 export { extractPolicyToolSets, type PolicyToolSets } from "./policy-tool-names.js";
 export {
 	countStaticErrors,
@@ -21,7 +22,11 @@ export type {
 export {
 	validateManifestDocument,
 	validateManifestFile,
-	validateManifestParsed,
 	type ManifestValidationError,
 } from "./validate-manifest.js";
-export { walkManifestFiles, type WalkFilterOptions } from "./walk-filters.js";
+export {
+	walkManifestFiles,
+	walkFiles,
+	isManifestPath,
+	type WalkFilterOptions,
+} from "../shared/walk.js";

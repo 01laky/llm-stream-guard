@@ -7,6 +7,7 @@ import {
 	redactSecrets,
 	sanitizeErrors,
 } from "../rules/index.js";
+import { blockToolArgsMatcherFromParams } from "./block-tool-args-matcher.js";
 import type { GuardTransform, ViolationMode } from "../types.js";
 import type { ByteGuardOptions } from "../types.js";
 import type { LoadedPolicy, NormalizedRule, PolicyDocument, PolicyRuleEntry } from "./types.js";
@@ -36,11 +37,12 @@ function compileRule(entry: PolicyRuleEntry): GuardTransform {
 			return allowTools(params.names as string[]);
 		case "denyTools":
 			return denyTools(params.names as string[]);
-		case "blockToolArgs":
-			if (typeof params.pattern === "string") {
-				return blockToolArgs(new RegExp(params.pattern));
-			}
-			return blockToolArgs(params.contains as string);
+		case "blockToolArgs": {
+			const matcher = blockToolArgsMatcherFromParams(params);
+			if (matcher?.pattern) return blockToolArgs(matcher.pattern);
+			if (matcher?.contains) return blockToolArgs(matcher.contains);
+			throw new Error("blockToolArgs requires pattern or contains");
+		}
 		case "maxToolArgsBytes":
 			return maxToolArgsBytes(params.max as number);
 		case "sanitizeErrors":

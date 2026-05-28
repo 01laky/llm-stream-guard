@@ -118,10 +118,9 @@ describe("LSG-REL: release readiness", () => {
 		expect(read("scripts/smoke-package.mjs")).toContain("validate");
 	});
 
-	it("LSG-REL17: README status and badges reference package version 0.5.0", () => {
+	it("LSG-REL17: README status and badges reference package version", () => {
 		const pkg = JSON.parse(read("package.json")) as { version: string };
 		const readme = read("README.md");
-		expect(pkg.version).toBe("0.5.0");
 		expect(readme).toContain(`Stable \`${pkg.version}\``);
 		expect(readme).toContain(`core-${pkg.version}-brightgreen`);
 		expect(readme).toContain(`status-stable_${pkg.version}-brightgreen`);
@@ -141,9 +140,8 @@ describe("LSG-REL: release readiness", () => {
 		expect(docSection).toContain("examples/README.md");
 	});
 
-	it("LSG-REL20: README status and badges reference 0.5.0", () => {
+	it("LSG-REL20: README status and badges reference current package version", () => {
 		const pkg = JSON.parse(read("package.json")) as { version: string };
-		expect(pkg.version).toBe("0.5.0");
 		expect(read("README.md")).toContain(`Stable \`${pkg.version}\``);
 	});
 
@@ -157,5 +155,20 @@ describe("LSG-REL: release readiness", () => {
 		const readme = read("README.md");
 		expect(readme).toContain("docs/ci-github-action.md");
 		expect(readme).toContain("action/README.md");
+	});
+
+	it("LSG-REL23: CHANGELOG documents 0.6.0 source refactor and audit export", () => {
+		const changelog = read("CHANGELOG.md");
+		expect(changelog).toContain("## [0.6.0]");
+		expect(changelog).toMatch(/shared\/walk|src\/scan/i);
+		expect(changelog).toMatch(/\.\/audit/);
+		const pkg = JSON.parse(read("package.json")) as { exports?: Record<string, unknown> };
+		expect(pkg.exports?.["./audit"]).toBeDefined();
+	});
+
+	it("LSG-REL24: refactor edge case suite covers LSG-REF prefix", () => {
+		const source = read("test/refactor-edge-cases.test.ts");
+		expect(source).toMatch(/LSG-REF01/);
+		expect(source).toMatch(/LSG-REF25/);
 	});
 });

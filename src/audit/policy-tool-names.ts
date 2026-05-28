@@ -1,3 +1,4 @@
+import { blockToolArgsMatcherFromParams } from "../policy/block-tool-args-matcher.js";
 import type { LoadedPolicy } from "../policy/types.js";
 
 export type PolicyToolSets = {
@@ -33,11 +34,8 @@ export function extractPolicyToolSets(policy: LoadedPolicy): PolicyToolSets {
 			}
 		}
 		if (rule.key === "blockToolArgs") {
-			if (typeof rule.params.pattern === "string") {
-				blockToolArgs.push({ pattern: new RegExp(rule.params.pattern) });
-			} else if (typeof rule.params.contains === "string") {
-				blockToolArgs.push({ contains: rule.params.contains });
-			}
+			const matcher = blockToolArgsMatcherFromParams(rule.params);
+			if (matcher) blockToolArgs.push(matcher);
 		}
 	}
 

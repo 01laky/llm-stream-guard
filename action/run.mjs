@@ -1,11 +1,12 @@
 #!/usr/bin/env node
-import { appendFileSync, existsSync } from "node:fs";
+import { appendFileSync, existsSync, readFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
 
 const actionDir = dirname(fileURLToPath(import.meta.url));
 const repoRoot = join(actionDir, "..");
+const pkgVersion = JSON.parse(readFileSync(join(repoRoot, "package.json"), "utf8")).version;
 
 function parseCli(argv) {
 	const out = {};
@@ -42,7 +43,7 @@ function resolveCli() {
 	if (existsSync(join(repoRoot, "dist/cli.js"))) {
 		return [process.execPath, [join(repoRoot, "dist/cli.js")]];
 	}
-	return ["npx", ["--yes", "llm-stream-guard@0.5.0"]];
+	return ["npx", ["--yes", `llm-stream-guard@${pkgVersion}`]];
 }
 
 function runGuard(args, cwd = repoRoot) {

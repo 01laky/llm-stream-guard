@@ -5,6 +5,27 @@ Format based on [Keep a Changelog](https://keepachangelog.com/); versioning foll
 
 ## [Unreleased]
 
+## [0.6.0]
+
+### Changed
+
+- **Source refactor** — unified filesystem walking (`src/shared/walk.ts`), shared CLI arg parsing and structured file reader, scan engine moved to `src/scan/`, audit split into focused modules (`load-policies`, `resolve-manifests`, `format-report`), CLI commands extracted from monolithic `main.ts`.
+- **`blockToolArgs` matcher** — shared `src/policy/block-tool-args-matcher.ts` used by policy compile, static audit, and drift tooling (no behavior change).
+- **Package version** — centralized in `src/version.ts`; SARIF preview and GitHub Action `run.mjs` read from package metadata instead of hardcoded strings.
+- **Exports** — new `./audit` subpath for programmatic static audit (`runStaticScan`, `walkManifestFiles`, etc.).
+
+### Removed
+
+- Dead helpers: `readPolicyRaw`, `readManifestRaw`, `validateManifestParsed` alias.
+
+### Added
+
+- **Tests** — **LSG-REF01–REF25** (77 refactor edge cases for `shared/`, `scan/`, audit splits); **782** tests total.
+
+### Unchanged
+
+- Public runtime API, CLI command surface, audit report JSON shapes, zero runtime npm dependencies.
+
 ## [0.5.0]
 
 ### Added

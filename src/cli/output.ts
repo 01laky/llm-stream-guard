@@ -1,25 +1,8 @@
 import type { PolicyValidationError } from "../policy/error-codes.js";
 import type { PolicyDiff } from "../policy/types.js";
-import type { Violation } from "../types.js";
+import type { ScanReport, ScanViolation } from "../scan/types.js";
 
-export type ScanViolation = {
-	file: string;
-	rule: string;
-	message: string;
-	mode: string;
-	policyVersion?: string;
-};
-
-export type ScanReport = {
-	summary: {
-		files: number;
-		violations: number;
-		redactions: number;
-		policyVersion?: string;
-		mode: string;
-	};
-	violations: ScanViolation[];
-};
+export type { ScanReport, ScanViolation };
 
 export function formatValidationErrors(errors: PolicyValidationError[], json: boolean): string {
 	if (json) return JSON.stringify(errors, null, 2);
@@ -48,16 +31,4 @@ export function formatPolicyDiff(diff: PolicyDiff, json: boolean): string {
 		.join("\n");
 }
 
-export function violationToScan(
-	file: string,
-	v: Violation,
-	policyVersion: string | undefined,
-): ScanViolation {
-	return {
-		file,
-		rule: v.rule,
-		message: v.message,
-		mode: v.mode,
-		...(policyVersion ? { policyVersion } : {}),
-	};
-}
+export { violationToScan } from "../scan/types.js";

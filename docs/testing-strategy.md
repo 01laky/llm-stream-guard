@@ -113,6 +113,17 @@
 - Extended edge cases: validate-manifest matrix, extractors, drift semantics, D004–D006, blockToolArgs contains/multi-rule, walk/include parent descent, quiet mode (**LSG-STA36–STA70** in `test/audit-edge-cases.test.ts`).
 - Docs: [`docs/static-scanning.md`](./static-scanning.md) (**LSG-STA17**).
 
+### 0.6.0 refactor modules (`shared/`, `scan/`, audit splits)
+
+- Shared walk: `isManifestPath`, skip dirs, include/exclude, parent descent (**LSG-REF03–REF05**, **LSG-REF20**, **LSG-REF25**).
+- `parseArgs` / `splitCommaList`, structured file reader (**LSG-REF01–REF02**, **LSG-REF06**).
+- `blockToolArgsMatcher`, compile guard, static scan roundtrip (**LSG-REF07–REF08**, **LSG-REF22**).
+- `loadPoliciesForScan`, `resolveManifestFiles`, `format-report` helpers (**LSG-REF09–REF11**, **LSG-REF18**).
+- Scan engine: `buildScanReport`, `scanPaths`, SSE normalize, jsonl blanks (**LSG-REF12–REF13**, **LSG-REF24**).
+- GitHub annotations, SARIF version fallback, `./audit` export smoke (**LSG-REF14–REF16**).
+- CLI command routing post-refactor (**LSG-REF19**).
+- Full suite: **LSG-REF01–REF25** in `test/refactor-edge-cases.test.ts` (77 tests).
+
 ### GitHub Action (`action/`)
 
 - Composite `action.yml` + `run.mjs` wrapper (**LSG-ACT01–03**).
@@ -124,12 +135,13 @@
 
 ### Test files (Phase 4)
 
-| File                             | IDs          | Focus                       |
-| -------------------------------- | ------------ | --------------------------- |
-| `test/static-audit.test.ts`      | LSG-STA01–35 | Static audit CLI core       |
-| `test/audit-edge-cases.test.ts`  | LSG-STA36–70 | Static audit extended edges |
-| `test/github-action.test.ts`     | LSG-ACT01–18 | Action wrapper + CI docs    |
-| `test/action-edge-cases.test.ts` | LSG-ACT19–30 | Action wrapper edge cases   |
+| File                               | IDs          | Focus                            |
+| ---------------------------------- | ------------ | -------------------------------- |
+| `test/static-audit.test.ts`        | LSG-STA01–35 | Static audit CLI core            |
+| `test/audit-edge-cases.test.ts`    | LSG-STA36–70 | Static audit extended edges      |
+| `test/github-action.test.ts`       | LSG-ACT01–18 | Action wrapper + CI docs         |
+| `test/action-edge-cases.test.ts`   | LSG-ACT19–30 | Action wrapper edge cases        |
+| `test/refactor-edge-cases.test.ts` | LSG-REF01–25 | 0.6.0 shared/scan/audit refactor |
 
 ## Test files
 
@@ -157,6 +169,7 @@
 | `test/audit-edge-cases.test.ts`    | LSG-STA36–70     | Static audit extended edges     |
 | `test/github-action.test.ts`       | LSG-ACT01–18     | GitHub Action + CI docs         |
 | `test/action-edge-cases.test.ts`   | LSG-ACT19–30     | Action wrapper edge cases       |
+| `test/refactor-edge-cases.test.ts` | LSG-REF01–25     | 0.6.0 refactor module edges     |
 | `test/release-readiness.test.ts`   | LSG-REL\*        | publish prep gates              |
 
 ## Running tests

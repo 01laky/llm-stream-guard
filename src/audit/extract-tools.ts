@@ -1,6 +1,5 @@
-import { readFileSync } from "node:fs";
 import { extname } from "node:path";
-import { parsePolicyYaml } from "../policy/parse-yaml-minimal.js";
+import { parseStructuredText, readStructuredFile } from "../shared/structured-file.js";
 import type { ParsedManifest } from "./types.js";
 
 function lineOf(text: string, index: number): number {
@@ -42,7 +41,6 @@ function pushTool(
 	}
 }
 
-/** Extract tools from Guard manifest / MCP JSON shape. */
 function extractFromToolsArray(doc: Record<string, unknown>): {
 	tools: string[];
 	strings: ParsedManifest["strings"];
@@ -60,7 +58,6 @@ function extractFromToolsArray(doc: Record<string, unknown>): {
 	return { tools, strings };
 }
 
-/** Extract from OpenAPI components.x-tools or paths.*.post.x-tools. */
 function extractOpenApiTools(doc: Record<string, unknown>): {
 	tools: string[];
 	strings: ParsedManifest["strings"];
@@ -106,16 +103,7 @@ function extractOpenApiTools(doc: Record<string, unknown>): {
 	return { tools, strings };
 }
 
-/** Parse manifest file → tool names + scannable strings. */
-export function parseManifestFile(filePath: string): ParsedManifest {
-	const text = readFileSync(filePath, "utf8");
-	const ext = extname(filePath).toLowerCase();
-	let doc: unknown;
-	if (ext === ".yaml" || ext === ".yml") {
-		doc = parsePolicyYaml(text);
-	} else {
-		doc = JSON.parse(text) as unknown;
-	}
+function parseManifestDocument(filePath: string, doc: unknown): ParsedManifest {
 	if (!doc || typeof doc !== "object") {
 		throw new Error(`Invalid manifest document: ${filePath}`);
 	}
@@ -129,24 +117,14 @@ export function parseManifestFile(filePath: string): ParsedManifest {
 	return { file: filePath, tools, strings };
 }
 
-/** Validate manifest JSON text only (for line tracking). */
+/** Parse manifest file → tool names + scannable strings. */
+export function parseManifestFile(filePath: string): ParsedManifest {
+	return parseManifestDocument(filePath, readStructuredFile(filePath));
+}
+
+/** Parse manifest text with path hint for extension detection. */
 export function parseManifestText(filePath: string, text: string): ParsedManifest {
-	const ext = extname(filePath).toLowerCase();
-	let doc: unknown;
-	if (ext === ".yaml" || ext === ".yml") {
-		doc = parsePolicyYaml(text);
-	} else {
-		doc = JSON.parse(text) as unknown;
-	}
-	if (!doc || typeof doc !== "object") throw new Error(`Invalid manifest: ${filePath}`);
-	const record = doc as Record<string, unknown>;
-	const { tools, strings } = extractFromToolsArray(record);
-	const oa = tools.length === 0 ? extractOpenApiTools(record) : { tools: [], strings: [] };
-	return {
-		file: filePath,
-		tools: tools.length > 0 ? tools : oa.tools,
-		strings: strings.concat(oa.strings),
-	};
+	return parseManifestDocument(filePath, parseStructuredText(text, filePath));
 }
 
 export { lineOf };

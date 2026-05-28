@@ -7,29 +7,12 @@ import { extractPolicyToolSets } from "../audit/policy-tool-names.js";
 import { staticScanToSarif } from "../audit/sarif-preview.js";
 import { countStaticErrors, formatStaticScanReport, runStaticScan } from "../audit/static-scan.js";
 import type { DriftFinding, StaticScanReport } from "../audit/types.js";
-import { validateManifestDocument, validateManifestFile } from "../audit/validate-manifest.js";
+import { validateManifestFile } from "../audit/validate-manifest.js";
 import { loadPolicy } from "../policy/load.js";
+import { annotateFinding } from "../shared/github-annotation.js";
+import { splitCommaList } from "../shared/parse-args.js";
 
 export type AuditRunnerFlags = Record<string, string | boolean>;
-
-function splitList(v: string | boolean | undefined): string[] | undefined {
-	if (typeof v !== "string" || v.length === 0) return undefined;
-	return v
-		.split(",")
-		.map((s) => s.trim())
-		.filter(Boolean);
-}
-
-function annotateFinding(f: {
-	file: string;
-	line?: number;
-	message: string;
-	severity: string;
-}): void {
-	const line = f.line ?? 1;
-	const level = f.severity === "error" ? "error" : "warning";
-	console.log(`::${level} file=${f.file},line=${line}::${f.message}`);
-}
 
 export function runAuditValidateManifest(manifestPath: string, json: boolean): number {
 	const errors = validateManifestFile(resolve(manifestPath));
@@ -88,8 +71,8 @@ export function runAuditStatic(flags: AuditRunnerFlags): number {
 	}
 
 	try {
-		const include = splitList(flags.include);
-		const exclude = splitList(flags.exclude);
+		const include = splitCommaList(flags.include);
+		const exclude = splitCommaList(flags.exclude);
 		const report = runStaticScan({
 			root,
 			...(policy ? { policy } : {}),
