@@ -9,7 +9,7 @@
 
 **Security filter for LLM streams** — redact secrets and PII, enforce tool-call policy, sanitize errors. Works on raw bytes (`TransformStream`) and parsed event streams.
 
-> A standalone, zero-dependency TypeScript library for proxy and agent pipelines: byte mode for browser-facing SSE, event mode for tool gates before execution. **No dependency on [llm-stream-assemble](https://github.com/01laky/llm-stream-assemble).**
+> A standalone, zero-dependency TypeScript security filter for LLM proxy and agent pipelines. Byte mode: chunk-safe secret redaction on raw SSE. Event mode: tool allow/deny, arg blocking, PII & error sanitization on parsed streams. Works with any parser — no assemble required.
 
 **Status:** Stable `0.2.0` — MVP guard rules ship (secret redaction, tool policy, error sanitization). Review [CHANGELOG.md](./CHANGELOG.md) before upgrades.
 
