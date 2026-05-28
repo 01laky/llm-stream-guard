@@ -16,7 +16,7 @@ Format based on [Keep a Changelog](https://keepachangelog.com/); versioning foll
 - **Docs** — `docs/ci-github-action.md`, `docs/static-scanning.md`, `docs/pre-commit-recipe.md`, `ci-action-flow` diagram; cookbook §11, migration Step 4, FAQ, testing-strategy, comparison, CONTRIBUTING updated.
 - **CI** — `.github/workflows/guard-audit.yml` dogfood job; upgraded `examples/policy-ci/scan-fixtures.sh`.
 - **Scripts** — `pnpm fixtures:audit-tools-registry`, `pnpm action:smoke`; wired into `pnpm verify`.
-- **Tests** — **LSG-STA01–STA35**, **LSG-ACT01–ACT18**, **LSG-REL20–REL22**; **637** tests total.
+- **Tests** — **LSG-STA01–STA35**, **LSG-STA36–STA70** (extended audit edge cases), **LSG-ACT01–ACT30**, **LSG-REL20–REL22**; **703** tests total.
 
 ### Unchanged
 

@@ -25,7 +25,13 @@ function matchesPrefix(rel: string, patterns: string[] | undefined): boolean {
 
 function allowed(rel: string, include?: string[], exclude?: string[]): boolean {
 	if (matchesPrefix(rel, exclude)) return false;
-	if (include && include.length > 0) return matchesPrefix(rel, include);
+	if (include && include.length > 0) {
+		const posix = toPosix(rel);
+		return include.some((p) => {
+			const norm = toPosix(p).replace(/\/$/, "");
+			return posix === norm || posix.startsWith(`${norm}/`) || norm.startsWith(`${posix}/`);
+		});
+	}
 	return true;
 }
 

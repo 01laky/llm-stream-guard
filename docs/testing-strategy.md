@@ -110,6 +110,7 @@
 - Dangerous catalog **D001–D006**; `BLOCK_ARGS_STATIC` preview (**LSG-STA08–09**, **LSG-STA27–28**).
 - Walk filters: skip `node_modules`, include/exclude prefixes (**LSG-STA13**, **LSG-STA32–33**).
 - Exit codes 0–3, `--annotate`, SARIF preview (**LSG-STA10–12**, **LSG-STA34–35**).
+- Extended edge cases: validate-manifest matrix, extractors, drift semantics, D004–D006, blockToolArgs contains/multi-rule, walk/include parent descent, quiet mode (**LSG-STA36–STA70** in `test/audit-edge-cases.test.ts`).
 - Docs: [`docs/static-scanning.md`](./static-scanning.md) (**LSG-STA17**).
 
 ### GitHub Action (`action/`)
@@ -119,13 +120,16 @@
 - Docs: matrix workflow + SARIF upload preview (**LSG-ACT05–06**, **LSG-ACT16**, **LSG-ACT18**).
 - Diagram: `ci-action-flow.mmd` + SVG (**LSG-ACT11–12**).
 - PR annotations (**LSG-ACT13**).
+- Extended wrapper edge cases: `fail-on` matrix, GITHUB_OUTPUT, baseline gate, annotate off (**LSG-ACT19–ACT30** in `test/action-edge-cases.test.ts`).
 
 ### Test files (Phase 4)
 
-| File                         | IDs       | Focus                    |
-| ---------------------------- | --------- | ------------------------ |
-| `test/static-audit.test.ts`  | LSG-STA\* | Static audit CLI         |
-| `test/github-action.test.ts` | LSG-ACT\* | Action wrapper + CI docs |
+| File                             | IDs          | Focus                       |
+| -------------------------------- | ------------ | --------------------------- |
+| `test/static-audit.test.ts`      | LSG-STA01–35 | Static audit CLI core       |
+| `test/audit-edge-cases.test.ts`  | LSG-STA36–70 | Static audit extended edges |
+| `test/github-action.test.ts`     | LSG-ACT01–18 | Action wrapper + CI docs    |
+| `test/action-edge-cases.test.ts` | LSG-ACT19–30 | Action wrapper edge cases   |
 
 ## Test files
 
@@ -149,8 +153,10 @@
 | `test/policy-edge-cases.test.ts`   | LSG-POL33–52     | Policy/CLI extended edge cases  |
 | `test/cookbook-recipes.test.ts`    | LSG-CBK01–34     | Cookbook docs + example recipes |
 | `test/cookbook-edge-cases.test.ts` | LSG-CBK35–43     | Cookbook behavioral edge cases  |
-| `test/static-audit.test.ts`        | LSG-STA\*        | Static manifest audit           |
-| `test/github-action.test.ts`       | LSG-ACT\*        | GitHub Action + CI docs         |
+| `test/static-audit.test.ts`        | LSG-STA01–35     | Static manifest audit core      |
+| `test/audit-edge-cases.test.ts`    | LSG-STA36–70     | Static audit extended edges     |
+| `test/github-action.test.ts`       | LSG-ACT01–18     | GitHub Action + CI docs         |
+| `test/action-edge-cases.test.ts`   | LSG-ACT19–30     | Action wrapper edge cases       |
 | `test/release-readiness.test.ts`   | LSG-REL\*        | publish prep gates              |
 
 ## Running tests
