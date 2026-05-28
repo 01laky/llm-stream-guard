@@ -1,5 +1,6 @@
 /**
  * Extended edge-case tests — Phase 0 pipeline wiring (passthrough).
+ * See also test/edge-cases-extended.test.ts (LSG-E08–E17).
  * Redaction/policy golden tests land in Phase 1 (LSG-C*, LSG-R*, LSG-T*).
  */
 import { describe, expect, it } from "vitest";

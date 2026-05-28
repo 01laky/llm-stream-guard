@@ -7,6 +7,10 @@ Version headers only — no dates (`## [0.1.1]`, not `## [0.1.1] - 2026-05-28`).
 
 ## [Unreleased]
 
+### Added
+
+- **Tests** — **LSG-E08–E17** extended edge-case suite (`test/edge-cases-extended.test.ts`): Phase 0 transform non-execution traps, exhaustive `GuardEvent` union matrix, 2000-event stress, source error propagation, `applyGuardTransforms` / `pipeGuard` combinatorics, every-byte UTF-8 split matrix, binary/CRLF SSE payloads, deterministic random split fuzz (20 seeds × 4 payloads), context lifecycle isolation, 1 MiB byte smoke; **148** tests total.
+
 ## [0.1.1]
 
 ### Added
