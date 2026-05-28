@@ -1,0 +1,80 @@
+name: LLM Stream Guard Audit
+description: Validate policy, scan event fixtures, and run static tool manifest audit
+inputs:
+  policy:
+    description: Path to policy JSON/YAML
+    required: true
+  policy-dir:
+    description: Directory of policies for multi-policy static audit
+    required: false
+    default: ""
+  baseline-policy:
+    description: Baseline policy for diff --check gate
+    required: false
+    default: ""
+  scan-paths:
+    description: Comma-separated paths for stream scan
+    required: false
+    default: ""
+  static-root:
+    description: Root directory for audit static
+    required: false
+    default: "."
+  manifest:
+    description: Explicit tools manifest path
+    required: false
+    default: ""
+  include:
+    description: Comma-separated path prefixes to include
+    required: false
+    default: ""
+  exclude:
+    description: Comma-separated path prefixes to exclude
+    required: false
+    default: ""
+  fail-on:
+    description: "violations | drift | static | any | none"
+    required: false
+    default: any
+  annotate:
+    description: Emit GitHub workflow commands for findings
+    required: false
+    default: "true"
+  sarif-out:
+    description: Write SARIF preview output path
+    required: false
+    default: ""
+  mode:
+    description: GUARD_MODE override
+    required: false
+    default: ""
+outputs:
+  violations:
+    description: Stream scan violation count
+  drift-count:
+    description: Drift finding count from static audit
+  static-findings:
+    description: Total static audit findings
+  sarif-path:
+    description: Path to SARIF file when generated
+  policy-changed:
+    description: true when baseline diff detects policy change
+runs:
+  using: composite
+  steps:
+    - name: Run llm-stream-guard audit
+      shell: bash
+      run: node "${{ github.action_path }}/run.mjs"
+      env:
+        INPUT_POLICY: ${{ inputs.policy }}
+        INPUT_POLICY_DIR: ${{ inputs.policy-dir }}
+        INPUT_BASELINE_POLICY: ${{ inputs.baseline-policy }}
+        INPUT_SCAN_PATHS: ${{ inputs.scan-paths }}
+        INPUT_STATIC_ROOT: ${{ inputs.static-root }}
+        INPUT_MANIFEST: ${{ inputs.manifest }}
+        INPUT_INCLUDE: ${{ inputs.include }}
+        INPUT_EXCLUDE: ${{ inputs.exclude }}
+        INPUT_FAIL_ON: ${{ inputs.fail-on }}
+        INPUT_ANNOTATE: ${{ inputs.annotate }}
+        INPUT_SARIF_OUT: ${{ inputs.sarif-out }}
+        INPUT_MODE: ${{ inputs.mode }}

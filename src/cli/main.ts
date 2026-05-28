@@ -8,6 +8,7 @@ import { parsePolicyFile } from "../policy/parse-yaml-minimal.js";
 import { validatePolicy } from "../policy/validate.js";
 import type { ViolationMode } from "../types.js";
 import { formatPolicyDiff, formatScanReport, formatValidationErrors } from "./output.js";
+import { runAuditSubcommand } from "./audit-runner.js";
 import { scanPaths, scanStdin } from "./scan-runner.js";
 import { walkFiles } from "./walk.js";
 
@@ -21,6 +22,10 @@ Usage:
   llm-stream-guard diff <policyA> <policyB> [--check] [--json]
   llm-stream-guard profiles list
   llm-stream-guard profiles show <id>
+  llm-stream-guard audit validate-manifest --manifest <path> [--json]
+  llm-stream-guard audit drift --policy <p> --manifest <m> [--json]
+  llm-stream-guard audit static [--policy <p>|--policy-dir <d>] [--root <dir>] [--manifest <m>]
+    [--strict] [--include a,b] [--exclude a,b] [--quiet] [--annotate] [--json] [--sarif-out <file>]
 
 Env: GUARD_MODE, GUARD_POLICY_PATH
 `;
@@ -210,6 +215,8 @@ async function main(): Promise<number> {
 			return cmdProfiles(cmdRest[0], cmdRest.slice(1), json);
 		case "scan":
 			return cmdScan(cmdRest, flags);
+		case "audit":
+			return runAuditSubcommand(cmdRest[0], flags, cmdRest.slice(1));
 		default:
 			console.error(`Unknown command: ${cmd}\n${usage()}`);
 			return 2;

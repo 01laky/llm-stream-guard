@@ -1,6 +1,6 @@
 # FAQ
 
-**Status:** **Stable 0.4.0** — integration cookbook + runnable examples. Publish via [`docs/publishing.md`](./publishing.md).
+**Status:** **Stable 0.5.0** — GitHub Action, static manifest audit, integration cookbook + runnable examples. Publish via [`docs/publishing.md`](./publishing.md).
 
 ## General
 
@@ -19,6 +19,14 @@ Publish-ready — run [`pnpm release:prep`](./publishing.md) then `npm publish` 
 ```bash
 pnpm add github:01laky/llm-stream-guard
 ```
+
+### Is there a GitHub Action?
+
+Yes — **`01laky/llm-stream-guard/action@v0.5.0`** validates policy, scans event fixtures, and runs static manifest audit with optional SARIF preview and PR annotations. See [`docs/ci-github-action.md`](./ci-github-action.md). Manual CLI steps remain in [cookbook §11](./integration-cookbook.md#11-ci--github-action).
+
+### What works in 0.5.0?
+
+Everything in **0.4.0** plus **GitHub Action** (`action/`), **`audit static`** / drift / dangerous-pattern catalog (**D001–D006**), SARIF preview, and pre-commit recipe. Tests: **LSG-STA01–STA35**, **LSG-ACT01–ACT18**.
 
 ### What works in 0.4.0?
 

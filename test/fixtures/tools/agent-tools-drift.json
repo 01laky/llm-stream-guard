@@ -1,0 +1,7 @@
+{
+	"version": "1",
+	"tools": [
+		{ "name": "search", "description": "Search" },
+		{ "name": "web_search", "description": "Web search — drift vs agent-gate allowlist" }
+	]
+}

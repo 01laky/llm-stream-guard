@@ -1,0 +1,25 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://github.com/01laky/llm-stream-guard/schemas/tools-manifest-v1.json",
+	"title": "LLM Stream Guard tools manifest v1",
+	"type": "object",
+	"required": ["version", "tools"],
+	"properties": {
+		"version": { "const": "1" },
+		"tools": {
+			"type": "array",
+			"minItems": 1,
+			"items": {
+				"type": "object",
+				"required": ["name"],
+				"properties": {
+					"name": { "type": "string", "minLength": 1 },
+					"description": { "type": "string" },
+					"examples": {},
+					"args": {},
+					"inputSchema": { "type": "object" }
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,25 @@
+name: Guard Audit
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  guard-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+      - run: node dist/cli.js validate policies/agent-gate.json
+      - run: node dist/cli.js audit validate-manifest tools/manifest.json
+      - run: node dist/cli.js scan --policy policies/agent-gate.json --json test/fixtures/events/clean-tool.json
+      - run: node dist/cli.js audit static --policy policies/agent-gate.json --root . --manifest tools/manifest.json
+      - run: bash examples/policy-ci/scan-fixtures.sh

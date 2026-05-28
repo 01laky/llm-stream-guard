@@ -1,0 +1,4 @@
+{
+	"version": "1",
+	"tools": [{ "name": "included_tool", "description": "Only found with --include walk/apps/agent" }]
+}

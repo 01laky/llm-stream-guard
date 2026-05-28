@@ -1,0 +1,8 @@
+{
+	"version": "1",
+	"tools": [
+		{ "name": "search", "description": "Search the codebase" },
+		{ "name": "read_file", "description": "Read a file from the workspace" },
+		{ "name": "grep", "description": "Search file contents with a pattern" }
+	]
+}

@@ -1,0 +1,14 @@
+flowchart LR
+  A[checkout] --> B[validate policy]
+  B --> C{baseline set?}
+  C -->|yes| D[diff --check]
+  C -->|no| E[scan paths]
+  D --> E
+  E --> F[audit static]
+  F --> G{SARIF out?}
+  G -->|yes| H[write SARIF preview]
+  G -->|no| I[annotate findings]
+  H --> I
+  I --> J{fail-on gate}
+  J -->|findings| K[exit 1]
+  J -->|clean| L[exit 0]

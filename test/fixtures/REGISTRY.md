@@ -19,4 +19,6 @@ Synthetic secrets only — never real keys.
 
 Policy rows are also tracked in `policies/REGISTRY.md` (`pnpm fixtures:audit-policy-registry`).
 
-Maintained by `pnpm fixtures:check-redaction`, `pnpm fixtures:check-policies`, and `pnpm fixtures:audit-registry`.
+Tool manifest rows are tracked in `tools/REGISTRY.md` (`pnpm fixtures:audit-tools-registry`).
+
+Maintained by `pnpm fixtures:check-redaction`, `pnpm fixtures:check-policies`, `pnpm fixtures:audit-registry`, and `pnpm fixtures:audit-tools-registry`.

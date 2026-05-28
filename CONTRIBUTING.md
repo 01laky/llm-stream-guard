@@ -8,7 +8,7 @@ Thank you for your interest in contributing.
 
 Read [`docs/proposal.MD`](./docs/proposal.MD) before making changes. It defines scope, the `GuardEvent` model, MVP rules, and non-goals.
 
-For integration patterns, see [`docs/integration-cookbook.md`](./docs/integration-cookbook.md) (expanded in **v0.4.0** with runnable `examples/`).
+For integration patterns, see [`docs/integration-cookbook.md`](./docs/integration-cookbook.md) (expanded in **v0.4.0** with runnable `examples/`). Phase 4 (**v0.5.0**) adds static audit docs, GitHub Action, and pre-commit recipe.
 
 ## Requirements
 
@@ -47,6 +47,8 @@ git config core.hooksPath   # should print: .githooks
 | **LSG-P**   | Performance smoke (local)       |
 | **LSG-POL** | Policy loader / CLI             |
 | **LSG-CBK** | Integration cookbook / examples |
+| **LSG-STA** | Static manifest audit / CLI     |
+| **LSG-ACT** | GitHub Action / CI docs         |
 | **LSG-REL** | Release / publish readiness     |
 
 Document new IDs in test headers; maintain `test/fixtures/REGISTRY.md`; run `pnpm fixtures:audit-registry` to enforce parity. Rule edge cases: **LSG-E18–E38** in `test/edge-cases-rules.test.ts`.

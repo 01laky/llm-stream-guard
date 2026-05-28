@@ -1,6 +1,6 @@
 # Testing strategy
 
-**Status:** Phase 3 shipped — integration cookbook, runnable examples, **580** tests.
+**Status:** Phase 4 shipped — GitHub Action, static manifest audit, **LSG-STA** / **LSG-ACT** tests.
 
 ## Test ID prefixes
 
@@ -15,6 +15,8 @@
 | **LSG-P**   | Performance smoke (local timing, not CI gate)           |
 | **LSG-POL** | Policy validate, merge, compile, load, diff, CLI        |
 | **LSG-CBK** | Integration cookbook docs, examples, behavioral recipes |
+| **LSG-STA** | Static manifest audit, drift, dangerous catalog, SARIF  |
+| **LSG-ACT** | GitHub Action composite, CI docs, dogfood workflow      |
 | **LSG-REL** | Release / publish readiness                             |
 
 ## Phase 1 coverage
@@ -99,6 +101,32 @@
 - README 0.4.0 badges and documentation links (**LSG-REL17**, **LSG-REL19**).
 - CHANGELOG `## [0.4.0]` cookbook bullets (**LSG-REL18**).
 
+## Phase 4 coverage (static audit + GitHub Action)
+
+### Static audit CLI (`audit static`, `audit drift`, `audit validate-manifest`)
+
+- Manifest extractors: Guard v1, MCP-shaped JSON, OpenAPI `x-tools`, YAML (**LSG-STA02–04**, **LSG-STA19**).
+- Drift: `DRIFT_ALLOW`, `DRIFT_DENY`, `DRIFT_POLICY_ONLY`; `--strict` promotion (**LSG-STA05–07**).
+- Dangerous catalog **D001–D006**; `BLOCK_ARGS_STATIC` preview (**LSG-STA08–09**, **LSG-STA27–28**).
+- Walk filters: skip `node_modules`, include/exclude prefixes (**LSG-STA13**, **LSG-STA32–33**).
+- Exit codes 0–3, `--annotate`, SARIF preview (**LSG-STA10–12**, **LSG-STA34–35**).
+- Docs: [`docs/static-scanning.md`](./static-scanning.md) (**LSG-STA17**).
+
+### GitHub Action (`action/`)
+
+- Composite `action.yml` + `run.mjs` wrapper (**LSG-ACT01–03**).
+- `fail-on` modes, baseline `diff --check`, SARIF output (**LSG-ACT04**, **LSG-ACT09–10**, **LSG-ACT14–15**).
+- Docs: matrix workflow + SARIF upload preview (**LSG-ACT05–06**, **LSG-ACT16**, **LSG-ACT18**).
+- Diagram: `ci-action-flow.mmd` + SVG (**LSG-ACT11–12**).
+- PR annotations (**LSG-ACT13**).
+
+### Test files (Phase 4)
+
+| File                         | IDs       | Focus                    |
+| ---------------------------- | --------- | ------------------------ |
+| `test/static-audit.test.ts`  | LSG-STA\* | Static audit CLI         |
+| `test/github-action.test.ts` | LSG-ACT\* | Action wrapper + CI docs |
+
 ## Test files
 
 | File                               | IDs              | Focus                           |
@@ -121,6 +149,8 @@
 | `test/policy-edge-cases.test.ts`   | LSG-POL33–52     | Policy/CLI extended edge cases  |
 | `test/cookbook-recipes.test.ts`    | LSG-CBK01–34     | Cookbook docs + example recipes |
 | `test/cookbook-edge-cases.test.ts` | LSG-CBK35–43     | Cookbook behavioral edge cases  |
+| `test/static-audit.test.ts`        | LSG-STA\*        | Static manifest audit           |
+| `test/github-action.test.ts`       | LSG-ACT\*        | GitHub Action + CI docs         |
 | `test/release-readiness.test.ts`   | LSG-REL\*        | publish prep gates              |
 
 ## Running tests

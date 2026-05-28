@@ -1,6 +1,6 @@
 # How llm-stream-guard compares
 
-**Status:** **Stable 0.4.0** — MVP rules + declarative policy + CLI + integration cookbook. See [`proposal.MD`](./proposal.MD).
+**Status:** **Stable 0.5.0** — MVP rules + declarative policy + CLI + static manifest audit + GitHub Action + integration cookbook. See [`proposal.MD`](./proposal.MD).
 
 ## At a glance
 
@@ -11,6 +11,7 @@
 | **Event mode**                 | `guardEvents()` + tool policy | Varies                                    | N/A (assembly only)         | Rare            |
 | **Tool allowlist / arg block** | First-class                   | Varies                                    | Out of scope                | Manual          |
 | **Runtime deps**               | Zero                          | Varies                                    | Zero                        | None            |
+| **Static manifest audit**      | `audit static` + Action       | Varies                                    | N/A                         | Manual          |
 | **Provider adapters**          | No (map events in app)        | Sometimes                                 | Yes (7 adapters)            | No              |
 
 ## When to use guard

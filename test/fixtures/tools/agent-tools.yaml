@@ -1,0 +1,8 @@
+version: "1"
+tools:
+  -
+    name: yaml_search
+    description: YAML agent tool fixture
+  -
+    name: yaml_read
+    description: Read via YAML config

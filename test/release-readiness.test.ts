@@ -118,10 +118,10 @@ describe("LSG-REL: release readiness", () => {
 		expect(read("scripts/smoke-package.mjs")).toContain("validate");
 	});
 
-	it("LSG-REL17: README status and badges reference package version 0.4.0", () => {
+	it("LSG-REL17: README status and badges reference package version 0.5.0", () => {
 		const pkg = JSON.parse(read("package.json")) as { version: string };
 		const readme = read("README.md");
-		expect(pkg.version).toBe("0.4.0");
+		expect(pkg.version).toBe("0.5.0");
 		expect(readme).toContain(`Stable \`${pkg.version}\``);
 		expect(readme).toContain(`core-${pkg.version}-brightgreen`);
 		expect(readme).toContain(`status-stable_${pkg.version}-brightgreen`);
@@ -139,5 +139,23 @@ describe("LSG-REL: release readiness", () => {
 		const docSection = readme.split("## Documentation")[1]?.split("## How this compares")[0] ?? "";
 		expect(docSection).toContain("integration-cookbook.md");
 		expect(docSection).toContain("examples/README.md");
+	});
+
+	it("LSG-REL20: README status and badges reference 0.5.0", () => {
+		const pkg = JSON.parse(read("package.json")) as { version: string };
+		expect(pkg.version).toBe("0.5.0");
+		expect(read("README.md")).toContain(`Stable \`${pkg.version}\``);
+	});
+
+	it("LSG-REL21: CHANGELOG documents 0.5.0 Action and static audit", () => {
+		const changelog = read("CHANGELOG.md");
+		expect(changelog).toContain("## [0.5.0]");
+		expect(changelog).toMatch(/GitHub Action|static audit|LSG-STA/i);
+	});
+
+	it("LSG-REL22: README links ci-github-action and action README", () => {
+		const readme = read("README.md");
+		expect(readme).toContain("docs/ci-github-action.md");
+		expect(readme).toContain("action/README.md");
 	});
 });

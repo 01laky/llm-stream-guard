@@ -1,0 +1,10 @@
+{
+	"openapi": "3.0.0",
+	"info": { "title": "Tools API", "version": "1.0.0" },
+	"components": {
+		"x-tools": [
+			{ "name": "openapi_search", "description": "Search via OpenAPI extension" },
+			{ "name": "openapi_read", "description": "Read via OpenAPI extension" }
+		]
+	}
+}

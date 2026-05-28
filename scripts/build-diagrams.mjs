@@ -18,6 +18,7 @@ const diagrams = [
 	"agent-gate-loop.mmd",
 	"dual-stream.mmd",
 	"migration-path.mmd",
+	"ci-action-flow.mmd",
 ];
 
 for (const name of diagrams) {

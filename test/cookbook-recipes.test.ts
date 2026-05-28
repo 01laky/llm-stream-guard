@@ -33,7 +33,7 @@ describe("LSG-CBK01–20: cookbook docs and layout", () => {
 		"## 8. Dual-stream audit",
 		"## 9. MCP tool gate",
 		"## 10. LiteLLM / gateway",
-		"## 11. CI without Action",
+		"## 11. CI & GitHub Action",
 		"## 12. Migration",
 		"## 13. Troubleshooting",
 	];

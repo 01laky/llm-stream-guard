@@ -19,7 +19,9 @@ function walk(dir) {
 		if (statSync(path).isDirectory()) {
 			entries.push(...walk(path));
 		} else if (name !== "REGISTRY.md") {
-			entries.push(relative(fixturesDir, path));
+			const rel = relative(fixturesDir, path);
+			if (rel.startsWith("tools/")) continue;
+			entries.push(rel);
 		}
 	}
 	return entries;

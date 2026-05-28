@@ -16,6 +16,7 @@ execute Mermaid — always commit updated **`.svg`** files alongside **`.mmd`** 
 | `agent-gate-loop.mmd`    | Agent loop: parse → guardEvents → executeTool on allowed tools      |
 | `dual-stream.mmd`        | Client stream + server audit side-channel (`onViolation` collector) |
 | `migration-path.mmd`     | Regex middleware → rule factories → policy files → CLI scan         |
+| `ci-action-flow.mmd`     | GitHub Action: validate → scan → audit static → SARIF → fail gate   |
 
 Regenerate after editing sources:
 

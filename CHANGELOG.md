@@ -5,6 +5,23 @@ Format based on [Keep a Changelog](https://keepachangelog.com/); versioning foll
 
 ## [Unreleased]
 
+## [0.5.0]
+
+### Added
+
+- **Static audit CLI** — `audit validate-manifest`, `audit drift`, `audit static` with `--strict`, `--include`/`--exclude`, `--quiet`, `--annotate`, `--sarif-out`, and unified exit codes 0–3 (**LSG-STA01–STA35**).
+- **`src/audit/` module** — manifest extraction (Guard v1, MCP, YAML, OpenAPI `x-tools`), allowlist drift, dangerous pattern catalog D001–D006, `blockToolArgs` static preview (`BLOCK_ARGS_STATIC`), SARIF 2.1.0 preview serializer.
+- **GitHub Action** — composite `action/` (`action.yml`, `run.mjs`, README) with baseline policy diff, stream scan, static audit, annotations, and SARIF output (**LSG-ACT01–ACT18**).
+- **Repo conventions** — `tools/manifest.json` dogfood manifest, `schemas/tools-manifest-v1.json`, `policies/agent-gate.baseline.json`, `test/fixtures/tools/` + REGISTRY.
+- **Docs** — `docs/ci-github-action.md`, `docs/static-scanning.md`, `docs/pre-commit-recipe.md`, `ci-action-flow` diagram; cookbook §11, migration Step 4, FAQ, testing-strategy, comparison, CONTRIBUTING updated.
+- **CI** — `.github/workflows/guard-audit.yml` dogfood job; upgraded `examples/policy-ci/scan-fixtures.sh`.
+- **Scripts** — `pnpm fixtures:audit-tools-registry`, `pnpm action:smoke`; wired into `pnpm verify`.
+- **Tests** — **LSG-STA01–STA35**, **LSG-ACT01–ACT18**, **LSG-REL20–REL22**; **637** tests total.
+
+### Unchanged
+
+- Core runtime API, existing `scan`/`diff`/`profiles` CLI, zero runtime npm dependencies.
+
 ## [0.4.0]
 
 ### Added

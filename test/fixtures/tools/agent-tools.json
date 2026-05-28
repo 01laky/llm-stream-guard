@@ -1,0 +1,8 @@
+{
+	"version": "1",
+	"tools": [
+		{ "name": "search", "description": "Search the codebase" },
+		{ "name": "read_file", "description": "Read a file" },
+		{ "name": "grep", "description": "Grep files" }
+	]
+}

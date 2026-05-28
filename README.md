@@ -1,17 +1,17 @@
 # llm-stream-guard
 
-![core](https://img.shields.io/badge/core-0.4.0-brightgreen)
+![core](https://img.shields.io/badge/core-0.5.0-brightgreen)
 ![node](https://img.shields.io/badge/node-%3E%3D18-339933)
 ![runtime deps](https://img.shields.io/badge/runtime_deps-0-brightgreen)
-![tests](https://img.shields.io/badge/tests-580_passing-brightgreen)
+![tests](https://img.shields.io/badge/tests-637_passing-brightgreen)
 [![ci](https://github.com/01laky/llm-stream-guard/actions/workflows/ci.yml/badge.svg)](https://github.com/01laky/llm-stream-guard/actions/workflows/ci.yml)
-![status](https://img.shields.io/badge/status-stable_0.4.0-brightgreen)
+![status](https://img.shields.io/badge/status-stable_0.5.0-brightgreen)
 
 **Security filter for LLM streams** — redact secrets and PII, enforce tool-call policy, sanitize errors. Works on raw bytes (`TransformStream`) and parsed event streams. **Declarative JSON/YAML policies** and a **CLI** for offline scans.
 
 > A standalone, zero-dependency TypeScript security filter for LLM proxy and agent pipelines. Byte mode: chunk-safe secret redaction on raw SSE. Event mode: tool allow/deny, arg blocking, PII & error sanitization on parsed streams. Policy files + `llm-stream-guard scan` for CI prep.
 
-**Status:** Stable `0.4.0` — integration cookbook, runnable `examples/`, migration/MCP/LiteLLM guides, and CI scan recipes. Policy loader + CLI from 0.3.0 unchanged. Review [CHANGELOG.md](./CHANGELOG.md) before upgrades.
+**Status:** Stable `0.5.0` — static manifest audit, GitHub Action, CI dogfood workflow, and `audit` CLI subcommands. Integration cookbook and examples from 0.4.0 unchanged. Review [CHANGELOG.md](./CHANGELOG.md) before upgrades.
 
 ---
 
@@ -269,6 +269,15 @@ Use the [modes diagram](#two-modes) above, or:
 ---
 
 ## Documentation
+
+### CI & static audit (0.5.0)
+
+Policy drift detection, static tool manifest scanning, and a composite GitHub Action for PR gates:
+
+- [CI & GitHub Action guide](./docs/ci-github-action.md) — matrix workflows, SARIF preview upload
+- [Static scanning](./docs/static-scanning.md) — manifest formats, drift, dangerous patterns
+- [Pre-commit recipe](./docs/pre-commit-recipe.md) — local hook with `audit static --quiet`
+- [GitHub Action README](./action/README.md) — consumer inputs/outputs
 
 ### Integration cookbook (0.4.0)
 

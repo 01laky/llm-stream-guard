@@ -1,6 +1,6 @@
 # Integration cookbook
 
-**Status:** **0.4.0** — full adoption guide, typechecked examples under [`examples/`](../examples/README.md).
+**Status:** **0.5.0** — full adoption guide, typechecked examples under [`examples/`](../examples/README.md).
 
 Cookbook examples are **app-level only** — the guard package stays zero-dep and does not import assemble or provider SDKs.
 
@@ -16,7 +16,7 @@ Cookbook examples are **app-level only** — the guard package stays zero-dep an
 8. [Dual-stream audit](#8-dual-stream-audit)
 9. [MCP tool gate](#9-mcp-tool-gate)
 10. [LiteLLM / gateway](#10-litellm--gateway)
-11. [CI without Action](#11-ci-without-action)
+11. [CI & GitHub Action](#11-ci--github-action)
 12. [Migration](#12-migration)
 13. [Troubleshooting](#13-troubleshooting)
 
@@ -257,19 +257,24 @@ See [`docs/litellm-gateway-hook.md`](./litellm-gateway-hook.md) (**LSG-CBK31**) 
 
 ---
 
-## 11. CI without Action
+## 11. CI & GitHub Action
 
-**When to use:** PR checks before full GitHub Action package (Phase 4 / **0.5.0**).
+**When to use:** PR checks — composite Action or manual CLI steps (**LSG-CBK09**).
 
-Doc-only workflow fragment (**LSG-CBK09**):
+**Recommended:** [`docs/ci-github-action.md`](./ci-github-action.md) — matrix workflow, SARIF preview upload, local audit CLI (**LSG-ACT16**, **LSG-ACT18**).
+
+Minimal manual workflow (no Action):
 
 ```yaml
 - run: pnpm exec llm-stream-guard validate policies/agent-gate.json
 - run: pnpm exec llm-stream-guard scan --policy policies/agent-gate.json --json test/fixtures/events/ > scan.json
+- run: pnpm exec llm-stream-guard audit static --policy policies/agent-gate.json --root .
 - run: node --input-type=module -e "import fs from 'node:fs'; const n=JSON.parse(fs.readFileSync('scan.json','utf8')).summary.violations; if(n!==0) process.exit(1)"
 ```
 
 Shell script: [`examples/policy-ci/scan-fixtures.sh`](../examples/policy-ci/scan-fixtures.sh) (**LSG-CBK27**).
+
+Optional pre-commit: [`docs/pre-commit-recipe.md`](./pre-commit-recipe.md).
 
 ---
 

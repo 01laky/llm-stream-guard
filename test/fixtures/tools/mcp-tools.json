@@ -1,0 +1,6 @@
+{
+	"tools": [
+		{ "name": "mcp_list", "inputSchema": { "type": "object" } },
+		{ "name": "mcp_fetch", "description": "Fetch resource" }
+	]
+}
