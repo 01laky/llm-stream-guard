@@ -20,6 +20,7 @@ Format based on [Keep a Changelog](https://keepachangelog.com/); versioning foll
 
 - **Breaking** — `guardEvents(..., transform)` now invokes transforms; `createByteGuard({ redactSecrets: true })` mutates bytes.
 - **release-prep** — stable green badge gates for 0.2.0+.
+- **maxToolArgsBytes** — stable byte tracking for tool calls without `id` (keyed by tool name).
 
 ### Notes
 
