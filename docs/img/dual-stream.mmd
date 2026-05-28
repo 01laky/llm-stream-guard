@@ -1,0 +1,6 @@
+flowchart TB
+  U[Upstream SSE] --> G[createByteGuard / guardEvents]
+  G --> C[Client-safe stream]
+  G --> V[onViolation tap]
+  V --> L[Server audit log / SIEM]
+  G --> R[Secrets redacted in all modes]

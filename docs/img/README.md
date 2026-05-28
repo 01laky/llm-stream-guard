@@ -13,6 +13,9 @@ execute Mermaid — always commit updated **`.svg`** files alongside **`.mmd`** 
 | `ecosystem.mmd`          | Optional `llm-stream-assemble` + guard pipeline (no npm dependency) |
 | `scaffold-lifecycle.mmd` | Stateful `GuardContext` per stream vs stateless compose helpers     |
 | `policy-compile.mmd`     | Policy file → validate → merge → compile → guard / CLI scan         |
+| `agent-gate-loop.mmd`    | Agent loop: parse → guardEvents → executeTool on allowed tools      |
+| `dual-stream.mmd`        | Client stream + server audit side-channel (`onViolation` collector) |
+| `migration-path.mmd`     | Regex middleware → rule factories → policy files → CLI scan         |
 
 Regenerate after editing sources:
 

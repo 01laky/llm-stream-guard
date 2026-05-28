@@ -15,6 +15,9 @@ const diagrams = [
 	"ecosystem.mmd",
 	"scaffold-lifecycle.mmd",
 	"policy-compile.mmd",
+	"agent-gate-loop.mmd",
+	"dual-stream.mmd",
+	"migration-path.mmd",
 ];
 
 for (const name of diagrams) {

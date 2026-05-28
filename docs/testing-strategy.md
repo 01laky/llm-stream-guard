@@ -1,20 +1,21 @@
 # Testing strategy
 
-**Status:** Phase 2 shipped — policy loader, CLI, fixture audit scripts, **480** tests.
+**Status:** Phase 3 shipped — integration cookbook, runnable examples, **527** tests.
 
 ## Test ID prefixes
 
-| Prefix      | Purpose                                          |
-| ----------- | ------------------------------------------------ |
-| **LSG-S**   | Scaffold smoke (build, deps, passthrough API)    |
-| **LSG-B**   | Build artifacts and dist hygiene                 |
-| **LSG-E**   | Extended edge-case wiring (LSG-E01–E38)          |
-| **LSG-C**   | Chunk-boundary byte redaction                    |
-| **LSG-R**   | Redaction golden input → output                  |
-| **LSG-T**   | Tool policy + transform ordering                 |
-| **LSG-P**   | Performance smoke (local timing, not CI gate)    |
-| **LSG-POL** | Policy validate, merge, compile, load, diff, CLI |
-| **LSG-REL** | Release / publish readiness                      |
+| Prefix      | Purpose                                                 |
+| ----------- | ------------------------------------------------------- |
+| **LSG-S**   | Scaffold smoke (build, deps, passthrough API)           |
+| **LSG-B**   | Build artifacts and dist hygiene                        |
+| **LSG-E**   | Extended edge-case wiring (LSG-E01–E38)                 |
+| **LSG-C**   | Chunk-boundary byte redaction                           |
+| **LSG-R**   | Redaction golden input → output                         |
+| **LSG-T**   | Tool policy + transform ordering                        |
+| **LSG-P**   | Performance smoke (local timing, not CI gate)           |
+| **LSG-POL** | Policy validate, merge, compile, load, diff, CLI        |
+| **LSG-CBK** | Integration cookbook docs, examples, behavioral recipes |
+| **LSG-REL** | Release / publish readiness                             |
 
 ## Phase 1 coverage
 
@@ -58,6 +59,30 @@
 - JSON event files vs raw byte/SSE paths; `--json` report with `policyVersion` and effective `mode`.
 - SSE `data:` prefix normalization before byte scan.
 
+## Phase 3 coverage (integration cookbook)
+
+### Docs and examples
+
+- 13-section cookbook with byte/event/policy/migration/CI/troubleshooting recipes (**LSG-CBK01–20**).
+- Runnable `examples/` tree typechecked against `dist/index.d.ts` (**LSG-CBK11–15**, **LSG-CBK28**).
+- Supplementary guides: MCP tool gate, LiteLLM gateway hook, migration from regex (**LSG-CBK29–32**).
+- `scripts/check-cookbook-examples.mjs` — registry parity vs `examples/README.md` (**LSG-CBK33**).
+
+### Behavioral recipes (in tests)
+
+- Agent loop block vs audit modes (**LSG-CBK21–22**).
+- Policy-driven guard from file (**LSG-CBK23**).
+- Dual-stream audit side channel (**LSG-CBK24**).
+- Assemble mapper fixture (**LSG-CBK25**).
+- Workers example portability (**LSG-CBK26**).
+- Policy CI scan script on clean fixture (**LSG-CBK27**).
+- Troubleshooting table ≥5 rows (**LSG-CBK34**).
+
+### Release readiness extensions
+
+- README 0.4.0 badges and documentation links (**LSG-REL17**, **LSG-REL19**).
+- CHANGELOG `## [0.4.0]` cookbook bullets (**LSG-REL18**).
+
 ## Test files
 
 | File                               | IDs              | Focus                           |
@@ -78,6 +103,7 @@
 | `test/policy-load.test.ts`         | LSG-POL01–31     | Policy validate, merge, compile |
 | `test/policy-cli.test.ts`          | LSG-POL16–32     | CLI validate, scan, diff        |
 | `test/policy-edge-cases.test.ts`   | LSG-POL33–48     | Policy/CLI extended edge cases  |
+| `test/cookbook-recipes.test.ts`    | LSG-CBK01–34     | Cookbook docs + example recipes |
 | `test/release-readiness.test.ts`   | LSG-REL\*        | publish prep gates              |
 
 ## Running tests
@@ -89,6 +115,9 @@ pnpm fixtures:check-redaction    # golden drift check
 pnpm fixtures:audit-registry     # REGISTRY.md parity
 pnpm fixtures:check-policies       # policy golden drift
 pnpm fixtures:audit-policy-registry
+pnpm examples:typecheck            # cookbook examples vs dist types
+pnpm cookbook:check-examples       # examples README registry parity
+pnpm examples:smoke                # minimal-node smoke
 pnpm bench:smoke                 # local MB/s timing (informational)
 ```
 

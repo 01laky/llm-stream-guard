@@ -117,4 +117,27 @@ describe("LSG-REL: release readiness", () => {
 		expect(read("scripts/smoke-package.mjs")).toContain("cli.js");
 		expect(read("scripts/smoke-package.mjs")).toContain("validate");
 	});
+
+	it("LSG-REL17: README status and badges reference package version 0.4.0", () => {
+		const pkg = JSON.parse(read("package.json")) as { version: string };
+		const readme = read("README.md");
+		expect(pkg.version).toBe("0.4.0");
+		expect(readme).toContain(`Stable \`${pkg.version}\``);
+		expect(readme).toContain(`core-${pkg.version}-brightgreen`);
+		expect(readme).toContain(`status-stable_${pkg.version}-brightgreen`);
+	});
+
+	it("LSG-REL18: CHANGELOG documents 0.4.0 cookbook and examples", () => {
+		const changelog = read("CHANGELOG.md");
+		expect(changelog).toContain("## [0.4.0]");
+		expect(changelog).toMatch(/integration cookbook|examples\//i);
+		expect(changelog).toMatch(/LSG-CBK/i);
+	});
+
+	it("LSG-REL19: README Documentation links examples README and cookbook", () => {
+		const readme = read("README.md");
+		const docSection = readme.split("## Documentation")[1]?.split("## How this compares")[0] ?? "";
+		expect(docSection).toContain("integration-cookbook.md");
+		expect(docSection).toContain("examples/README.md");
+	});
 });

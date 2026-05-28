@@ -1,17 +1,17 @@
 # llm-stream-guard
 
-![core](https://img.shields.io/badge/core-0.3.0-brightgreen)
+![core](https://img.shields.io/badge/core-0.4.0-brightgreen)
 ![node](https://img.shields.io/badge/node-%3E%3D18-339933)
 ![runtime deps](https://img.shields.io/badge/runtime_deps-0-brightgreen)
-![tests](https://img.shields.io/badge/tests-480_passing-brightgreen)
+![tests](https://img.shields.io/badge/tests-527_passing-brightgreen)
 [![ci](https://github.com/01laky/llm-stream-guard/actions/workflows/ci.yml/badge.svg)](https://github.com/01laky/llm-stream-guard/actions/workflows/ci.yml)
-![status](https://img.shields.io/badge/status-stable_0.3.0-brightgreen)
+![status](https://img.shields.io/badge/status-stable_0.4.0-brightgreen)
 
 **Security filter for LLM streams** — redact secrets and PII, enforce tool-call policy, sanitize errors. Works on raw bytes (`TransformStream`) and parsed event streams. **Declarative JSON/YAML policies** and a **CLI** for offline scans.
 
 > A standalone, zero-dependency TypeScript security filter for LLM proxy and agent pipelines. Byte mode: chunk-safe secret redaction on raw SSE. Event mode: tool allow/deny, arg blocking, PII & error sanitization on parsed streams. Policy files + `llm-stream-guard scan` for CI prep.
 
-**Status:** Stable `0.3.0` — declarative policy loader, built-in profiles, and CLI (`validate`, `resolve`, `scan`, `diff`). Review [CHANGELOG.md](./CHANGELOG.md) before upgrades.
+**Status:** Stable `0.4.0` — integration cookbook, runnable `examples/`, migration/MCP/LiteLLM guides, and CI scan recipes. Policy loader + CLI from 0.3.0 unchanged. Review [CHANGELOG.md](./CHANGELOG.md) before upgrades.
 
 ---
 
@@ -270,12 +270,23 @@ Use the [modes diagram](#two-modes) above, or:
 
 ## Documentation
 
+### Integration cookbook (0.4.0)
+
+End-to-end recipes for byte proxies (Hono, Express, Workers), agent tool gates, policy-driven setup, assemble/AI SDK mappers, dual-stream audit, MCP mapping, LiteLLM hooks, CI scans, and migration from regex middleware:
+
+- [Integration cookbook](./docs/integration-cookbook.md) — 13 sections, **LSG-CBK01–34**
+- [Runnable examples registry](./examples/README.md) — typechecked under `examples/` (git only, not npm tarball)
+- [Migration from regex middleware](./docs/migration-from-regex.md)
+- [MCP tool gate recipe](./docs/mcp-tool-gate-recipe.md)
+- [LiteLLM / gateway byte hook](./docs/litellm-gateway-hook.md)
+
+### Reference
+
 - [Product & technical proposal](./docs/proposal.MD)
 - [Testing strategy](./docs/testing-strategy.md)
 - [Publishing checklist](./docs/publishing.md) _(maintainers)_
 - [Architecture diagrams](./docs/img/README.md)
 - [How this compares](./docs/comparison.md)
-- [Integration cookbook](./docs/integration-cookbook.md)
 - [FAQ](./docs/faq.md)
 - [Contributing](./CONTRIBUTING.md)
 
@@ -324,7 +335,10 @@ pnpm verify
 | `pnpm diagrams:build`                 | regenerate README SVGs from Mermaid sources          |
 | `pnpm fixtures:check-policies`        | validate example + profile policies                  |
 | `pnpm fixtures:audit-policy-registry` | policy fixture REGISTRY parity                       |
-| `pnpm test`                           | Vitest (LSG-S/B/E/C/R/T/P/POL, LSG-REL)              |
+| `pnpm test`                           | Vitest (LSG-S/B/E/C/R/T/P/POL/CBK, LSG-REL)          |
+| `pnpm examples:typecheck`             | Typecheck cookbook examples against `dist/`          |
+| `pnpm examples:smoke`                 | minimal-node install smoke after build               |
+| `pnpm cookbook:check-examples`        | examples README registry parity                      |
 | `pnpm bench:smoke`                    | local byte/event timing (informational)              |
 | `pnpm build`                          | tsup → ESM + CJS + declarations                      |
 

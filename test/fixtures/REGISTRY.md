@@ -9,6 +9,7 @@ Synthetic secrets only — never real keys.
 | LSG-R14   | redaction/text-sk.input.json + text-sk.expected.json               | redactSecrets      | warn  | event golden                     |
 | LSG-T11   | tool-policy/allow-blocked.input.json + allow-blocked.expected.json | allowTools         | block |                                  |
 | LSG-POL\* | events/bad-tool.json                                               | allowTools         | block | CLI scan event fixture           |
+| LSG-CBK27 | events/clean-tool.json                                             | allowTools         | block | clean scan fixture (exit 0)      |
 | LSG-POL\* | policies/valid/minimal.json                                        | policy validate    | —     | valid policy golden              |
 | LSG-POL\* | policies/valid/extends-agent.resolved.json                         | policy merge       | —     | expected resolved extends        |
 | LSG-POL\* | policies/invalid/missing-version.json                              | policy validate    | —     | POLICY_E001                      |

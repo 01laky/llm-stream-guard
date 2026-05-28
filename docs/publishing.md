@@ -21,7 +21,7 @@
    - Optional draft: `.local-playground/release-X.Y.Z.md` (gitignored).
 5. Verify `npm view llm-stream-guard version`.
 
-## Badge conventions (stable 0.3.0+)
+## Badge conventions (stable 0.4.0+)
 
 | Badge      | Pattern                                          |
 | ---------- | ------------------------------------------------ |

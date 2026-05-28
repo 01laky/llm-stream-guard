@@ -5,6 +5,25 @@ Format based on [Keep a Changelog](https://keepachangelog.com/); versioning foll
 
 ## [Unreleased]
 
+## [0.4.0]
+
+### Added
+
+- **Integration cookbook** — 13-section [`docs/integration-cookbook.md`](./docs/integration-cookbook.md): byte proxies (Hono, Express, Workers), agent tool gate, policy-driven setup, transform ordering, assemble + AI SDK mappers, dual-stream audit, MCP, LiteLLM gateway hook, CI without Action, migration, troubleshooting (**LSG-CBK01–34**).
+- **Runnable examples** — `examples/` tree (typechecked via `pnpm examples:typecheck`, smoke via `pnpm examples:smoke`): `byte-proxy/`, `event-gate/`, `assemble-mapper/`, `ai-sdk-mapper/`, `dual-stream/`, `policy-ci/`, `minimal-node/`; registry in [`examples/README.md`](./examples/README.md).
+- **Migration guide** — [`docs/migration-from-regex.md`](./docs/migration-from-regex.md) + `migration-path` diagram (regex → rule factories → policy files → CLI scan).
+- **MCP recipe** — [`docs/mcp-tool-gate-recipe.md`](./docs/mcp-tool-gate-recipe.md) (`tools/call` → `GuardEvent` mapping before execute).
+- **LiteLLM hook** — [`docs/litellm-gateway-hook.md`](./docs/litellm-gateway-hook.md) (byte guard on gateway response body; no litellm npm dep).
+- **Diagrams** — `agent-gate-loop`, `dual-stream`, `migration-path` (`.mmd` + `.svg`).
+- **Scripts** — `pnpm cookbook:check-examples`, `scripts/check-cookbook-examples.mjs`; `verify` extended with examples typecheck + smoke.
+- **Fixtures** — `test/fixtures/events/clean-tool.json` for policy-ci scan exit-0 golden.
+- **Tests** — **LSG-CBK01–CBK34**, **LSG-REL17–REL19**; **527** tests total.
+
+### Unchanged
+
+- Core runtime API, policy loader, CLI, zero runtime npm dependencies.
+- npm tarball `files` whitelist (`dist`, `schemas`, `README.md`, `LICENSE`).
+
 ## [0.3.0]
 
 ### Added

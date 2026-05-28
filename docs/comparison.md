@@ -1,6 +1,6 @@
 # How llm-stream-guard compares
 
-**Status:** **Stable 0.3.0** — MVP rules + declarative policy + CLI. See [`proposal.MD`](./proposal.MD).
+**Status:** **Stable 0.4.0** — MVP rules + declarative policy + CLI + integration cookbook. See [`proposal.MD`](./proposal.MD).
 
 ## At a glance
 

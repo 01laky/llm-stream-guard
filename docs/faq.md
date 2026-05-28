@@ -1,6 +1,6 @@
 # FAQ
 
-**Status:** **Stable 0.2.0** — MVP rules ship; npm publish via [`docs/publishing.md`](./publishing.md).
+**Status:** **Stable 0.4.0** — integration cookbook + runnable examples. Publish via [`docs/publishing.md`](./publishing.md).
 
 ## General
 
@@ -19,6 +19,10 @@ Publish-ready — run [`pnpm release:prep`](./publishing.md) then `npm publish` 
 ```bash
 pnpm add github:01laky/llm-stream-guard
 ```
+
+### What works in 0.4.0?
+
+Everything in **0.3.0** plus the expanded [**integration cookbook**](./integration-cookbook.md) (13 sections), **runnable examples** under [`examples/README.md`](../examples/README.md), migration/MCP/LiteLLM guides, and CI scan recipes. Tests: **LSG-CBK01–CBK34**.
 
 ### What works in 0.3.0?
 

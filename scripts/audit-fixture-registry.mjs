@@ -45,6 +45,7 @@ const referenced = [
 	"tool-policy/allow-blocked.input.json",
 	"tool-policy/allow-blocked.expected.json",
 	"events/bad-tool.json",
+	"events/clean-tool.json",
 	"policies/valid/minimal.json",
 	"policies/valid/extends-agent.resolved.json",
 	"policies/invalid/missing-version.json",

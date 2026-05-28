@@ -1,0 +1,8 @@
+{
+	"private": true,
+	"type": "module",
+	"description": "Optional local install example — CI smoke uses ../../dist/index.js directly",
+	"dependencies": {
+		"llm-stream-guard": "file:../.."
+	}
+}

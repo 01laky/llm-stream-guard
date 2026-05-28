@@ -1,0 +1,9 @@
+flowchart LR
+  A[Parse provider stream] --> B[guardEvents + transforms]
+  B --> C{tool_call.done?}
+  C -->|no| D[Forward text / reasoning]
+  C -->|yes| E{Policy OK?}
+  E -->|block/warn violation| F[error + finish policy_violation]
+  E -->|audit violation| G[onViolation log + pass event]
+  E -->|clean| H[executeTool]
+  G --> I[App decides execute]

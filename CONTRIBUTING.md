@@ -8,7 +8,7 @@ Thank you for your interest in contributing.
 
 Read [`docs/proposal.MD`](./docs/proposal.MD) before making changes. It defines scope, the `GuardEvent` model, MVP rules, and non-goals.
 
-For integration patterns, see [`docs/integration-cookbook.md`](./docs/integration-cookbook.md) (expanded in v0.3).
+For integration patterns, see [`docs/integration-cookbook.md`](./docs/integration-cookbook.md) (expanded in **v0.4.0** with runnable `examples/`).
 
 ## Requirements
 
@@ -36,16 +36,18 @@ git config core.hooksPath   # should print: .githooks
 
 ## Fixture and test ID convention
 
-| Prefix      | Purpose                       |
-| ----------- | ----------------------------- |
-| **LSG-S**   | Scaffold / smoke              |
-| **LSG-B**   | Build artifact / dist hygiene |
-| **LSG-E**   | Extended edge-case wiring     |
-| **LSG-C**   | Chunk-boundary byte streams   |
-| **LSG-R**   | Redaction golden fixtures     |
-| **LSG-T**   | Tool policy tests             |
-| **LSG-P**   | Performance smoke (local)     |
-| **LSG-REL** | Release / publish readiness   |
+| Prefix      | Purpose                         |
+| ----------- | ------------------------------- |
+| **LSG-S**   | Scaffold / smoke                |
+| **LSG-B**   | Build artifact / dist hygiene   |
+| **LSG-E**   | Extended edge-case wiring       |
+| **LSG-C**   | Chunk-boundary byte streams     |
+| **LSG-R**   | Redaction golden fixtures       |
+| **LSG-T**   | Tool policy tests               |
+| **LSG-P**   | Performance smoke (local)       |
+| **LSG-POL** | Policy loader / CLI             |
+| **LSG-CBK** | Integration cookbook / examples |
+| **LSG-REL** | Release / publish readiness     |
 
 Document new IDs in test headers; maintain `test/fixtures/REGISTRY.md`; run `pnpm fixtures:audit-registry` to enforce parity. Rule edge cases: **LSG-E18–E38** in `test/edge-cases-rules.test.ts`.
 

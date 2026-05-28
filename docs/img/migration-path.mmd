@@ -1,0 +1,4 @@
+flowchart LR
+  R[Regex middleware] --> T[Transform factories]
+  T --> P[Policy JSON/YAML]
+  P --> S[llm-stream-guard scan CLI]

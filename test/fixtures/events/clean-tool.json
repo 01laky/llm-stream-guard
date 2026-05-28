@@ -1,0 +1,9 @@
+[
+	{
+		"type": "tool_call",
+		"phase": "done",
+		"name": "search",
+		"id": "1",
+		"args": { "q": "weather" }
+	}
+]
