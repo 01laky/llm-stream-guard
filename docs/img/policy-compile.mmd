@@ -1,0 +1,12 @@
+flowchart LR
+  file["Policy file\n.json / .yaml"]
+  parse["parsePolicyFile"]
+  merge["resolve extends\nprofiles merge"]
+  validate["validatePolicy\nPOLICY_E* codes"]
+  compile["compilePolicy\n→ transforms + byteOptions"]
+  runtime["guardEvents /\ncreateByteGuard"]
+  cli["CLI scan / validate"]
+
+  file --> parse --> merge --> validate --> compile
+  compile --> runtime
+  compile --> cli

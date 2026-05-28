@@ -39,10 +39,18 @@ for (const file of files) {
 const referenced = [
 	"byte-sse/sk-mid-line.sse",
 	"byte-sse/sk-mid-line.expected.sse",
+	"byte-sse/data-prefix-sk.sse",
 	"redaction/text-sk.input.json",
 	"redaction/text-sk.expected.json",
 	"tool-policy/allow-blocked.input.json",
 	"tool-policy/allow-blocked.expected.json",
+	"events/bad-tool.json",
+	"policies/valid/minimal.json",
+	"policies/valid/extends-agent.resolved.json",
+	"policies/invalid/missing-version.json",
+	"policies/invalid/bad-regexp.json",
+	"policies/invalid/allow-deny-overlap.json",
+	"policies/invalid/empty-allow-block.json",
 ];
 
 for (const ref of referenced) {

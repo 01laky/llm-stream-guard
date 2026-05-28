@@ -1,0 +1,6 @@
+{
+	"extends": "agent-gate",
+	"policyVersion": "team-extends-demo",
+	"mode": "block",
+	"rules": [{ "allowTools": { "names": ["search", "read_file", "grep", "bash"] } }]
+}

@@ -12,6 +12,7 @@ execute Mermaid — always commit updated **`.svg`** files alongside **`.mmd`** 
 | `chunk-redaction.mmd`    | Mid-chunk secret redaction with rolling lookback buffer (Phase 1)   |
 | `ecosystem.mmd`          | Optional `llm-stream-assemble` + guard pipeline (no npm dependency) |
 | `scaffold-lifecycle.mmd` | Stateful `GuardContext` per stream vs stateless compose helpers     |
+| `policy-compile.mmd`     | Policy file → validate → merge → compile → guard / CLI scan         |
 
 Regenerate after editing sources:
 

@@ -1,17 +1,17 @@
 # llm-stream-guard
 
-![core](https://img.shields.io/badge/core-0.2.0-brightgreen)
+![core](https://img.shields.io/badge/core-0.3.0-brightgreen)
 ![node](https://img.shields.io/badge/node-%3E%3D18-339933)
 ![runtime deps](https://img.shields.io/badge/runtime_deps-0-brightgreen)
-![tests](https://img.shields.io/badge/tests-355_passing-brightgreen)
+![tests](https://img.shields.io/badge/tests-480_passing-brightgreen)
 [![ci](https://github.com/01laky/llm-stream-guard/actions/workflows/ci.yml/badge.svg)](https://github.com/01laky/llm-stream-guard/actions/workflows/ci.yml)
-![status](https://img.shields.io/badge/status-stable_0.2.0-brightgreen)
+![status](https://img.shields.io/badge/status-stable_0.3.0-brightgreen)
 
-**Security filter for LLM streams** — redact secrets and PII, enforce tool-call policy, sanitize errors. Works on raw bytes (`TransformStream`) and parsed event streams.
+**Security filter for LLM streams** — redact secrets and PII, enforce tool-call policy, sanitize errors. Works on raw bytes (`TransformStream`) and parsed event streams. **Declarative JSON/YAML policies** and a **CLI** for offline scans.
 
-> A standalone, zero-dependency TypeScript security filter for LLM proxy and agent pipelines. Byte mode: chunk-safe secret redaction on raw SSE. Event mode: tool allow/deny, arg blocking, PII & error sanitization on parsed streams. Works with any parser — no assemble required.
+> A standalone, zero-dependency TypeScript security filter for LLM proxy and agent pipelines. Byte mode: chunk-safe secret redaction on raw SSE. Event mode: tool allow/deny, arg blocking, PII & error sanitization on parsed streams. Policy files + `llm-stream-guard scan` for CI prep.
 
-**Status:** Stable `0.2.0` — MVP guard rules ship (secret redaction, tool policy, error sanitization). Review [CHANGELOG.md](./CHANGELOG.md) before upgrades.
+**Status:** Stable `0.3.0` — declarative policy loader, built-in profiles, and CLI (`validate`, `resolve`, `scan`, `diff`). Review [CHANGELOG.md](./CHANGELOG.md) before upgrades.
 
 ---
 
@@ -25,6 +25,7 @@
 - [Install](#install)
 - [First success in 30 seconds](#first-success-in-30-seconds)
 - [Quickstart](#quickstart)
+- [Policy files & CLI](#policy-files--cli)
 - [Mode decision guide](#mode-decision-guide)
 - [Documentation](#documentation)
 - [How this compares](#how-this-compares)
@@ -200,6 +201,61 @@ Reversing order is explicit — see [`docs/integration-cookbook.md`](./docs/inte
 
 ---
 
+## Policy files & CLI
+
+![Policy compile pipeline](https://raw.githubusercontent.com/01laky/llm-stream-guard/main/docs/img/policy-compile.svg)
+
+Declarative policies map to the same rule factories as manual stacks. Built-in profiles: `proxy-strict`, `agent-gate`, `audit-only`.
+
+### Policy file (`policies/agent-gate.json`)
+
+```json
+{
+	"version": "1",
+	"policyVersion": "team-alpha-v3",
+	"mode": "block",
+	"rules": [
+		{ "allowTools": { "names": ["search", "read_file", "grep"] } },
+		{ "maxToolArgsBytes": { "max": 65536 } },
+		{ "sanitizeErrors": {} }
+	]
+}
+```
+
+### Programmatic (`loadPolicy` / `createGuardFromPolicy`)
+
+```ts
+import { createGuardFromPolicy, loadPolicy } from "llm-stream-guard";
+
+const guard = createGuardFromPolicy(loadPolicy("./policies/agent-gate.json"));
+for await (const event of guard.guard(parsedEvents)) {
+	await handle(event);
+}
+const byteGuard = guard.createByteGuard();
+```
+
+### CLI
+
+```bash
+npx llm-stream-guard validate policies/agent-gate.json
+npx llm-stream-guard resolve policies/examples/extends-agent.json
+npx llm-stream-guard scan --policy policies/agent-gate.json test/fixtures/events/
+cat capture.log | npx llm-stream-guard scan --policy policies/proxy-strict.json -
+npx llm-stream-guard diff policies/v1.json policies/v2.json --check
+npx llm-stream-guard profiles list
+```
+
+| Env variable        | Effect                                              |
+| ------------------- | --------------------------------------------------- |
+| `GUARD_MODE`        | Override policy `mode` (`block` / `warn` / `audit`) |
+| `GUARD_POLICY_PATH` | Default `--policy` path for CLI scan                |
+
+Schema reference: [`schemas/policy-v1.json`](./schemas/policy-v1.json). Example policies: [`policies/`](./policies/).
+
+**Policy pitfalls:** overlapping allow/deny lists (`POLICY_E009`); empty allowlist with `mode: block` (`POLICY_E010` / `POLICY_E008`).
+
+---
+
 ## Mode decision guide
 
 Pick byte vs event mode in ~30 seconds:
@@ -260,15 +316,17 @@ pnpm install
 pnpm verify
 ```
 
-| Command               | Description                                          |
-| --------------------- | ---------------------------------------------------- |
-| `pnpm verify`         | format + typecheck + build + test + fixtures + smoke |
-| `pnpm verify:deps`    | fail if runtime dependencies are added               |
-| `pnpm release:prep`   | pre-tag checks (version, CHANGELOG, dist, npm pack)  |
-| `pnpm diagrams:build` | regenerate README SVGs from Mermaid sources          |
-| `pnpm test`           | Vitest (LSG-S/B/E/C/R/T/P, LSG-REL)                  |
-| `pnpm bench:smoke`    | local byte/event timing (informational)              |
-| `pnpm build`          | tsup → ESM + CJS + declarations                      |
+| Command                               | Description                                          |
+| ------------------------------------- | ---------------------------------------------------- |
+| `pnpm verify`                         | format + typecheck + build + test + fixtures + smoke |
+| `pnpm verify:deps`                    | fail if runtime dependencies are added               |
+| `pnpm release:prep`                   | pre-tag checks (version, CHANGELOG, dist, npm pack)  |
+| `pnpm diagrams:build`                 | regenerate README SVGs from Mermaid sources          |
+| `pnpm fixtures:check-policies`        | validate example + profile policies                  |
+| `pnpm fixtures:audit-policy-registry` | policy fixture REGISTRY parity                       |
+| `pnpm test`                           | Vitest (LSG-S/B/E/C/R/T/P/POL, LSG-REL)              |
+| `pnpm bench:smoke`                    | local byte/event timing (informational)              |
+| `pnpm build`                          | tsup → ESM + CJS + declarations                      |
 
 ---
 

@@ -88,4 +88,11 @@ describe("build-artifacts.test.ts", () => {
 			expect(existsSync(path)).toBe(true);
 		});
 	});
+
+	describe("LSG-B09", () => {
+		it("dist/cli.js and policy profiles exist", () => {
+			expect(existsSync(join(rootDir, "dist/cli.js"))).toBe(true);
+			expect(existsSync(join(rootDir, "dist/policy/profiles/agent-gate.json"))).toBe(true);
+		});
+	});
 });

@@ -1,0 +1,9 @@
+{
+	"version": "1",
+	"mode": "audit",
+	"byte": {
+		"redactSecrets": true,
+		"sanitizeErrors": true
+	},
+	"rules": [{ "redactSecrets": {} }, { "sanitizeErrors": {} }]
+}

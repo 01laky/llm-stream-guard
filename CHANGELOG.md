@@ -5,6 +5,25 @@ Format based on [Keep a Changelog](https://keepachangelog.com/); versioning foll
 
 ## [Unreleased]
 
+## [0.3.0]
+
+### Added
+
+- **Policy schema v1** — JSON/YAML files with `version`, `mode`, `byte`, ordered `rules`, optional `extends` and `policyVersion`.
+- **Policy API** — `loadPolicy()`, `compilePolicy()`, `validatePolicy()`, `diffPolicies()`, `createGuardFromPolicy()`, `listProfiles()`; stable error codes `POLICY_E001`–`E011`.
+- **Built-in profiles** — `proxy-strict`, `agent-gate`, `audit-only` with merge semantics for `extends`.
+- **Minimal YAML parser** — zero-dep subset for policy files (`parsePolicyYaml`).
+- **CLI** (`llm-stream-guard`) — `validate`, `resolve`, `scan` (files, dirs, stdin), `diff`, `profiles list|show`.
+- **Scan report** — `--json` output includes `policyVersion` and effective `mode` per violation.
+- **SSE-aware byte scan** — strips `data:` framing before byte redaction in CLI scan.
+- **Examples** — `policies/`, `schemas/policy-v1.json`, `test/fixtures/policies/` + REGISTRY.
+- **Tests** — **LSG-POL01–POL48**, **LSG-REL15–REL16**; **480** tests total.
+
+### Unchanged
+
+- All Phase 1 rule factories and manual transform API.
+- Zero runtime npm dependencies.
+
 ## [0.2.0]
 
 ### Added

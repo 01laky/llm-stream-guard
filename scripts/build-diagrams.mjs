@@ -14,6 +14,7 @@ const diagrams = [
 	"chunk-redaction.mmd",
 	"ecosystem.mmd",
 	"scaffold-lifecycle.mmd",
+	"policy-compile.mmd",
 ];
 
 for (const name of diagrams) {

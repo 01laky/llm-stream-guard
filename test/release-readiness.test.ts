@@ -105,4 +105,16 @@ describe("LSG-REL: release readiness", () => {
 		expect(read("docs/publishing.md")).toContain("pnpm release:prep");
 		expect(read("docs/publishing.md")).toContain("git tag vX.Y.Z");
 	});
+
+	it("LSG-REL15: README documents CLI policy workflow", () => {
+		const readme = read("README.md");
+		expect(readme).toContain("llm-stream-guard");
+		expect(readme).toContain("loadPolicy");
+		expect(readme).toContain("createGuardFromPolicy");
+	});
+
+	it("LSG-REL16: smoke-package validates CLI from tarball", () => {
+		expect(read("scripts/smoke-package.mjs")).toContain("cli.js");
+		expect(read("scripts/smoke-package.mjs")).toContain("validate");
+	});
 });

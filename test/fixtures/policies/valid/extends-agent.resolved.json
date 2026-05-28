@@ -1,0 +1,9 @@
+{
+	"version": "1",
+	"mode": "block",
+	"rules": [
+		{ "allowTools": { "names": ["search", "read_file", "grep", "bash"] } },
+		{ "maxToolArgsBytes": { "max": 65536 } },
+		{ "sanitizeErrors": {} }
+	]
+}

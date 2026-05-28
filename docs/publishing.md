@@ -10,7 +10,7 @@
 2. `pnpm release:prep` — version, README badges, CHANGELOG, dist, test badge, npm pack.
 3. `pnpm smoke:package` — install tarball in temp project; ESM + CJS import smoke.
 4. Confirm `package.json` has **no** `"private": true`.
-5. `npm pack --dry-run --json` — confirm `files` whitelist (`dist`, `README.md`, `LICENSE` only).
+5. `npm pack --dry-run --json` — confirm `files` whitelist (`dist`, `schemas`, `README.md`, `LICENSE`; **`bin.llm-stream-guard`** → `dist/cli.js` since **0.3.0**).
 
 ## Publish
 
@@ -21,7 +21,7 @@
    - Optional draft: `.local-playground/release-X.Y.Z.md` (gitignored).
 5. Verify `npm view llm-stream-guard version`.
 
-## Badge conventions (stable 0.2.0+)
+## Badge conventions (stable 0.3.0+)
 
 | Badge      | Pattern                                          |
 | ---------- | ------------------------------------------------ |

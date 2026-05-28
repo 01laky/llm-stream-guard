@@ -20,9 +20,24 @@ Publish-ready — run [`pnpm release:prep`](./publishing.md) then `npm publish` 
 pnpm add github:01laky/llm-stream-guard
 ```
 
+### What works in 0.3.0?
+
+Everything in **0.2.0** plus declarative **JSON/YAML policies** (`loadPolicy`, `createGuardFromPolicy`), built-in profiles (`proxy-strict`, `agent-gate`, `audit-only`), and the **`llm-stream-guard` CLI** for offline `validate`, `resolve`, `scan`, and `diff`. Tests: **LSG-POL01–POL48**.
+
 ### What works in 0.2.0?
 
-`redactSecrets()`, `redactPII()`, tool policy factories, `sanitizeErrors()`, byte flags on `createByteGuard()`, and golden fixtures (**LSG-C/R/T**). YAML policy + CLI → **0.3.0**.
+`redactSecrets()`, `redactPII()`, tool policy factories, `sanitizeErrors()`, byte flags on `createByteGuard()`, and golden fixtures (**LSG-C/R/T**).
+
+### Can I scan logs offline without wiring the library?
+
+Yes — install the package and run:
+
+```bash
+npx llm-stream-guard scan --policy ./policies/agent-gate.json path/to/events.json
+npx llm-stream-guard scan --policy ./policies/proxy-strict.json ./captures/stream.sse
+```
+
+Use `--json` for machine-readable output (includes `policyVersion` and effective violation `mode`). Set `GUARD_POLICY_PATH` as the default `--policy` path.
 
 ## Modes
 

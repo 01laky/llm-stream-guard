@@ -1,6 +1,6 @@
 # Integration cookbook
 
-**Status:** **0.2.0** — minimal recipes; expanded patterns land in **0.4.0** (proposal v0.3).
+**Status:** **0.3.0** — policy files + CLI scan; expanded patterns land in **0.4.0** (proposal v0.3).
 
 Cookbook examples are **app-level only** — the guard package stays zero-dep and does not import assemble or provider SDKs.
 
@@ -116,5 +116,35 @@ async function* mapStream(source: AsyncIterable<StreamEvent>) {
 ## Dual stream: safe client + audit log
 
 Use `mode: "audit"` on tool policy when you want SIEM logging without blocking; secrets still redact in all modes.
+
+## Policy file + programmatic guard
+
+```ts
+import { createGuardFromPolicy, loadPolicy } from "llm-stream-guard";
+
+const policy = loadPolicy("./policies/agent-gate.json");
+const byteGuard = createGuardFromPolicy(policy); // TransformStream for proxy
+// or: compilePolicy(policy) + manual guardEvents(..., ...compiled.transforms)
+```
+
+Profile inheritance:
+
+```json
+{
+	"version": 1,
+	"extends": "agent-gate",
+	"mode": "warn",
+	"rules": [{ "allowTools": ["search", "read_file"] }]
+}
+```
+
+## CI offline scan (no app code)
+
+```bash
+pnpm exec llm-stream-guard validate policies/agent-gate.json
+pnpm exec llm-stream-guard scan --policy policies/agent-gate.json --json test/fixtures/events/
+```
+
+See [`docs/img/policy-compile.svg`](./img/policy-compile.svg) and README [Policy files & CLI](../README.md#policy-files--cli).
 
 Related assemble cookbook: [llm-stream-assemble integration-cookbook](https://github.com/01laky/llm-stream-assemble/blob/main/docs/integration-cookbook.md).

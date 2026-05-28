@@ -1,0 +1,14 @@
+{
+	"version": "1",
+	"mode": "block",
+	"byte": {
+		"redactSecrets": true,
+		"sanitizeErrors": true
+	},
+	"rules": [
+		{ "redactSecrets": {} },
+		{ "sanitizeErrors": {} },
+		{ "denyTools": { "names": ["bash", "shell", "exec", "run_terminal_cmd"] } },
+		{ "blockToolArgs": { "pattern": "rm\\s+-rf|curl\\s+.*\\|" } }
+	]
+}

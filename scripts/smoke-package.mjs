@@ -20,6 +20,7 @@ try {
 		if (normalized === "package.json") continue;
 		if (normalized === "LICENSE" || normalized === "README.md") continue;
 		if (normalized.startsWith("dist/")) continue;
+		if (normalized.startsWith("schemas/")) continue;
 		throw new Error(`unexpected file in npm pack: ${path}`);
 	}
 
@@ -63,6 +64,13 @@ if (typeof pipeGuard !== "function") throw new Error("pipeGuard CJS import faile
 
 	execFileSync("node", ["esm.mjs"], { cwd: temp, stdio: "pipe" });
 	execFileSync("node", ["cjs.cjs"], { cwd: temp, stdio: "pipe" });
+
+	const cliPath = join(temp, "node_modules", "llm-stream-guard", "dist", "cli.js");
+	execFileSync(
+		process.execPath,
+		[cliPath, "validate", join(root, "test/fixtures/policies/valid/minimal.json")],
+		{ stdio: "pipe" },
+	);
 
 	const pkg = JSON.parse(readFileSync(join(root, "package.json"), "utf8"));
 	if (!Array.isArray(pkg.files) || !pkg.files.includes("dist")) {

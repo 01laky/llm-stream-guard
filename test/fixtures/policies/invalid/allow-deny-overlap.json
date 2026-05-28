@@ -1,0 +1,8 @@
+{
+	"version": "1",
+	"mode": "block",
+	"rules": [
+		{ "allowTools": { "names": ["search", "bash"] } },
+		{ "denyTools": { "names": ["bash"] } }
+	]
+}
