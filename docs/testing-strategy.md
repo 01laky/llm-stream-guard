@@ -1,6 +1,6 @@
 # Testing strategy
 
-**Status:** Phase 3 shipped — integration cookbook, runnable examples, **527** tests.
+**Status:** Phase 3 shipped — integration cookbook, runnable examples, **580** tests.
 
 ## Test ID prefixes
 
@@ -78,6 +78,22 @@
 - Policy CI scan script on clean fixture (**LSG-CBK27**).
 - Troubleshooting table ≥5 rows (**LSG-CBK34**).
 
+### Extended cookbook edge cases (**LSG-CBK35–CBK43**)
+
+- Assemble + AI SDK mapper exhaustive mapping and async streams (**LSG-CBK35–36**).
+- Agent loop: execute path, warn/audit semantics, blockToolArgs, post-violation halt (**LSG-CBK37**, **LSG-CBK42**).
+- Dual-stream audit: clean vs disallowed tools, ordering, empty stream (**LSG-CBK38**).
+- Policy-driven guard: agent-gate/proxy-strict, `guard()` + `createByteGuard()` (**LSG-CBK39**).
+- Mapper → `guardEvents` integration pipelines (**LSG-CBK40**).
+- Byte proxy export sanity + doc cross-links (**LSG-CBK41**, **LSG-CBK43**).
+
+### Policy extended edge cases (**LSG-POL49–POL52**)
+
+- `applyModeOverride` invalid `GUARD_MODE` fallback (**LSG-POL49**).
+- `createGuardFromPolicy` byte + event factory parity (**LSG-POL50**).
+- `compilePolicy` empty rules / default byte flags (**LSG-POL51**).
+- `scanContent` on clean vs bad tool fixtures (**LSG-POL52**).
+
 ### Release readiness extensions
 
 - README 0.4.0 badges and documentation links (**LSG-REL17**, **LSG-REL19**).
@@ -102,8 +118,9 @@
 | `test/exports.test.ts`             | LSG-S06          | public export surface           |
 | `test/policy-load.test.ts`         | LSG-POL01–31     | Policy validate, merge, compile |
 | `test/policy-cli.test.ts`          | LSG-POL16–32     | CLI validate, scan, diff        |
-| `test/policy-edge-cases.test.ts`   | LSG-POL33–48     | Policy/CLI extended edge cases  |
+| `test/policy-edge-cases.test.ts`   | LSG-POL33–52     | Policy/CLI extended edge cases  |
 | `test/cookbook-recipes.test.ts`    | LSG-CBK01–34     | Cookbook docs + example recipes |
+| `test/cookbook-edge-cases.test.ts` | LSG-CBK35–43     | Cookbook behavioral edge cases  |
 | `test/release-readiness.test.ts`   | LSG-REL\*        | publish prep gates              |
 
 ## Running tests

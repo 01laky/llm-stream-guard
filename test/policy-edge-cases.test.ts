@@ -32,9 +32,11 @@ import {
 } from "../src/index.js";
 import { loadPolicyDocumentFromUnknown } from "../src/policy/load.js";
 import { mergePolicyDocuments, resolveExtends, MAX_EXTENDS_DEPTH } from "../src/policy/merge.js";
+import { applyModeOverride } from "../src/policy/compile.js";
 import { parsePolicyYaml as parseYaml, PolicyYamlError } from "../src/policy/parse-yaml-minimal.js";
 import { eventsFrom } from "./helpers/sample-events.js";
 import { pipeThroughByteGuard } from "./helpers/guard-bytes.js";
+import { collectBytes, splitAtByteIndex, utf8 } from "./helpers/streams.js";
 
 const rootDir = join(dirname(fileURLToPath(import.meta.url)), "..");
 const cliPath = join(rootDir, "dist/cli.js");
@@ -804,5 +806,92 @@ describe("LSG-POL48: CLI scan formats", () => {
 		const parsed = JSON.parse(r.stdout);
 		expect(parsed.changed).toBe(true);
 		expect(Array.isArray(parsed.entries)).toBe(true);
+	});
+});
+
+describe("LSG-POL49: applyModeOverride edge cases", () => {
+	it("ignores invalid GUARD_MODE and uses options override", () => {
+		const prev = process.env.GUARD_MODE;
+		process.env.GUARD_MODE = "invalid";
+		try {
+			expect(applyModeOverride("block", { mode: "audit" })).toBe("audit");
+		} finally {
+			if (prev === undefined) delete process.env.GUARD_MODE;
+			else process.env.GUARD_MODE = prev;
+		}
+	});
+
+	it("falls back to policy mode when env and options unset", () => {
+		const prev = process.env.GUARD_MODE;
+		delete process.env.GUARD_MODE;
+		try {
+			expect(applyModeOverride("warn")).toBe("warn");
+		} finally {
+			if (prev === undefined) delete process.env.GUARD_MODE;
+			else process.env.GUARD_MODE = prev;
+		}
+	});
+});
+
+describe("LSG-POL50: createGuardFromPolicy factory edge cases", () => {
+	it("guard() and createByteGuard() share compiled policy mode", async () => {
+		const guard = createGuardFromPolicy(join(rootDir, "policies/proxy-strict.json"));
+		expect(guard.mode).toBe("block");
+		expect(guard.byteOptions.redactSecrets).toBe(true);
+
+		const secret = utf8("sk-test12345678901234567890123456789012");
+		const [a, b] = splitAtByteIndex(secret, 5);
+		const out = await collectBytes(
+			new ReadableStream<Uint8Array>({
+				start(c) {
+					c.enqueue(a);
+					c.enqueue(b);
+					c.close();
+				},
+			}).pipeThrough(guard.createByteGuard()),
+		);
+		expect(new TextDecoder().decode(out)).not.toContain("sk-test");
+	});
+
+	it("event guard blocks denyTools from compiled policy", async () => {
+		const guard = createGuardFromPolicy(join(rootDir, "policies/proxy-strict.json"));
+		const out: unknown[] = [];
+		for await (const e of guard.guard(
+			eventsFrom([{ type: "tool_call", phase: "done", name: "bash", id: "1", args: {} }]),
+		)) {
+			out.push(e);
+		}
+		expect(out.some((e) => (e as { reason?: string }).reason === "policy_violation")).toBe(true);
+	});
+});
+
+describe("LSG-POL51: compilePolicy edge cases", () => {
+	it("empty rules array yields zero transforms", () => {
+		const loaded = compilePolicy({ version: "1", mode: "audit", rules: [] });
+		expect(loaded.transforms).toEqual([]);
+		expect(loaded.mode).toBe("audit");
+	});
+
+	it("byte flags default false when byte section omitted", () => {
+		const loaded = compilePolicy({ version: "1", rules: [{ redactSecrets: {} }] });
+		expect(loaded.byteOptions.redactSecrets).toBe(false);
+		expect(loaded.byteOptions.sanitizeErrors).toBe(false);
+	});
+});
+
+describe("LSG-POL52: scan-runner additional edge cases", () => {
+	it("scanContent on clean-tool fixture returns zero violations", async () => {
+		const raw = readFileSync(join(rootDir, "test/fixtures/events/clean-tool.json"), "utf8");
+		const loaded = loadPolicy(join(rootDir, "policies/agent-gate.json"));
+		const result = await scanContent("clean-tool.json", raw, loaded, { ext: ".json" });
+		expect(result.violations).toHaveLength(0);
+		expect(result.skipped).toBe(false);
+	});
+
+	it("scanContent on bad-tool fixture reports violations", async () => {
+		const raw = readFileSync(join(rootDir, "test/fixtures/events/bad-tool.json"), "utf8");
+		const loaded = loadPolicy(join(rootDir, "policies/agent-gate.json"));
+		const result = await scanContent("bad-tool.json", raw, loaded, { ext: ".json" });
+		expect(result.violations.length).toBeGreaterThan(0);
 	});
 });

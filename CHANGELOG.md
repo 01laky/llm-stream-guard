@@ -17,7 +17,7 @@ Format based on [Keep a Changelog](https://keepachangelog.com/); versioning foll
 - **Diagrams** — `agent-gate-loop`, `dual-stream`, `migration-path` (`.mmd` + `.svg`).
 - **Scripts** — `pnpm cookbook:check-examples`, `scripts/check-cookbook-examples.mjs`; `verify` extended with examples typecheck + smoke.
 - **Fixtures** — `test/fixtures/events/clean-tool.json` for policy-ci scan exit-0 golden.
-- **Tests** — **LSG-CBK01–CBK34**, **LSG-REL17–REL19**; **527** tests total.
+- **Tests** — **LSG-CBK01–CBK34**, **LSG-CBK35–CBK43** (extended cookbook edge cases), **LSG-POL49–POL52**, **LSG-REL17–REL19**; **580** tests total.
 
 ### Unchanged
 
