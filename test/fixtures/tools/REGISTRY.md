@@ -11,6 +11,7 @@
 | agent-tools.yaml                    | YAML tools list extraction                    |
 | mcp-tools.json                      | MCP-shaped tools array                        |
 | openapi-x-tools.json                | OpenAPI components.x-tools subset             |
-| walk/node_modules/tools/hidden.json | Should be skipped during walk                 |
 | walk/apps/agent/tools/manifest.json | Include-prefix fixture                        |
 | walk/binary-tools.dat               | Binary skipped without throw                  |
+
+`node_modules` skip is covered by **LSG-STA13** (temp dir in test, not a committed fixture — `node_modules/` is gitignored).

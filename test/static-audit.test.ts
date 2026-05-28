@@ -2,7 +2,7 @@
  * LSG-STA static audit tests
  */
 import { execFileSync, spawnSync } from "node:child_process";
-import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -192,8 +192,16 @@ describe("LSG-STA12: SARIF results", () => {
 
 describe("LSG-STA13: skip node_modules", () => {
 	it("does not discover hidden manifest under node_modules", () => {
-		const files = walkManifestFiles({ root: join(toolsDir, "walk") });
+		const dir = mkdtempSync(join(tmpdir(), "lsg-skip-nm-"));
+		const hidden = join(dir, "node_modules", "tools");
+		mkdirSync(hidden, { recursive: true });
+		writeFileSync(
+			join(hidden, "hidden.json"),
+			JSON.stringify({ version: "1", tools: [{ name: "hidden" }] }),
+		);
+		const files = walkManifestFiles({ root: dir });
 		expect(files.some((f) => f.includes("node_modules"))).toBe(false);
+		rmSync(dir, { recursive: true, force: true });
 	});
 });
 

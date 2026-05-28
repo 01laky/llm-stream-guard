@@ -16,7 +16,7 @@ const listed = new Set(rows);
 
 function walk(dir, prefix = "") {
 	for (const name of readdirSync(dir)) {
-		if (name.startsWith(".") || name === "REGISTRY.md") continue;
+		if (name.startsWith(".") || name === "REGISTRY.md" || name === "node_modules") continue;
 		const rel = prefix ? `${prefix}/${name}` : name;
 		const full = join(dir, name);
 		const st = statSync(full);
