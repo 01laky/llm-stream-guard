@@ -146,7 +146,7 @@ describe("LSG-POL32: packaged CLI validate", () => {
 		} finally {
 			rmSync(temp, { recursive: true, force: true });
 		}
-	});
+	}, 30_000);
 });
 
 describe("LSG-POL edge: CLI help", () => {

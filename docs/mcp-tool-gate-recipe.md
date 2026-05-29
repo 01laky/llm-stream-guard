@@ -1,6 +1,6 @@
 # MCP tool gate recipe
 
-**Status:** 0.4.0 — map MCP tool calls to `GuardEvent` before server-side execution.
+**Status:** **0.8.2** — map MCP tool calls to `GuardEvent` before server-side execution.
 
 llm-stream-guard does **not** parse MCP wire protocol. Your MCP server handler maps incoming calls to `GuardEvent`, then runs `guardEvents()` or `createGuardFromPolicy()`.
 

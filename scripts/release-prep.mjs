@@ -190,8 +190,30 @@ try {
 	if (errors.every((message) => !message.startsWith("npm pack missing"))) {
 		ok(`npm pack dry-run includes ${paths.length} files`);
 	}
+	if (!paths.includes("schemas/README.md")) {
+		errors.push("npm pack missing schemas/README.md");
+	}
 } catch (error) {
 	errors.push(`npm pack --dry-run failed: ${error.message}`);
+}
+
+if (!existsSync(join(rootDir, "test/docs-readiness.test.ts"))) {
+	errors.push("missing test/docs-readiness.test.ts (LSG-DOC suite)");
+}
+if (!readme.includes("docs/troubleshooting.md")) {
+	errors.push("README.md must link docs/troubleshooting.md (REL43)");
+}
+if (!existsSync(join(rootDir, "SECURITY.md"))) {
+	errors.push("missing SECURITY.md at repo root");
+}
+if (!existsSync(join(rootDir, "schemas/README.md"))) {
+	errors.push("missing schemas/README.md");
+}
+const verifyScript = pkg.scripts?.verify ?? "";
+if (!verifyScript.includes("doc:check-links")) {
+	errors.push("package.json verify script must include doc:check-links");
+} else {
+	ok("doc gates (LSG-REL43): docs-readiness, troubleshooting link, SECURITY.md, schemas README");
 }
 
 if (errors.length > 0) {

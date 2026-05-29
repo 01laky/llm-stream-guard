@@ -5,6 +5,29 @@ Format based on [Keep a Changelog](https://keepachangelog.com/); versioning foll
 
 ## [Unreleased]
 
+## [0.8.2]
+
+### Added
+
+- **Docs — Phase 8 completion** — [`docs/troubleshooting.md`](./docs/troubleshooting.md) (≥8 symptoms), [`schemas/README.md`](./schemas/README.md), [`docs/security-reporting.md`](./docs/security-reporting.md), [`SECURITY.md`](./SECURITY.md), [`docs/upgrade-guide.md`](./docs/upgrade-guide.md), [`docs/threat-model-stub.md`](./docs/threat-model-stub.md).
+- **Link checker** — `scripts/check-doc-links.mjs`, `pnpm doc:check-links` wired into `pnpm verify`.
+- **Tests — LSG-DOC01–DOC35** — `test/docs-readiness.test.ts` (core docs, status lint, persona smoke, Action CLI map, npm pack schema README).
+- **Tests — LSG-DOC-E09–E55** — `test/docs-edge-cases.test.ts` (troubleshooting anchor parity, security doc sections, Action I/O sync, link-checker negatives, version/badge sync).
+- **Tests — LSG-REL31–REL43** — release gates incl. Action pin sync, release-prep doc checks.
+- **examples/README** — Persona column (proxy / agent / CI / smoke).
+- **action/README** — INPUT→CLI mapping table; pin `@v0.8.2`.
+
+### Changed
+
+- Stale doc status lines updated to **0.8.2**; README doc table; docs-map learning path steps 9–12.
+- **Cookbook §13** — defers to standalone troubleshooting guide.
+- **ci-github-action.md** — all Action examples pin `@v0.8.2`.
+- **CONTRIBUTING** — Documentation section; **LSG-DOC** prefix.
+
+### Unchanged
+
+- Public runtime API, CLI command surface, audit JSON report keys, GitHub Action inputs/outputs schema, zero runtime npm dependencies.
+
 ## [0.8.1]
 
 ### Fixed

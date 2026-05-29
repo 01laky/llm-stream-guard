@@ -2,7 +2,7 @@
 
 **Binary:** `llm-stream-guard` (also `npx llm-stream-guard`)  
 **Entry:** `dist/cli.js` after build  
-**Version:** 0.7.0+
+**Version:** 0.8.2+
 
 For conceptual background see [Getting started](./getting-started.md) and [Policy reference](./policy-reference.md).
 

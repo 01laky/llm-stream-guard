@@ -226,4 +226,117 @@ describe("LSG-REL: release readiness", () => {
 		expect(stretch).toMatch(/LSG-COV219/);
 		expect(stretch).toMatch(/LSG-COV220/);
 	});
+
+	it("LSG-REL31: CHANGELOG documents 0.8.2 Phase 8 completion", () => {
+		const changelog = read("CHANGELOG.md");
+		const pkg = JSON.parse(read("package.json")) as { version: string };
+		expect(changelog).toContain(`## [${pkg.version}]`);
+		expect(changelog).toMatch(/troubleshooting|LSG-DOC|schemas README/i);
+	});
+
+	it("LSG-REL32: docs-readiness test file exists with DOC01", () => {
+		const source = read("test/docs-readiness.test.ts");
+		expect(source).toMatch(/DOC01/);
+	});
+
+	it("LSG-REL33: README and docs-map reference getting-started", () => {
+		expect(read("README.md")).toContain("getting-started.md");
+		expect(read("docs/docs-map.md")).toContain("getting-started.md");
+	});
+
+	it("LSG-REL34: all build-diagrams SVGs exist", () => {
+		const script = read("scripts/build-diagrams.mjs");
+		const names = [...script.matchAll(/"([^"]+\.mmd)"/g)].map((m) => m[1].replace(".mmd", ".svg"));
+		for (const svg of names) {
+			expect(existsSync(join(rootDir, "docs/img", svg))).toBe(true);
+		}
+	});
+
+	it("LSG-REL35: FAQ Action line uses package version", () => {
+		const pkg = JSON.parse(read("package.json")) as { version: string };
+		expect(read("docs/faq.md")).toContain(`@v${pkg.version}`);
+	});
+
+	it("LSG-REL36: action README inputs match action.yml", () => {
+		const readme = read("action/README.md");
+		for (const key of [
+			"policy",
+			"policy-dir",
+			"baseline-policy",
+			"scan-paths",
+			"static-root",
+			"manifest",
+			"include",
+			"exclude",
+			"fail-on",
+			"annotate",
+			"sarif-out",
+			"mode",
+		]) {
+			expect(readme).toContain(`\`${key}\``);
+		}
+		for (const out of [
+			"violations",
+			"drift-count",
+			"static-findings",
+			"sarif-path",
+			"policy-changed",
+		]) {
+			expect(readme).toContain(out);
+		}
+		const pkg = JSON.parse(read("package.json")) as { version: string };
+		expect(readme).toContain(`@v${pkg.version}`);
+	});
+
+	it("LSG-REL37: cookbook §13 links troubleshooting doc", () => {
+		expect(read("docs/integration-cookbook.md")).toContain("troubleshooting.md");
+	});
+
+	it("LSG-REL38: schemas README linked from policy-reference or docs-map", () => {
+		const policy = read("docs/policy-reference.md");
+		const map = read("docs/docs-map.md");
+		expect(policy.includes("schemas/README.md") || map.includes("schemas/README.md")).toBe(true);
+	});
+
+	it("LSG-REL39: testing-strategy documents LSG-DOC01–35", () => {
+		const doc = read("docs/testing-strategy.md");
+		expect(doc).toMatch(/LSG-DOC01|DOC01–DOC35|DOC01–35/);
+	});
+
+	it("LSG-REL40: README Documentation links troubleshooting", () => {
+		const section = read("README.md").split("## Documentation")[1] ?? "";
+		expect(section).toContain("troubleshooting.md");
+	});
+
+	it("LSG-REL41: npm pack includes schemas README", () => {
+		const output = execFileSync("npm", ["pack", "--dry-run", "--json"], {
+			cwd: rootDir,
+			encoding: "utf8",
+		});
+		const [pack] = JSON.parse(output) as Array<{ files: Array<{ path: string }> }>;
+		expect(pack.files.map((f) => f.path)).toContain("schemas/README.md");
+	}, 30_000);
+
+	it("LSG-REL42: no stale action pins in consumer docs", () => {
+		const pkg = JSON.parse(read("package.json")) as { version: string };
+		const stale = /llm-stream-guard\/action@v0\.([0-7]|8\.0|8\.1)\b/;
+		for (const file of ["action/README.md", "docs/ci-github-action.md", "docs/faq.md"]) {
+			const text = read(file);
+			expect(text).toContain(`@v${pkg.version}`);
+			expect(stale.test(text), file).toBe(false);
+		}
+	});
+
+	it("LSG-REL43: release-prep includes doc gate checks", () => {
+		const script = read("scripts/release-prep.mjs");
+		expect(script).toContain("docs-readiness");
+		expect(script).toContain("troubleshooting");
+	});
+
+	it("LSG-REL44: docs-edge-cases test file covers DOC-E09–E55", () => {
+		const source = read("test/docs-edge-cases.test.ts");
+		expect(source).toMatch(/DOC-E09/);
+		expect(source).toMatch(/DOC-E55/);
+		expect(source).toContain("check-doc-links");
+	});
 });

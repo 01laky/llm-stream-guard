@@ -1,6 +1,6 @@
 # LiteLLM / gateway byte hook
 
-**Status:** 0.4.0 — attach byte guard on gateway streaming response.
+**Status:** **0.8.2** — attach byte guard on gateway streaming response.
 
 LiteLLM and similar gateways expose the provider **response body** as a stream. Insert `createByteGuard()` on that body before returning to the client — same as any HTTP proxy.
 

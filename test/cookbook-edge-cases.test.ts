@@ -504,9 +504,10 @@ describe("LSG-CBK43: migration + doc cross-links sanity", () => {
 		expect(doc).toMatch(/tool_call.*done|phase.*done/i);
 	});
 
-	it("troubleshooting section lists blockToolArgs delta guidance", () => {
-		const doc = readFileSync(join(rootDir, "docs/integration-cookbook.md"), "utf8");
-		const section = doc.split("## 13. Troubleshooting")[1] ?? "";
-		expect(section.toLowerCase()).toMatch(/blocktoolargs|delta/);
+	it("troubleshooting guide lists blockToolArgs delta guidance", () => {
+		const cookbook = readFileSync(join(rootDir, "docs/integration-cookbook.md"), "utf8");
+		expect(cookbook).toContain("troubleshooting.md");
+		const guide = readFileSync(join(rootDir, "docs/troubleshooting.md"), "utf8");
+		expect(guide.toLowerCase()).toMatch(/blocktoolargs|tool_call\.done|delta/);
 	});
 });

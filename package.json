@@ -1,6 +1,6 @@
 {
 	"name": "llm-stream-guard",
-	"version": "0.8.1",
+	"version": "0.8.2",
 	"description": "Zero-dependency TypeScript security filter for LLM streams — redact secrets, enforce tool policy, byte and event modes.",
 	"license": "MIT",
 	"author": "Ladislav Kostolny <01laky@gmail.com>",
@@ -50,11 +50,12 @@
 		"verify:deps": "node scripts/verify-zero-deps.mjs",
 		"smoke:package": "node scripts/smoke-package.mjs",
 		"release:prep": "node scripts/release-prep.mjs",
+		"doc:check-links": "node scripts/check-doc-links.mjs --check",
 		"diagrams:build": "node scripts/build-diagrams.mjs",
 		"examples:typecheck": "pnpm build && pnpm exec tsc --noEmit -p examples/tsconfig.json",
 		"examples:smoke": "pnpm build && node examples/minimal-node/smoke.mjs",
 		"cookbook:check-examples": "node scripts/check-cookbook-examples.mjs --check",
-		"verify": "pnpm verify:deps && pnpm format && pnpm typecheck && pnpm build && pnpm test && pnpm fixtures:check-redaction && pnpm fixtures:audit-registry && pnpm fixtures:check-policies && pnpm fixtures:audit-policy-registry && pnpm fixtures:audit-tools-registry && pnpm examples:typecheck && pnpm cookbook:check-examples && pnpm examples:smoke && pnpm action:smoke && pnpm smoke:package"
+		"verify": "pnpm verify:deps && pnpm format && pnpm doc:check-links && pnpm typecheck && pnpm build && pnpm test && pnpm fixtures:check-redaction && pnpm fixtures:audit-registry && pnpm fixtures:check-policies && pnpm fixtures:audit-policy-registry && pnpm fixtures:audit-tools-registry && pnpm examples:typecheck && pnpm cookbook:check-examples && pnpm examples:smoke && pnpm action:smoke && pnpm smoke:package"
 	},
 	"repository": {
 		"type": "git",

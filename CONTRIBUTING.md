@@ -50,8 +50,20 @@ git config core.hooksPath   # should print: .githooks
 | **LSG-STA** | Static manifest audit / CLI     |
 | **LSG-ACT** | GitHub Action / CI docs         |
 | **LSG-REL** | Release / publish readiness     |
+| **LSG-DOC** | Documentation completeness      |
 
 Document new IDs in test headers; maintain `test/fixtures/REGISTRY.md`; run `pnpm fixtures:audit-registry` to enforce parity. Rule edge cases: **LSG-E18–E38** in `test/edge-cases-rules.test.ts`.
+
+## Documentation
+
+- **Start here:** [docs/docs-map.md](./docs/docs-map.md) for structure.
+- **Beginner path:** [docs/getting-started.md](./docs/getting-started.md) — keep in sync when changing public API or CLI.
+- **Diagrams:** edit `docs/img/*.mmd` → run `pnpm diagrams:build` → commit `.mmd` + `.svg`.
+- **Policy/CLI changes:** update [policy-reference.md](./docs/policy-reference.md) and [cli-reference.md](./docs/cli-reference.md) in the same PR.
+- **New examples:** register in `examples/README.md` and cookbook section; run `pnpm cookbook:check-examples`.
+- **Doc tests:** `test/docs-readiness.test.ts` (LSG-DOC\*) must pass; add DOC ID if adding release-critical doc gates.
+- **Link checks:** run `pnpm doc:check-links` before PR; wired in `pnpm verify`.
+- **Status lines:** bump guide status when releasing; do not change `proposal.MD` draft status.
 
 ## Releases
 

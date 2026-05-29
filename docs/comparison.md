@@ -1,6 +1,6 @@
 # How llm-stream-guard compares
 
-**Status:** **Stable 0.5.0** — MVP rules + declarative policy + CLI + static manifest audit + GitHub Action + integration cookbook. See [`proposal.MD`](./proposal.MD).
+**Status:** **Stable 0.8.2** — MVP rules + declarative policy + CLI + static manifest audit + GitHub Action + integration cookbook. See [`proposal.MD`](./proposal.MD).
 
 ## At a glance
 
@@ -22,9 +22,11 @@
 
 ## When not to use guard
 
-- **Parsing provider SSE** — use [llm-stream-assemble](https://github.com/01laky/llm-stream-assemble) or your parser first.
+- **Parsing provider SSE** — use [llm-stream-assemble](https://github.com/01laky/llm-stream-assemble) or your parser first. New to streaming? [Getting started](./getting-started.md).
 - **HTTP to provider, auth, retries** — your app or AI SDK.
 - **Tool execution, memory, UI** — out of scope.
+
+See [Threat model stub](./threat-model-stub.md) for security scope boundaries.
 
 ## Pairing with assemble
 

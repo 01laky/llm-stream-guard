@@ -1,6 +1,6 @@
 # FAQ
 
-**Status:** **Stable 0.7.0** — 1100 tests, expanded docs (getting started, policy/CLI reference). Publish via [`docs/publishing.md`](./publishing.md).
+**Status:** **Stable 0.8.2** — Phase 8 doc completion, LSG-DOC01–35 gates. Publish via [`docs/publishing.md`](./publishing.md).
 
 ## Beginners
 
@@ -41,7 +41,15 @@ pnpm add github:01laky/llm-stream-guard
 
 ### Is there a GitHub Action?
 
-Yes — **`01laky/llm-stream-guard/action@v0.7.0`** (or `@main`) validates policy, scans event fixtures, and runs static manifest audit with optional SARIF preview and PR annotations. See [`docs/ci-github-action.md`](./ci-github-action.md).
+Yes — **`01laky/llm-stream-guard/action@v0.8.2`** (or `@main`) validates policy, scans event fixtures, and runs static manifest audit with optional SARIF preview and PR annotations. See [`docs/ci-github-action.md`](./ci-github-action.md).
+
+### What works in 0.8.2?
+
+Phase 8 completion: [Troubleshooting](./troubleshooting.md), [schemas README](../schemas/README.md), [security reporting](./security-reporting.md), [upgrade guide](./upgrade-guide.md), [threat model stub](./threat-model-stub.md), **LSG-DOC01–35** + **REL31–43** gates, `pnpm doc:check-links`. Action docs pin `@v0.8.2`. No API breaking changes. See [Upgrade guide](./upgrade-guide.md).
+
+### What works in 0.8.1?
+
+npm **bin path fix** (`dist/cli.js` without `./`); version/badge sync with 0.8.x docs track. First npm publish including 0.8.0 documentation.
 
 ### What works in 0.7.0?
 

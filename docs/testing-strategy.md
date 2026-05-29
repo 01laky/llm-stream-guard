@@ -1,6 +1,6 @@
 # Testing strategy
 
-**Status:** Phase 7 shipped — exhaustive coverage (LSG-COV), stretch goals, **1100** tests.
+**Status:** Phase 7 shipped — exhaustive coverage (LSG-COV), stretch goals, **1157** tests.
 
 ## Test ID prefixes
 
@@ -172,6 +172,20 @@ Beginner-friendly docs — **`LSG-DOC01–DOC20`** in `test/docs-readiness.test.
 | `docs/docs-map.md`              | Persona learning paths                  |
 
 New diagrams: `stream-anatomy`, `getting-started-journey`, `tool-call-lifecycle`, `policy-rules-map`, `static-audit-flow`. Prompt: `prompts/phase-8-documentation-prompt.md`.
+
+### Phase 8.2 documentation completion (0.8.2)
+
+Closes Phase 8 debt — **`LSG-DOC01–DOC35`**, **`LSG-REL31–REL43`**, **`pnpm doc:check-links`**. Prompt: `prompts/phase-8.2-documentation-completion-prompt.md`.
+
+| Area                             | IDs                  | Focus                                                          |
+| -------------------------------- | -------------------- | -------------------------------------------------------------- |
+| `test/docs-readiness.test.ts`    | DOC01–35, DOC-E01–08 | Docs, links, status lint, personas                             |
+| `test/docs-edge-cases.test.ts`   | DOC-E09–E55          | Troubleshooting anchors, Action parity, link checker negatives |
+| `test/release-readiness.test.ts` | REL31–43             | CHANGELOG, npm pack schema README, Action pins                 |
+| `scripts/check-doc-links.mjs`    | DOC30                | Relative link integrity in verify                              |
+| `scripts/release-prep.mjs`       | REL43                | Pre-tag doc gates                                              |
+
+New docs: `troubleshooting.md`, `security-reporting.md`, `upgrade-guide.md`, `threat-model-stub.md`, `schemas/README.md`, `SECURITY.md`.
 
 ### Test files (Phase 4)
 

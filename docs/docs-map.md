@@ -1,6 +1,6 @@
 # Documentation map
 
-**Status:** 0.8.0 — structured learning paths for beginners through maintainers.
+**Status:** **0.8.2** — structured learning paths for beginners through maintainers.
 
 Use this page when you are not sure **which doc to read first**. Every guide links back here.
 
@@ -16,6 +16,8 @@ Use this page when you are not sure **which doc to read first**. Every guide lin
 | **Platform / security** | Team policies, CI gates, drift detection           | [Policy reference](./policy-reference.md)                                      | [Static scanning](./static-scanning.md) → [CI & Action](./ci-github-action.md) |
 | **Maintainer**          | Publish, test matrix, architecture                 | [Testing strategy](./testing-strategy.md)                                      | [Publishing](./publishing.md) · [proposal.MD](./proposal.MD)                   |
 
+Examples by persona: [`examples/README.md`](../examples/README.md)
+
 ---
 
 ## Learning path (recommended order)
@@ -29,6 +31,10 @@ Use this page when you are not sure **which doc to read first**. Every guide lin
 6. static-scanning.md          ← manifest drift, D001–D006, SARIF
 7. ci-github-action.md         ← PR gates, GitHub Action inputs
 8. faq.md · comparison.md      ← edge questions & alternatives
+9. troubleshooting.md          ← symptom → cause → fix
+10. security-reporting.md      ← bypass reports (see SECURITY.md)
+11. upgrade-guide.md           ← semver jumps (0.7 → 0.8.x)
+12. threat-model-stub.md       ← scope & trust boundaries (optional depth)
 ```
 
 Diagram: [`docs/img/getting-started-journey.svg`](./img/getting-started-journey.svg)
@@ -55,10 +61,15 @@ Diagram: [`docs/img/getting-started-journey.svg`](./img/getting-started-journey.
 | Topic                 | Doc                                                          | Diagram                                              |
 | --------------------- | ------------------------------------------------------------ | ---------------------------------------------------- |
 | Policy file format    | [Policy reference](./policy-reference.md)                    | [policy-compile.svg](./img/policy-compile.svg)       |
+| JSON schemas (npm)    | [schemas/README.md](../schemas/README.md)                    | —                                                    |
 | Rule types map        | [Policy reference § Rules](./policy-reference.md#rule-types) | [policy-rules-map.svg](./img/policy-rules-map.svg)   |
 | CLI commands          | [CLI reference](./cli-reference.md)                          | —                                                    |
 | Static manifest audit | [Static scanning](./static-scanning.md)                      | [static-audit-flow.svg](./img/static-audit-flow.svg) |
 | GitHub Action         | [CI guide](./ci-github-action.md)                            | [ci-action-flow.svg](./img/ci-action-flow.svg)       |
+| Troubleshooting       | [Troubleshooting](./troubleshooting.md)                      | —                                                    |
+| Security reports      | [Security reporting](./security-reporting.md)                | —                                                    |
+| Upgrading             | [Upgrade guide](./upgrade-guide.md)                          | —                                                    |
+| Threat model (stub)   | [Threat model stub](./threat-model-stub.md)                  | —                                                    |
 
 ### Diagrams index
 
@@ -83,3 +94,4 @@ Full list and regeneration: [`docs/img/README.md`](./img/README.md)
 - [Product proposal](./proposal.MD) — original problem statement and non-goals
 - [Testing strategy](./testing-strategy.md) — LSG-\* test ID prefixes
 - [Publishing checklist](./publishing.md) — release prep
+- [SECURITY.md](../SECURITY.md) — GitHub vulnerability entrypoint

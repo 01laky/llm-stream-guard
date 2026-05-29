@@ -1,6 +1,6 @@
 # Integration cookbook
 
-**Status:** **0.7.0** — adoption guide with typechecked examples under [`examples/`](../examples/README.md).  
+**Status:** **0.8.2** — adoption guide with typechecked examples under [`examples/`](../examples/README.md).
 **Prerequisite:** Read [Getting started](./getting-started.md) if you are new to byte vs event mode.
 
 Cookbook examples are **app-level only** — the guard package stays zero-dep and does not import assemble or provider SDKs.
@@ -173,6 +173,8 @@ Profile inheritance:
 
 ## 5. Transform ordering
 
+**inline-only** — conceptual ordering (no standalone example file).
+
 **When to use:** Composing manual stacks (policy `rules[]` order matches this).
 
 ```text
@@ -245,6 +247,8 @@ Secrets **always redact** in all modes. Tool `audit` passes events and fires `on
 
 ## 9. MCP tool gate
 
+**inline-only** — map MCP shapes in your app; see recipe doc.
+
 **When to use:** MCP server executes tools — map `tools/call` to `GuardEvent` first.
 
 Deep dive: [`docs/mcp-tool-gate-recipe.md`](./mcp-tool-gate-recipe.md) (**LSG-CBK30**).
@@ -252,6 +256,8 @@ Deep dive: [`docs/mcp-tool-gate-recipe.md`](./mcp-tool-gate-recipe.md) (**LSG-CB
 ---
 
 ## 10. LiteLLM / gateway
+
+**inline-only** — gateway hook pattern; see dedicated doc.
 
 **When to use:** Gateway returns streaming HTTP body to clients.
 
@@ -290,15 +296,16 @@ See [`docs/migration-from-regex.md`](./migration-from-regex.md) (**LSG-CBK10**, 
 
 ## 13. Troubleshooting
 
-**Test ID:** LSG-CBK34
+**Test ID:** LSG-CBK34 (summary — full guide moved)
 
-| Mistake                                  | Fix                                                           |
-| ---------------------------------------- | ------------------------------------------------------------- |
-| `blockToolArgs` on delta false positives | Evaluate primarily on `tool_call.done`                        |
-| Shared `GuardContext` across requests    | One context per stream / request                              |
-| Empty allowlist                          | `POLICY_E008`; empty names invalid                            |
-| `warn` vs `audit` for tools              | **warn blocks** like block; **audit** logs + passes           |
-| Byte mode on JSON event files            | Use event mode or CLI auto-detect (`.json` events vs `.sse`)  |
-| `scan` vs `validate`                     | `validate` = policy file; `scan` = logs/events against policy |
+See **[Troubleshooting guide](./troubleshooting.md)** for symptom → cause → fix (≥8 common issues), debug checklist, and security reporting links.
 
-Related: [Policy files & CLI](../README.md#policy-files--cli), [FAQ](./faq.md).
+Quick reminders:
+
+| Topic                            | Pointer                                                             |
+| -------------------------------- | ------------------------------------------------------------------- |
+| Byte vs event / scan vs validate | [Troubleshooting § index](./troubleshooting.md#quick-symptom-index) |
+| Policy errors E008–E010          | [Policy reference](./policy-reference.md)                           |
+| CLI exit codes                   | [CLI reference](./cli-reference.md)                                 |
+
+Related: [FAQ](./faq.md) · [Upgrade guide](./upgrade-guide.md)

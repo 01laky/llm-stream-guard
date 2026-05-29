@@ -267,10 +267,12 @@ describe("LSG-CBK29–34: §15 enhancements", () => {
 		expect(matches.length).toBeGreaterThanOrEqual(8);
 	});
 
-	it("LSG-CBK34: troubleshooting table rows", () => {
-		const section = cookbook.split("## 13. Troubleshooting")[1] ?? "";
-		const rows = section.match(/^\| [^|]/gm) ?? [];
-		expect(rows.length).toBeGreaterThanOrEqual(5);
+	it("LSG-CBK34: troubleshooting guide has symptom table rows", () => {
+		const doc = readFileSync(join(rootDir, "docs/troubleshooting.md"), "utf8");
+		const table = doc.split("## Quick symptom index")[1]?.split("\n---\n")[0] ?? "";
+		const rows = table.match(/^\| [^|]/gm) ?? [];
+		expect(rows.length).toBeGreaterThanOrEqual(8);
+		expect(cookbook).toContain("troubleshooting.md");
 	});
 });
 

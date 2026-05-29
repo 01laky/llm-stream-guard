@@ -17,6 +17,7 @@ jobs:
           node-version: "20"
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+      # Consumer CI: pin 01laky/llm-stream-guard/action@vX.Y.Z — see docs/ci-github-action.md
       - run: pnpm build
       - run: node dist/cli.js validate policies/agent-gate.json
       - run: node dist/cli.js audit validate-manifest tools/manifest.json

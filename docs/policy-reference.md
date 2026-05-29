@@ -1,7 +1,7 @@
 # Policy reference
 
 **Audience:** Teams authoring JSON/YAML guard policies.  
-**Schema:** [`schemas/policy-v1.json`](../schemas/policy-v1.json)  
+**Schema:** [`schemas/policy-v1.json`](../schemas/policy-v1.json) — see also [`schemas/README.md`](../schemas/README.md) (npm-shipped schema docs)  
 **Examples:** [`policies/`](../policies/) · [`test/fixtures/policies/`](../test/fixtures/policies/)
 
 ---
