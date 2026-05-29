@@ -188,7 +188,7 @@ Runtime guard protects **live streams**. **Static audit** checks **tool manifest
 
 - Allowlist **drift** (tool in manifest but not in policy),
 - **Dangerous strings** (D001–D006 catalog),
-- **`blockToolArgs` preview** on manifest text fields.
+- **`blockToolArgs` static analysis** on manifest text fields.
 
 ```bash
 npx llm-stream-guard audit static \

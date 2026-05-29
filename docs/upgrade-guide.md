@@ -1,8 +1,22 @@
 # Upgrade guide
 
-**Status:** **0.9.0** — semver jumps for npm, GitHub Action, test fortress, and documentation layout.
+**Status:** **1.0.0** — semver jumps for npm, GitHub Action, SARIF stability, and stream reporting.
 
-Historical per-release notes remain in FAQ **What works in X.Y.Z?** sections.
+Historical per-release notes: [faq-archive.md](./faq-archive.md).
+
+---
+
+## From 0.9.0 → 1.0.0
+
+- **Stable SARIF** — rule IDs frozen; Action category `llm-stream-guard`; see [migration-0.x-to-1.0.md](./migration-0.x-to-1.0.md).
+- **`onFinish` / `StreamGuardSummary`** — per-stream metrics; example `examples/minimal-node/on-finish-summary.mjs`.
+- **`llm-stream-guard doctor`** — `pnpm doctor` after build.
+- **npm:** `npm install llm-stream-guard@1.0.0`
+- **GitHub Action:** pin `@v1.0.0`
+
+```yaml
+- uses: 01laky/llm-stream-guard/action@v1.0.0
+```
 
 ---
 
@@ -32,7 +46,7 @@ Historical per-release notes remain in FAQ **What works in X.Y.Z?** sections.
 ## From 0.8.0 / 0.8.1 → 0.8.2
 
 - **0.8.1** — npm `bin` path fix (`dist/cli.js` without `./` prefix). Upgrade if CLI missing after `npm install -g`.
-- **0.8.2** — [Troubleshooting](./troubleshooting.md), [schemas README](../schemas/README.md), [security reporting](./security-reporting.md), [upgrade guide](./upgrade-guide.md), [threat model stub](./threat-model-stub.md).
+- **0.8.2** — [Troubleshooting](./troubleshooting.md), [schemas README](../schemas/README.md), [security reporting](./security-reporting.md), [upgrade guide](./upgrade-guide.md), threat model (now [threat-model.md](./threat-model.md) in 1.0.0).
 - **GitHub Action:** pin `01laky/llm-stream-guard/action@v0.8.2` (replace `@v0.5.0` / `@v0.7.0`).
 
 ```yaml

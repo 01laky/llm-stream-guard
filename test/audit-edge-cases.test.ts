@@ -13,7 +13,7 @@ import { scanDangerousStrings, DANGEROUS_PATTERNS } from "../src/audit/dangerous
 import { computeDrift } from "../src/audit/drift.js";
 import { parseManifestFile, parseManifestText } from "../src/audit/extract-tools.js";
 import { extractPolicyToolSets } from "../src/audit/policy-tool-names.js";
-import { staticScanToSarif } from "../src/audit/sarif-preview.js";
+import { staticScanToSarif } from "../src/audit/sarif.js";
 import {
 	countStaticErrors,
 	formatStaticScanReport,

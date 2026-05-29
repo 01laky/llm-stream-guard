@@ -4,8 +4,10 @@
 
 | Version | Supported        |
 | ------- | ---------------- |
-| 0.8.x   | Yes              |
-| < 0.8   | Best effort only |
+| 1.0.x   | Yes              |
+| 0.9.x   | Best effort only |
+| 0.8.x   | Best effort only |
+| < 0.8   | No               |
 
 ## Reporting a vulnerability
 
@@ -15,4 +17,4 @@ Follow [docs/security-reporting.md](docs/security-reporting.md): minimal repro p
 
 ## Response
 
-Maintainer triage via GitHub issues or the email in `package.json` `author`. No SLA guaranteed in 0.8.x.
+Maintainer triage via GitHub issues or the email in `package.json` `author`. No SLA guaranteed; 1.0.x receives priority triage.

@@ -150,7 +150,7 @@ npx llm-stream-guard audit drift \
 
 ## `audit static`
 
-Full offline audit: drift + dangerous patterns (D001–D006) + `blockToolArgs` static preview.
+Full offline audit: drift + dangerous patterns (D001–D006) + `blockToolArgs` static analysis.
 
 ```bash
 npx llm-stream-guard audit static \
@@ -161,7 +161,7 @@ npx llm-stream-guard audit static \
 # Multi-policy directory
 npx llm-stream-guard audit static --policy-dir policies/ --root . --manifest tools/manifest.json
 
-# SARIF preview
+# SARIF export
 npx llm-stream-guard audit static \
   --policy policies/agent-gate.json \
   --root . \
@@ -184,7 +184,7 @@ npx llm-stream-guard audit static --strict --json ...
 | `--quiet`                   | Suppress warning lines in human output              |
 | `--annotate`                | Print GitHub workflow commands                      |
 | `--json`                    | JSON report on stdout                               |
-| `--sarif-out`               | Write SARIF 2.1.0 preview file                      |
+| `--sarif-out`               | Write SARIF 2.1.0 output file                       |
 
 ### Exit codes (audit)
 

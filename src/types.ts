@@ -27,6 +27,17 @@ export type Violation = {
 	message: string;
 	mode: ViolationMode;
 	event?: GuardEvent;
+	policyVersion?: string;
+	eventIndex?: number;
+};
+
+export type StreamGuardSummary = {
+	violations: Violation[];
+	countsByRule: Record<string, number>;
+	toolsTouched: string[];
+	redactions: number;
+	policyVersion?: string;
+	mode: ViolationMode;
 };
 
 export type GuardTransform = (
@@ -39,12 +50,16 @@ export type ByteTransform = (chunk: Uint8Array, ctx: GuardContext) => Uint8Array
 export type GuardEventsConfig = {
 	mode?: ViolationMode;
 	onViolation?: (violation: Violation) => void;
+	onFinish?: (summary: StreamGuardSummary) => void;
+	policyVersion?: string;
 	transforms?: GuardTransform[];
 };
 
 export type ByteGuardOptions = {
 	mode?: ViolationMode;
 	onViolation?: (violation: Violation) => void;
+	onFinish?: (summary: StreamGuardSummary) => void;
+	policyVersion?: string;
 	redactSecrets?: boolean;
 	sanitizeErrors?: boolean;
 };
@@ -52,6 +67,7 @@ export type ByteGuardOptions = {
 export type CreateGuardContextOptions = {
 	mode?: ViolationMode;
 	onViolation?: (violation: Violation) => void;
+	policyVersion?: string;
 };
 
 /** Per-stream guard state — create one instance per stream/request. */
@@ -67,4 +83,7 @@ export type GuardContextState = {
 	byteLookback: Uint8Array;
 	pendingUtf8: Uint8Array;
 	toolArgsBytesById: Map<string, number>;
+	redactions: number;
+	policyVersion?: string;
+	eventIndex?: number;
 };

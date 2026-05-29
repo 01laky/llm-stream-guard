@@ -1,0 +1,36 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://github.com/01laky/llm-stream-guard/schemas/stream-guard-summary-v1.json",
+	"title": "llm-stream-guard StreamGuardSummary v1",
+	"type": "object",
+	"required": ["violations", "countsByRule", "toolsTouched", "redactions", "mode"],
+	"additionalProperties": false,
+	"properties": {
+		"violations": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"required": ["rule", "message", "mode"],
+				"additionalProperties": true,
+				"properties": {
+					"rule": { "type": "string" },
+					"message": { "type": "string" },
+					"mode": { "enum": ["block", "warn", "audit"] },
+					"policyVersion": { "type": "string" },
+					"eventIndex": { "type": "integer", "minimum": 0 }
+				}
+			}
+		},
+		"countsByRule": {
+			"type": "object",
+			"additionalProperties": { "type": "integer", "minimum": 0 }
+		},
+		"toolsTouched": {
+			"type": "array",
+			"items": { "type": "string" }
+		},
+		"redactions": { "type": "integer", "minimum": 0 },
+		"policyVersion": { "type": "string" },
+		"mode": { "enum": ["block", "warn", "audit"] }
+	}
+}

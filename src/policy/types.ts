@@ -1,4 +1,11 @@
-import type { ByteGuardOptions, GuardTransform, ViolationMode } from "../types.js";
+import type {
+	ByteGuardOptions,
+	GuardEventsConfig,
+	GuardTransform,
+	StreamGuardSummary,
+	Violation,
+	ViolationMode,
+} from "../types.js";
 
 export type PolicyByteSection = {
 	redactSecrets?: boolean;
@@ -35,6 +42,8 @@ export type LoadPolicyOptions = {
 	mode?: ViolationMode;
 	noExtends?: boolean;
 	baseDir?: string;
+	onFinish?: (summary: StreamGuardSummary) => void;
+	onViolation?: (violation: Violation) => void;
 };
 
 export type CompileOptions = LoadPolicyOptions;
@@ -56,10 +65,7 @@ export type GuardFromPolicy = {
 	readonly policyVersion?: string;
 	readonly transforms: GuardTransform[];
 	readonly byteOptions: ByteGuardOptions;
-	readonly eventConfig: {
-		mode: ViolationMode;
-		transforms: GuardTransform[];
-	};
+	readonly eventConfig: GuardEventsConfig;
 	guard(
 		source: AsyncIterable<import("../types.js").GuardEvent>,
 	): AsyncGenerator<import("../types.js").GuardEvent>;

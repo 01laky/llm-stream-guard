@@ -1,5 +1,5 @@
 /**
- * LSG-PKG01–PKG18 — npm pack tarball CLI smoke matrix.
+ * LSG-PKG01–PKG25 — npm pack tarball CLI smoke matrix.
  */
 import { execFileSync, spawnSync } from "node:child_process";
 import { existsSync, mkdtempSync, readFileSync, rmSync } from "node:fs";
@@ -117,6 +117,38 @@ describe("LSG-PKG01: packaged CLI matrix", () => {
 		{
 			id: 18,
 			args: ["resolve", "policies/proxy-strict.json"],
+			expectStatus: 0,
+		},
+		{ id: 19, args: ["doctor", "--json"], expectStatus: 0 },
+		{ id: 20, args: ["doctor", "policies/agent-gate.json"], expectStatus: 0 },
+		{
+			id: 21,
+			args: [
+				"audit",
+				"static",
+				"--policy",
+				"policies/agent-gate.json",
+				"--manifest",
+				"test/fixtures/tools/agent-tools.json",
+			],
+			expectStatus: 0,
+		},
+		{
+			id: 22,
+			args: [
+				"scan",
+				"--policy",
+				"policies/proxy-strict.json",
+				"--json",
+				"test/fixtures/events/clean-tool.json",
+			],
+			expectStatus: 0,
+		},
+		{ id: 23, args: ["profiles", "show", "proxy-strict"], expectStatus: 0 },
+		{ id: 24, args: ["validate", "src/policy/profiles/agent-gate.json"], expectStatus: 0 },
+		{
+			id: 25,
+			args: ["diff", "policies/audit-only.json", "policies/proxy-strict.json"],
 			expectStatus: 0,
 		},
 	];

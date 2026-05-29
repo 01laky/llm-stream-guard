@@ -35,7 +35,11 @@ execute Mermaid — always commit updated **`.svg`** files alongside **`.mmd`** 
 | `static-audit-flow.mmd`       | `audit static` pipeline: drift + D001–D006 + SARIF |
 | `ci-action-flow.mmd`          | GitHub Action: validate → scan → audit → fail gate |
 | `test-coverage.mmd`           | Phase 7 LSG-COV test suite layout (maintainers)    |
-| `test-fortress.mmd`           | Phase 9 test fortress: XEC/PROP gates (0.9.0+)     |
+| `test-fortress.mmd`           | Phase 9 test fortress: XEC/PROP gates              |
+| `v1-stable-architecture.mmd`  | 1.0 stable surfaces: byte, event, policy, SARIF    |
+| `violation-report-flow.mmd`   | `onFinish` / `StreamGuardSummary` sequence         |
+
+**21 diagrams** in `pnpm diagrams:build`.
 
 Regenerate after editing sources:
 

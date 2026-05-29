@@ -11,7 +11,7 @@ import { scanDangerousStrings } from "../src/audit/dangerous-patterns.js";
 import { lineOf, parseManifestFile } from "../src/audit/extract-tools.js";
 import { formatStaticScanReport } from "../src/audit/format-report.js";
 import { runStaticScan } from "../src/audit/static-scan.js";
-import { staticScanToSarif } from "../src/audit/sarif-preview.js";
+import { staticScanToSarif } from "../src/audit/sarif.js";
 import { cmdScan } from "../src/cli/commands/scan.js";
 import { CliExit } from "../src/cli/exit-codes.js";
 import { formatPolicyDiff, formatScanReport, formatValidationErrors } from "../src/cli/output.js";

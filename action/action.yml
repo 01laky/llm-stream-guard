@@ -41,7 +41,7 @@ inputs:
     required: false
     default: "true"
   sarif-out:
-    description: Write SARIF preview output path
+    description: Write SARIF 2.1.0 output path
     required: false
     default: ""
   mode:

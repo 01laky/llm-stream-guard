@@ -1,6 +1,6 @@
 # How llm-stream-guard compares
 
-**Status:** **Stable 0.9.0** — MVP rules + declarative policy + CLI + static manifest audit + GitHub Action + integration cookbook. See [`proposal.MD`](./proposal.MD).
+**Status:** **Stable 1.0.0** — MVP rules + declarative policy + CLI + static manifest audit + GitHub Action + integration cookbook. See [`proposal.MD`](./proposal.MD).
 
 ## At a glance
 
@@ -26,7 +26,7 @@
 - **HTTP to provider, auth, retries** — your app or AI SDK.
 - **Tool execution, memory, UI** — out of scope.
 
-See [Threat model stub](./threat-model-stub.md) for security scope boundaries.
+See [Threat model](./threat-model.md) for security scope boundaries.
 
 ## Pairing with assemble
 

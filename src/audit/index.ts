@@ -11,7 +11,7 @@ export {
 	runStaticScan,
 	type StaticScanOptions,
 } from "./static-scan.js";
-export { staticScanToSarif } from "./sarif-preview.js";
+export { staticScanToSarif, SARIF_RULE_CATALOG } from "./sarif.js";
 export type {
 	AuditSeverity,
 	DriftFinding,

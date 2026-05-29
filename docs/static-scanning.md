@@ -1,17 +1,17 @@
 # Static scanning
 
-**Status:** **0.9.0** — offline manifest audit and policy drift detection (not live stream middleware).
+**Status:** **1.0.0** — offline manifest audit and policy drift detection (not live stream middleware).
 **CLI details:** [CLI reference § audit static](./cli-reference.md#audit-static) · **Diagram:** [static-audit-flow.svg](./img/static-audit-flow.svg)
 
 Catch unsafe tool definitions and allowlist drift **before deploy** — complement runtime `guardEvents()` / `scan` on captured streams.
 
 ## Commands
 
-| Command                                                                         | Purpose                                                 |
-| ------------------------------------------------------------------------------- | ------------------------------------------------------- |
-| `audit validate-manifest --manifest <path>`                                     | Schema check (`version: "1"`, non-empty `tools[].name`) |
-| `audit drift --policy <p> --manifest <m>`                                       | Policy vs manifest tool names only                      |
-| `audit static [--policy <p>\|--policy-dir <d>] [--root <dir>] [--manifest <m>]` | Drift + dangerous patterns + `blockToolArgs` preview    |
+| Command                                                                         | Purpose                                                      |
+| ------------------------------------------------------------------------------- | ------------------------------------------------------------ |
+| `audit validate-manifest --manifest <path>`                                     | Schema check (`version: "1"`, non-empty `tools[].name`)      |
+| `audit drift --policy <p> --manifest <m>`                                       | Policy vs manifest tool names only                           |
+| `audit static [--policy <p>\|--policy-dir <d>] [--root <dir>] [--manifest <m>]` | Drift + dangerous patterns + `blockToolArgs` static analysis |
 
 `audit static` auto-discovers manifests under `--root` when `--manifest` is omitted. See [discovery rules](#manifest-discovery).
 
@@ -83,7 +83,7 @@ Bundled zero-dep rules scan manifest string fields:
 
 Severity: **warning** by default; **error** under `--strict`.
 
-## blockToolArgs static preview
+## blockToolArgs static analysis
 
 When policy defines `blockToolArgs` rules, manifest text is matched statically:
 
@@ -127,7 +127,7 @@ llm-stream-guard audit static \
 | `--include` / `--exclude` | Comma-separated path-prefix filters                       |
 | `--quiet`                 | Errors only (for hooks)                                   |
 | `--annotate`              | GitHub workflow commands (`::error file=…`)               |
-| `--sarif-out`             | SARIF 2.1.0 preview file                                  |
+| `--sarif-out`             | SARIF 2.1.0 output file                                   |
 
 Env: `GUARD_POLICY_PATH`, `GUARD_MODE`.
 

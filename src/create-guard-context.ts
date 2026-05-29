@@ -12,11 +12,13 @@ function emptyBytes(): Uint8Array {
 	return new Uint8Array(0);
 }
 
-export function createGuardContextState(): GuardContextState {
+export function createGuardContextState(policyVersion?: string): GuardContextState {
 	return {
 		byteLookback: emptyBytes(),
 		pendingUtf8: emptyBytes(),
 		toolArgsBytesById: new Map(),
+		redactions: 0,
+		...(policyVersion !== undefined ? { policyVersion } : {}),
 	};
 }
 
@@ -35,6 +37,7 @@ export function getGuardContextState(ctx: GuardContext): GuardContextState {
 export function createGuardContext(options: CreateGuardContextOptions = {}): GuardContext {
 	const mode = options.mode ?? defaultMode;
 	const onViolation = options.onViolation;
+	const policyVersion = options.policyVersion;
 	const violations: Violation[] = [];
 
 	const ctx: GuardContext = {
@@ -58,6 +61,6 @@ export function createGuardContext(options: CreateGuardContextOptions = {}): Gua
 		},
 	};
 
-	contextState.set(ctx, createGuardContextState());
+	contextState.set(ctx, createGuardContextState(policyVersion));
 	return ctx;
 }

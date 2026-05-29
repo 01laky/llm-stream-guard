@@ -1,0 +1,23 @@
+flowchart TB
+	subgraph consumers [Consumers]
+		proxy[Proxy SSE]
+		agent[Agent loop]
+		ci[CI scan / Action]
+	end
+
+	subgraph guard [llm-stream-guard 1.0]
+		byte[createByteGuard]
+		event[guardEvents]
+		policy[createGuardFromPolicy]
+		summary[onFinish / StreamGuardSummary]
+		audit[audit static + SARIF]
+	end
+
+	proxy --> byte
+	agent --> event
+	ci --> policy
+	ci --> audit
+	byte --> summary
+	event --> summary
+	policy --> byte
+	policy --> event

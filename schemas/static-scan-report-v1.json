@@ -1,0 +1,52 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://github.com/01laky/llm-stream-guard/schemas/static-scan-report-v1.json",
+	"title": "llm-stream-guard static scan report v1",
+	"type": "object",
+	"required": ["summary", "drift", "dangerous", "blockToolArgs"],
+	"additionalProperties": false,
+	"properties": {
+		"summary": {
+			"type": "object",
+			"required": ["manifests", "toolsDeclared", "drift", "dangerous", "blockToolArgs", "mode"],
+			"additionalProperties": false,
+			"properties": {
+				"manifests": { "type": "integer", "minimum": 0 },
+				"toolsDeclared": { "type": "integer", "minimum": 0 },
+				"drift": { "type": "integer", "minimum": 0 },
+				"dangerous": { "type": "integer", "minimum": 0 },
+				"blockToolArgs": { "type": "integer", "minimum": 0 },
+				"mode": { "type": "string" },
+				"policyVersion": { "type": "string" }
+			}
+		},
+		"drift": {
+			"type": "array",
+			"items": { "$ref": "#/$defs/finding" }
+		},
+		"dangerous": {
+			"type": "array",
+			"items": { "$ref": "#/$defs/finding" }
+		},
+		"blockToolArgs": {
+			"type": "array",
+			"items": { "$ref": "#/$defs/finding" }
+		}
+	},
+	"$defs": {
+		"finding": {
+			"type": "object",
+			"required": ["code", "severity", "file", "message"],
+			"additionalProperties": false,
+			"properties": {
+				"code": { "type": "string" },
+				"severity": { "enum": ["error", "warning"] },
+				"file": { "type": "string" },
+				"field": { "type": "string" },
+				"line": { "type": "integer", "minimum": 1 },
+				"message": { "type": "string" },
+				"policy": { "type": "string" }
+			}
+		}
+	}
+}

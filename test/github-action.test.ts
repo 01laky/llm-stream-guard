@@ -252,9 +252,9 @@ describe("LSG-ACT17: scan-fixtures.sh upgraded", () => {
 });
 
 describe("LSG-ACT18: upload-sarif snippet", () => {
-	it("contains preview disclaimer", () => {
+	it("contains stable SARIF upload category", () => {
 		const doc = readFileSync(join(rootDir, "docs/ci-github-action.md"), "utf8");
 		expect(doc).toMatch(/upload-sarif|codeql/i);
-		expect(doc).toMatch(/preview/i);
+		expect(doc).toContain("category: llm-stream-guard");
 	});
 });

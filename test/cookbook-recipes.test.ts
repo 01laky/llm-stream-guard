@@ -297,6 +297,32 @@ describe("LSG-CBK44–63: examples matrix (0.9.0)", () => {
 	}
 });
 
+describe("LSG-CBK54–58: Phase 10 examples", () => {
+	it("CBK54: on-finish-summary.mjs exists", () => {
+		expect(existsSync(join(rootDir, "examples/minimal-node/on-finish-summary.mjs"))).toBe(true);
+	});
+
+	it("CBK55: examples README lists on-finish-summary", () => {
+		expect(examplesReadme).toContain("on-finish-summary.mjs");
+	});
+
+	it("CBK56: on-finish uses createByteGuard from dist", () => {
+		const src = readFileSync(join(rootDir, "examples/minimal-node/on-finish-summary.mjs"), "utf8");
+		expect(src).toContain("createByteGuard");
+		expect(src).toContain("onFinish");
+	});
+
+	it("CBK57: migration doc linked from README", () => {
+		expect(readFileSync(join(rootDir, "README.md"), "utf8")).toContain("migration-0.x-to-1.0.md");
+	});
+
+	it("CBK58: api-stability in docs-map or README", () => {
+		const map = readFileSync(join(rootDir, "docs/docs-map.md"), "utf8");
+		const readme = readFileSync(join(rootDir, "README.md"), "utf8");
+		expect(map.includes("api-stability") || readme.includes("api-stability")).toBe(true);
+	});
+});
+
 describe("LSG-CBK13–15: scripts", () => {
 	it("LSG-CBK15: check-cookbook-examples exits 0", () => {
 		if (!existsSync(join(rootDir, "dist/index.d.ts"))) {

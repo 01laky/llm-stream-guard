@@ -1,6 +1,6 @@
 # llm-stream-guard — Project Proposal
 
-**Status:** Draft (discussion only — not implemented)  
+**Status:** Historical specification — core MVP shipped in **1.0.0**; this document remains for design rationale, not runtime authority.  
 **Author:** Ladislav Kostolny ([@01laky](https://github.com/01laky))  
 **Related work:** [llm-stream-assemble](https://github.com/01laky/llm-stream-assemble) (separate library, no code migration)
 

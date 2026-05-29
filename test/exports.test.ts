@@ -26,6 +26,7 @@ describe("LSG-S06: dist exports", () => {
 		expect(typeof mod.loadPolicy).toBe("function");
 		expect(typeof mod.createGuardFromPolicy).toBe("function");
 		expect(typeof mod.validatePolicy).toBe("function");
+		expect(typeof mod.summarizeGuardContext).toBe("function");
 		expect(mod.applyGuardTransforms).toBeUndefined();
 	});
 

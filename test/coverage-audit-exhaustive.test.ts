@@ -19,7 +19,7 @@ import {
 import { loadPoliciesForScan } from "../src/audit/load-policies.js";
 import { extractPolicyToolSets } from "../src/audit/policy-tool-names.js";
 import { resolveManifestFiles } from "../src/audit/resolve-manifests.js";
-import { staticScanToSarif } from "../src/audit/sarif-preview.js";
+import { staticScanToSarif } from "../src/audit/sarif.js";
 import { runStaticScan } from "../src/audit/static-scan.js";
 import type { DriftFinding, StaticScanReport } from "../src/audit/types.js";
 import { validateManifestDocument, validateManifestFile } from "../src/audit/validate-manifest.js";

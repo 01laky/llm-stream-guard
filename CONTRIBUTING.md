@@ -36,25 +36,29 @@ git config core.hooksPath   # should print: .githooks
 
 ## Fixture and test ID convention
 
-| Prefix       | Purpose                          |
-| ------------ | -------------------------------- |
-| **LSG-S**    | Scaffold / smoke                 |
-| **LSG-B**    | Build artifact / dist hygiene    |
-| **LSG-E**    | Extended edge-case wiring        |
-| **LSG-C**    | Chunk-boundary byte streams      |
-| **LSG-R**    | Redaction golden fixtures        |
-| **LSG-T**    | Tool policy tests                |
-| **LSG-P**    | Performance smoke (local)        |
-| **LSG-POL**  | Policy loader / CLI              |
-| **LSG-CBK**  | Integration cookbook / examples  |
-| **LSG-STA**  | Static manifest audit / CLI      |
-| **LSG-ACT**  | GitHub Action / CI docs          |
-| **LSG-REL**  | Release / publish readiness      |
-| **LSG-DOC**  | Documentation completeness       |
-| **LSG-XEC**  | Phase 9 exhaustive edge matrices |
-| **LSG-PROP** | Property invariants (0.9.0+)     |
-| **LSG-PKG**  | npm pack tarball smoke           |
-| **LSG-SEC**  | Security negative / bypass docs  |
+| Prefix       | Purpose                                                        |
+| ------------ | -------------------------------------------------------------- |
+| **LSG-S**    | Scaffold / smoke                                               |
+| **LSG-B**    | Build artifact / dist hygiene                                  |
+| **LSG-E**    | Extended edge-case wiring                                      |
+| **LSG-C**    | Chunk-boundary byte streams                                    |
+| **LSG-R**    | Redaction golden fixtures                                      |
+| **LSG-T**    | Tool policy tests                                              |
+| **LSG-P**    | Performance smoke (local)                                      |
+| **LSG-POL**  | Policy loader / CLI                                            |
+| **LSG-CBK**  | Integration cookbook / examples                                |
+| **LSG-STA**  | Static manifest audit / CLI                                    |
+| **LSG-ACT**  | GitHub Action / CI docs                                        |
+| **LSG-REL**  | Release / publish readiness                                    |
+| **LSG-DOC**  | Documentation completeness                                     |
+| **LSG-XEC**  | Phase 9–10 exhaustive edge matrices (XEC1201+ = 1.0 reporting) |
+| **LSG-PROP** | Property invariants (0.9.0+)                                   |
+| **LSG-PKG**  | npm pack tarball smoke                                         |
+| **LSG-SEC**  | Security negative / bypass docs                                |
+| **LSG-RPT**  | Stream reporting / onFinish (1.0)                              |
+| **LSG-SAR**  | Stable SARIF export (1.0)                                      |
+| **LSG-SCH**  | JSON schema contracts (1.0)                                    |
+| **LSG-DTR**  | Doctor CLI (1.0)                                               |
 
 Document new IDs in test headers; maintain `test/fixtures/REGISTRY.md`; run `pnpm fixtures:audit-registry` to enforce parity. Rule edge cases: **LSG-E18–E38** in `test/edge-cases-rules.test.ts`.
 

@@ -1,4 +1,5 @@
 import { createGuardContext } from "./create-guard-context.js";
+import { summarizeGuardContext } from "./summarize-guard-context.js";
 import { pipeGuard } from "./pipe-guard.js";
 import { byteSanitizeErrors } from "./rules/byte/sanitize-errors-byte.js";
 import { byteRedactSecrets, flushByteRedactSecrets } from "./rules/byte/redact-secrets-byte.js";
@@ -18,7 +19,11 @@ function enqueueByteResults(
 export function createByteGuard(
 	options: ByteGuardOptions = {},
 ): TransformStream<Uint8Array, Uint8Array> {
-	const ctx = createGuardContext(options);
+	const ctx = createGuardContext({
+		...(options.mode !== undefined ? { mode: options.mode } : {}),
+		...(options.onViolation !== undefined ? { onViolation: options.onViolation } : {}),
+		...(options.policyVersion !== undefined ? { policyVersion: options.policyVersion } : {}),
+	});
 	const parts = [];
 	if (options.redactSecrets) parts.push(byteRedactSecrets(options));
 	if (options.sanitizeErrors) parts.push(byteSanitizeErrors());
@@ -32,6 +37,7 @@ export function createByteGuard(
 			if (options.redactSecrets) {
 				enqueueByteResults(controller, flushByteRedactSecrets(ctx, options));
 			}
+			options.onFinish?.(summarizeGuardContext(ctx));
 		},
 	});
 }

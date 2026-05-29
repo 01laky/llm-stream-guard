@@ -1,6 +1,6 @@
 {
 	"name": "llm-stream-guard",
-	"version": "0.9.0",
+	"version": "1.0.0",
 	"description": "Zero-dependency TypeScript security filter for LLM streams — redact secrets, enforce tool policy, byte and event modes.",
 	"license": "MIT",
 	"author": "Ladislav Kostolny <01laky@gmail.com>",
@@ -50,6 +50,9 @@
 		"fixtures:check-policies": "node scripts/check-policy-fixtures.mjs",
 		"fixtures:audit-policy-registry": "node scripts/audit-policy-fixture-registry.mjs --check",
 		"fixtures:audit-tools-registry": "node scripts/audit-tools-fixture-registry.mjs --check",
+		"fixtures:check-profiles": "node scripts/check-policy-profiles.mjs",
+		"gate:stable-language": "node scripts/grep-stable-gate.mjs --check",
+		"doctor": "node dist/cli.js doctor",
 		"action:smoke": "pnpm build && node action/run.mjs --policy policies/agent-gate.json --static-root . --manifest tools/manifest.json",
 		"verify:deps": "node scripts/verify-zero-deps.mjs",
 		"smoke:package": "node scripts/smoke-package.mjs",
@@ -59,7 +62,7 @@
 		"examples:typecheck": "pnpm build && pnpm exec tsc --noEmit -p examples/tsconfig.json",
 		"examples:smoke": "pnpm build && node examples/minimal-node/smoke.mjs",
 		"cookbook:check-examples": "node scripts/check-cookbook-examples.mjs --check",
-		"verify": "pnpm verify:deps && pnpm format && pnpm doc:check-links && pnpm typecheck && pnpm build && pnpm test && pnpm test:count-gate && pnpm test:coverage-map && pnpm fixtures:check-redaction && pnpm fixtures:audit-registry && pnpm fixtures:check-policies && pnpm fixtures:audit-policy-registry && pnpm fixtures:audit-tools-registry && pnpm examples:typecheck && pnpm cookbook:check-examples && pnpm examples:smoke && pnpm action:smoke && pnpm smoke:package"
+		"verify": "pnpm verify:deps && pnpm format && pnpm doc:check-links && pnpm gate:stable-language && pnpm typecheck && pnpm build && pnpm test && pnpm test:count-gate && pnpm test:coverage-map && pnpm fixtures:check-redaction && pnpm fixtures:audit-registry && pnpm fixtures:check-policies && pnpm fixtures:audit-policy-registry && pnpm fixtures:audit-tools-registry && pnpm fixtures:check-profiles && pnpm examples:typecheck && pnpm cookbook:check-examples && pnpm examples:smoke && pnpm action:smoke && pnpm smoke:package"
 	},
 	"repository": {
 		"type": "git",

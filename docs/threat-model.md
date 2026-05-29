@@ -1,6 +1,6 @@
-# Threat model (stub)
+# Threat model
 
-**Status:** **0.9.0** — scope boundaries for v0.9.x. Not a formal STRIDE analysis (see v1.0 roadmap in [proposal.MD](./proposal.MD)).
+**Status:** **1.0.0** — stable scope boundaries for the 1.x line. Not a formal STRIDE analysis; see [roadmap post-1.0](./roadmap-post-1.0.md) for future hardening ideas.
 
 ---
 
@@ -42,7 +42,7 @@ Provider → [byte guard OR parser → event guard] → client / tool executor
 - Provider authentication, API key storage, retry logic
 - Prompt injection / LLM-as-judge classification
 - Tool execution sandboxing (OS-level)
-- Network SSRF blocking (future rule ideas in proposal)
+- Network SSRF blocking (future rule ideas in [proposal.MD](./proposal.MD))
 - Parsing provider SSE (use [llm-stream-assemble](https://github.com/01laky/llm-stream-assemble) or your parser)
 
 Full non-goals: [proposal.MD § Non-goals](./proposal.MD#non-goals).

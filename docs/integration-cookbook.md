@@ -1,6 +1,6 @@
 # Integration cookbook
 
-**Status:** **0.9.0** — adoption guide with typechecked examples under [`examples/`](../examples/README.md).
+**Status:** **1.0.0** — adoption guide with typechecked examples under [`examples/`](../examples/README.md).
 **Prerequisite:** Read [Getting started](./getting-started.md) if you are new to byte vs event mode.
 
 Cookbook examples are **app-level only** — the guard package stays zero-dep and does not import assemble or provider SDKs.
@@ -269,7 +269,7 @@ See [`docs/litellm-gateway-hook.md`](./litellm-gateway-hook.md) (**LSG-CBK31**) 
 
 **When to use:** PR checks — composite Action or manual CLI steps (**LSG-CBK09**).
 
-**Recommended:** [`docs/ci-github-action.md`](./ci-github-action.md) — matrix workflow, SARIF preview upload, local audit CLI (**LSG-ACT16**, **LSG-ACT18**).
+**Recommended:** [`docs/ci-github-action.md`](./ci-github-action.md) — matrix workflow, SARIF upload, local audit CLI (**LSG-ACT16**, **LSG-ACT18**).
 
 Minimal manual workflow (no Action):
 

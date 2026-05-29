@@ -1,6 +1,6 @@
 # Documentation map
 
-**Status:** **0.9.0** — structured learning paths for beginners through maintainers.
+**Status:** **1.0.0** — structured learning paths for beginners through maintainers.
 
 Use this page when you are not sure **which doc to read first**. Every guide links back here.
 
@@ -33,8 +33,10 @@ Examples by persona: [`examples/README.md`](../examples/README.md)
 8. faq.md · comparison.md      ← edge questions & alternatives
 9. troubleshooting.md          ← symptom → cause → fix
 10. security-reporting.md      ← bypass reports (see SECURITY.md)
-11. upgrade-guide.md           ← semver jumps (0.7 → 0.8.x)
-12. threat-model-stub.md       ← scope & trust boundaries (optional depth)
+11. upgrade-guide.md           ← semver jumps (0.x → 1.0)
+12. threat-model.md            ← scope & trust boundaries
+13. api-stability.md          ← 1.x guarantees
+14. migration-0.x-to-1.0.md   ← SARIF + onFinish migration
 ```
 
 Diagram: [`docs/img/getting-started-journey.svg`](./img/getting-started-journey.svg)
@@ -58,18 +60,20 @@ Diagram: [`docs/img/getting-started-journey.svg`](./img/getting-started-journey.
 
 ### Policy & CLI (offline / CI)
 
-| Topic                 | Doc                                                          | Diagram                                              |
-| --------------------- | ------------------------------------------------------------ | ---------------------------------------------------- |
-| Policy file format    | [Policy reference](./policy-reference.md)                    | [policy-compile.svg](./img/policy-compile.svg)       |
-| JSON schemas (npm)    | [schemas/README.md](../schemas/README.md)                    | —                                                    |
-| Rule types map        | [Policy reference § Rules](./policy-reference.md#rule-types) | [policy-rules-map.svg](./img/policy-rules-map.svg)   |
-| CLI commands          | [CLI reference](./cli-reference.md)                          | —                                                    |
-| Static manifest audit | [Static scanning](./static-scanning.md)                      | [static-audit-flow.svg](./img/static-audit-flow.svg) |
-| GitHub Action         | [CI guide](./ci-github-action.md)                            | [ci-action-flow.svg](./img/ci-action-flow.svg)       |
-| Troubleshooting       | [Troubleshooting](./troubleshooting.md)                      | —                                                    |
-| Security reports      | [Security reporting](./security-reporting.md)                | —                                                    |
-| Upgrading             | [Upgrade guide](./upgrade-guide.md)                          | —                                                    |
-| Threat model (stub)   | [Threat model stub](./threat-model-stub.md)                  | —                                                    |
+| Topic                 | Doc                                                          | Diagram                                                        |
+| --------------------- | ------------------------------------------------------------ | -------------------------------------------------------------- |
+| Policy file format    | [Policy reference](./policy-reference.md)                    | [policy-compile.svg](./img/policy-compile.svg)                 |
+| JSON schemas (npm)    | [schemas/README.md](../schemas/README.md)                    | —                                                              |
+| Rule types map        | [Policy reference § Rules](./policy-reference.md#rule-types) | [policy-rules-map.svg](./img/policy-rules-map.svg)             |
+| CLI commands          | [CLI reference](./cli-reference.md)                          | —                                                              |
+| Static manifest audit | [Static scanning](./static-scanning.md)                      | [static-audit-flow.svg](./img/static-audit-flow.svg)           |
+| GitHub Action         | [CI guide](./ci-github-action.md)                            | [ci-action-flow.svg](./img/ci-action-flow.svg)                 |
+| Troubleshooting       | [Troubleshooting](./troubleshooting.md)                      | —                                                              |
+| Security reports      | [Security reporting](./security-reporting.md)                | —                                                              |
+| Upgrading             | [Upgrade guide](./upgrade-guide.md)                          | —                                                              |
+| Threat model          | [Threat model](./threat-model.md)                            | [v1-stable-architecture.svg](./img/v1-stable-architecture.svg) |
+| API stability         | [API stability](./api-stability.md)                          | —                                                              |
+| Stream reporting      | [Migration § onFinish](./migration-0.x-to-1.0.md)            | [violation-report-flow.svg](./img/violation-report-flow.svg)   |
 
 ### Diagrams index
 

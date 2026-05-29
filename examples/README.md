@@ -16,6 +16,7 @@ See [Documentation map](../docs/docs-map.md) and [Getting started](../docs/getti
 | `dual-stream/audit-side-channel.ts`        | agent   | Audit log + client stream              | LSG-CBK08, LSG-CBK24    |
 | `policy-ci/scan-fixtures.sh`               | ci      | CLI validate + scan in CI              | LSG-CBK09, LSG-CBK27    |
 | `minimal-node/smoke.mjs`                   | smoke   | Dist smoke after build                 | LSG-CBK28               |
+| `minimal-node/on-finish-summary.mjs`       | smoke   | `onFinish` / StreamGuardSummary demo   | LSG-CBK54–58            |
 
 ## Run
 

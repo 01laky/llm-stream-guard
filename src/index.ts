@@ -3,6 +3,7 @@ export { createByteGuard } from "./create-byte-guard.js";
 export { createGuardContext } from "./create-guard-context.js";
 export { guardEvents } from "./guard-events.js";
 export { pipeGuard } from "./pipe-guard.js";
+export { summarizeGuardContext } from "./summarize-guard-context.js";
 export {
 	allowTools,
 	blockToolArgs,
@@ -66,6 +67,7 @@ export type {
 	GuardToolCallEvent,
 	GuardTransform,
 	GuardContext,
+	StreamGuardSummary,
 	Violation,
 	ViolationMode,
 } from "./types.js";

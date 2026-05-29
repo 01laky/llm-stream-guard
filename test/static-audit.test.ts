@@ -12,7 +12,7 @@ import { computeDrift } from "../src/audit/drift.js";
 import { parseManifestFile } from "../src/audit/extract-tools.js";
 import { extractPolicyToolSets } from "../src/audit/policy-tool-names.js";
 import { runStaticScan, countStaticErrors } from "../src/audit/static-scan.js";
-import { staticScanToSarif } from "../src/audit/sarif-preview.js";
+import { staticScanToSarif } from "../src/audit/sarif.js";
 import { walkManifestFiles } from "../src/audit/walk-filters.js";
 import { loadPolicy } from "../src/policy/load.js";
 

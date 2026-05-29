@@ -2,6 +2,7 @@ export function cliUsage(): string {
 	return `llm-stream-guard — policy validate, scan, diff
 
 Usage:
+  llm-stream-guard doctor [--json] [policy-path]
   llm-stream-guard validate <policy>
   llm-stream-guard resolve <policy> [--json]
   llm-stream-guard scan --policy <policy> [--mode M] [--stdin-format F] [--json] <paths...|->

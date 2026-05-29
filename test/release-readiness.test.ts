@@ -421,11 +421,11 @@ describe("LSG-REL: release readiness", () => {
 		expect(src).toMatch(/CBK44|byte-proxy\/hono/);
 	});
 
-	it("LSG-REL60: version sync 0.9.0", () => {
+	it("LSG-REL60: version sync 1.0.0", () => {
 		const pkg = JSON.parse(read("package.json")) as { version: string };
-		expect(pkg.version).toBe("0.9.0");
-		expect(read("src/version.ts")).toContain("0.9.0");
-		expect(read("README.md")).toContain("0.9.0");
+		expect(pkg.version).toBe("1.0.0");
+		expect(read("src/version.ts")).toContain("1.0.0");
+		expect(read("README.md")).toContain("1.0.0");
 	});
 
 	it("LSG-REL61: zero runtime deps unchanged", () => {
@@ -440,5 +440,88 @@ describe("LSG-REL: release readiness", () => {
 	it("LSG-REL62: verify includes test:count-gate", () => {
 		const pkg = JSON.parse(read("package.json")) as { scripts: Record<string, string> };
 		expect(pkg.scripts.verify).toContain("test:count-gate");
+	});
+
+	it("LSG-REL63: stream-reporting test file RPT01", () => {
+		expect(read("test/stream-reporting.test.ts")).toMatch(/RPT01/);
+	});
+
+	it("LSG-REL64: sarif-stable test file SAR01", () => {
+		expect(read("test/sarif-stable.test.ts")).toMatch(/SAR01/);
+	});
+
+	it("LSG-REL65: schema-contract test file SCH01", () => {
+		expect(read("test/schema-contract.test.ts")).toMatch(/SCH01/);
+	});
+
+	it("LSG-REL66: doctor test file DTR01", () => {
+		expect(read("test/doctor.test.ts")).toMatch(/DTR01/);
+	});
+
+	it("LSG-REL67: gate stable language script", () => {
+		expect(existsSync(join(rootDir, "scripts/grep-stable-gate.mjs"))).toBe(true);
+		const pkg = JSON.parse(read("package.json")) as { scripts: Record<string, string> };
+		expect(pkg.scripts["gate:stable-language"]).toBeDefined();
+		expect(pkg.scripts.verify).toContain("gate:stable-language");
+	});
+
+	it("LSG-REL68: check-policy-profiles script", () => {
+		expect(existsSync(join(rootDir, "scripts/check-policy-profiles.mjs"))).toBe(true);
+		expect(existsSync(join(rootDir, "scripts/policy-profile-hashes.json"))).toBe(true);
+	});
+
+	it("LSG-REL69: phase10-report-matrix exists", () => {
+		expect(read("test/phase10-report-matrix.test.ts")).toMatch(/RPT36/);
+	});
+
+	it("LSG-REL70: security-negative-b SEC21", () => {
+		expect(read("test/security-negative-b.test.ts")).toMatch(/SEC21/);
+	});
+
+	it("LSG-REL71: api-stability doc Status 1.0.0", () => {
+		expect(read("docs/api-stability.md")).toMatch(/Status.*1\.0\.0/);
+	});
+
+	it("LSG-REL72: threat-model.md replaces stub", () => {
+		expect(existsSync(join(rootDir, "docs/threat-model.md"))).toBe(true);
+		expect(existsSync(join(rootDir, "docs/threat-model-stub.md"))).toBe(false);
+	});
+
+	it("LSG-REL73: migration-0.x-to-1.0 doc", () => {
+		expect(read("docs/migration-0.x-to-1.0.md")).toContain("1.0.0");
+	});
+
+	it("LSG-REL74: scan-report-v1 schema ships", () => {
+		expect(existsSync(join(rootDir, "schemas/scan-report-v1.json"))).toBe(true);
+	});
+
+	it("LSG-REL75: static-scan-report-v1 schema ships", () => {
+		expect(existsSync(join(rootDir, "schemas/static-scan-report-v1.json"))).toBe(true);
+	});
+
+	it("LSG-REL76: stream-guard-summary-v1 schema ships", () => {
+		expect(existsSync(join(rootDir, "schemas/stream-guard-summary-v1.json"))).toBe(true);
+	});
+
+	it("LSG-REL77: sarif.ts canonical module", () => {
+		expect(read("src/audit/sarif.ts")).toContain("SARIF_RULE_CATALOG");
+	});
+
+	it("LSG-REL78: on-finish-summary example", () => {
+		expect(existsSync(join(rootDir, "examples/minimal-node/on-finish-summary.mjs"))).toBe(true);
+	});
+
+	it("LSG-REL79: CHANGELOG 1.0.0 section", () => {
+		expect(read("CHANGELOG.md")).toContain("## [1.0.0]");
+	});
+
+	it("LSG-REL80: build-diagrams lists 21 mmd files", () => {
+		const script = read("scripts/build-diagrams.mjs");
+		const count = (script.match(/^\t"[^"]+\.mmd"/gm) ?? []).length;
+		expect(count).toBe(21);
+	});
+
+	it("LSG-REL81: edge-cases-phase10-exhaustive XEC1201", () => {
+		expect(read("test/edge-cases-phase10-exhaustive.test.ts")).toMatch(/XEC1201/);
 	});
 });

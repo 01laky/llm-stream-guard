@@ -1,6 +1,6 @@
 # Troubleshooting
 
-**Status:** **0.9.0** — symptom → cause → fix for byte mode, event mode, policy, CLI, and GitHub Action.
+**Status:** **1.0.0** — symptom → cause → fix for byte mode, event mode, policy, CLI, and GitHub Action.
 
 **See also:** [FAQ](./faq.md) · [Security reporting](./security-reporting.md) · [CLI reference](./cli-reference.md) · [Policy reference](./policy-reference.md)
 

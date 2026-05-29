@@ -1,5 +1,6 @@
-import { createGuardContext } from "./create-guard-context.js";
+import { createGuardContext, getGuardContextState } from "./create-guard-context.js";
 import { applyGuardTransforms } from "./apply-guard-transforms.js";
+import { summarizeGuardContext } from "./summarize-guard-context.js";
 import type { GuardEvent, GuardEventsConfig, GuardTransform } from "./types.js";
 
 function isGuardEventsConfig(
@@ -34,12 +35,21 @@ export async function* guardEvents(
 	...extraTransforms: GuardTransform[]
 ): AsyncGenerator<GuardEvent> {
 	const { config, transforms } = resolveGuardEventsArgs(configOrTransform, extraTransforms);
-	const ctx = createGuardContext(config);
+	const ctx = createGuardContext({
+		...(config?.mode !== undefined ? { mode: config.mode } : {}),
+		...(config?.onViolation !== undefined ? { onViolation: config.onViolation } : {}),
+		...(config?.policyVersion !== undefined ? { policyVersion: config.policyVersion } : {}),
+	});
 	const execute = transforms.length > 0;
 
+	let eventIndex = 0;
 	for await (const event of source) {
+		getGuardContextState(ctx).eventIndex = eventIndex;
+		eventIndex += 1;
 		for (const out of applyGuardTransforms(event, ctx, transforms, execute)) {
 			yield out;
 		}
 	}
+
+	config?.onFinish?.(summarizeGuardContext(ctx));
 }

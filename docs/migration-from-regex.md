@@ -1,6 +1,6 @@
 # Migration from regex middleware
 
-**Status:** **0.9.0** — upgrade path from ad-hoc filters to llm-stream-guard.
+**Status:** **1.0.0** — upgrade path from ad-hoc filters to llm-stream-guard.
 
 ![Migration path](https://raw.githubusercontent.com/01laky/llm-stream-guard/main/docs/img/migration-path.svg)
 
@@ -50,7 +50,7 @@ Effective **mode** precedence: `GUARD_MODE` env → `LoadPolicyOptions.mode` / C
 
 **To:** CI runs `validate` + `scan --json` + `audit static` on fixtures, manifests, and captured streams.
 
-- GitHub Action: [`docs/ci-github-action.md`](./ci-github-action.md) (`action/` composite, matrix `fail-on`, SARIF preview)
+- GitHub Action: [`docs/ci-github-action.md`](./ci-github-action.md) (`action/` composite, matrix `fail-on`, SARIF upload)
 - Static manifest audit: [`docs/static-scanning.md`](./static-scanning.md)
 - Cookbook §11: [integration cookbook](./integration-cookbook.md#11-ci--github-action)
 

@@ -33,7 +33,7 @@ const STATUS_SCAN_FILES = [
 	"docs/troubleshooting.md",
 	"docs/security-reporting.md",
 	"docs/upgrade-guide.md",
-	"docs/threat-model-stub.md",
+	"docs/threat-model.md",
 ];
 
 function parseSemverFromStatus(line: string): string | null {
@@ -139,10 +139,10 @@ describe("LSG-DOC: documentation readiness", () => {
 		expect(doc).toContain(`@v${version}`);
 	});
 
-	it("DOC13: build-diagrams.mjs renders 19 diagrams", () => {
+	it("DOC13: build-diagrams.mjs renders 21 diagrams", () => {
 		const script = read("scripts/build-diagrams.mjs");
-		const count = (script.match(/\.mmd"/g) ?? []).length;
-		expect(count).toBe(19);
+		const count = (script.match(/^\t"[^"]+\.mmd"/gm) ?? []).length;
+		expect(count).toBe(21);
 	});
 
 	it("DOC14: getting-started has common mistakes section", () => {
@@ -308,8 +308,8 @@ describe("LSG-DOC: documentation readiness", () => {
 		expect(doc).toContain("audit static");
 	});
 
-	it("DOC35: threat-model-stub has Out of scope and security-reporting link", () => {
-		const doc = read("docs/threat-model-stub.md");
+	it("DOC35: threat-model has Out of scope and security-reporting link", () => {
+		const doc = read("docs/threat-model.md");
 		expect(doc).toMatch(/Out of scope/i);
 		expect(doc).toContain("security-reporting.md");
 	});
@@ -363,7 +363,7 @@ describe("LSG-DOC edge cases", () => {
 	it("DOC-E06: upgrade-guide and threat-model linked from docs-map", () => {
 		const map = read("docs/docs-map.md");
 		expect(map).toContain("upgrade-guide.md");
-		expect(map).toContain("threat-model-stub.md");
+		expect(map).toContain("threat-model.md");
 	});
 
 	it("DOC-E07: check-doc-links exits zero on default scan set", () => {
@@ -373,7 +373,7 @@ describe("LSG-DOC edge cases", () => {
 		});
 	}, 30_000);
 
-	it("DOC-E08: all 19 diagram SVGs exist", () => {
+	it("DOC-E08: all 21 diagram SVGs exist", () => {
 		const script = read("scripts/build-diagrams.mjs");
 		const names = [...script.matchAll(/"([^"]+\.mmd)"/g)].map((m) => m[1].replace(".mmd", ".svg"));
 		for (const svg of names) {

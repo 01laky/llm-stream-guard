@@ -228,6 +228,32 @@ if (!existsSync(join(rootDir, "test/byte-split-matrix.test.ts"))) {
 if (!existsSync(join(rootDir, "docs/img/test-fortress.mmd"))) {
 	errors.push("missing docs/img/test-fortress.mmd");
 }
+for (const file of [
+	"test/stream-reporting.test.ts",
+	"test/sarif-stable.test.ts",
+	"test/schema-contract.test.ts",
+	"test/doctor.test.ts",
+	"test/phase10-report-matrix.test.ts",
+	"test/security-negative-b.test.ts",
+	"docs/api-stability.md",
+	"docs/threat-model.md",
+	"docs/migration-0.x-to-1.0.md",
+	"schemas/scan-report-v1.json",
+	"schemas/static-scan-report-v1.json",
+	"schemas/stream-guard-summary-v1.json",
+	"scripts/grep-stable-gate.mjs",
+	"scripts/check-policy-profiles.mjs",
+]) {
+	if (!existsSync(join(rootDir, file))) {
+		errors.push(`missing ${file} (REL63–REL80 Phase 10)`);
+	}
+}
+if (!pkg.scripts?.["gate:stable-language"]) {
+	errors.push("missing gate:stable-language script (REL67)");
+}
+if (!pkg.scripts?.["fixtures:check-profiles"]) {
+	errors.push("missing fixtures:check-profiles script (REL68)");
+}
 
 if (errors.length > 0) {
 	console.error("\nRelease prep failed:");

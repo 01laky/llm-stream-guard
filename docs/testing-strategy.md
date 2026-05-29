@@ -222,7 +222,33 @@ pnpm test:coverage-map    # export reference audit
 pnpm test:timing          # informational WARN locally
 ```
 
-Diagram: `docs/img/test-fortress.mmd` + SVG (19 diagrams total).
+Diagram: `docs/img/test-fortress.mmd` + SVG.
+
+### Phase 10 (1.0.0 release)
+
+Stable API contracts, SARIF freeze, stream reporting, and doc gates for 1.0.0.
+
+| Area                                         | IDs           | Focus                                                     |
+| -------------------------------------------- | ------------- | --------------------------------------------------------- |
+| `test/stream-reporting.test.ts`              | RPT01–35      | `onFinish`, `summarizeGuardContext`, policy-driven guards |
+| `test/phase10-report-matrix.test.ts`         | RPT36+ (~120) | Programmatic onFinish matrix                              |
+| `test/edge-cases-phase10-exhaustive.test.ts` | XEC1201–2220  | Phase 10 exhaustive: summary, onFinish, byte flush        |
+| `test/sarif-stable.test.ts`                  | SAR01–80      | SARIF catalog, schema, golden, edge matrix                |
+| `test/schema-contract.test.ts`               | SCH01–35      | `schemas/*-v1.json` shapes                                |
+| `test/doctor.test.ts`                        | DTR01–40      | `doctor` CLI + policy path matrix                         |
+| `test/security-negative-b.test.ts`           | SEC21–50      | Extended security negatives                               |
+| `test/release-readiness.test.ts`             | REL63–REL80   | Phase 10 file and gate checks                             |
+| `test/docs-edge-cases.test.ts`               | DOC-E71–E100  | 1.0 docs, diagrams, stable language                       |
+| `scripts/grep-stable-gate.mjs`               | REL67         | No preview/stub in src/action/docs                        |
+| `scripts/check-policy-profiles.mjs`          | REL68         | Profile hash manifest                                     |
+
+```bash
+pnpm gate:stable-language
+pnpm fixtures:check-profiles
+pnpm doctor
+```
+
+Diagrams: `v1-stable-architecture.mmd`, `violation-report-flow.mmd` (21 total).
 
 ### Test files (Phase 4)
 

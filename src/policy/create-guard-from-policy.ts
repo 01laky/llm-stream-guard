@@ -14,19 +14,30 @@ export function createGuardFromPolicy(
 	const eventConfig = {
 		mode: policy.mode,
 		transforms: policy.transforms,
+		...(policy.policyVersion !== undefined ? { policyVersion: policy.policyVersion } : {}),
+		...(options?.onFinish !== undefined ? { onFinish: options.onFinish } : {}),
+		...(options?.onViolation !== undefined ? { onViolation: options.onViolation } : {}),
+	};
+
+	const byteOptions = {
+		...policy.byteOptions,
+		mode: policy.mode,
+		...(policy.policyVersion !== undefined ? { policyVersion: policy.policyVersion } : {}),
+		...(options?.onFinish !== undefined ? { onFinish: options.onFinish } : {}),
+		...(options?.onViolation !== undefined ? { onViolation: options.onViolation } : {}),
 	};
 
 	return {
 		mode: policy.mode,
 		...(policy.policyVersion !== undefined ? { policyVersion: policy.policyVersion } : {}),
 		transforms: policy.transforms,
-		byteOptions: policy.byteOptions,
+		byteOptions,
 		eventConfig,
 		guard(source: AsyncIterable<GuardEvent>) {
 			return guardEvents(source, eventConfig);
 		},
 		createByteGuard() {
-			return createByteGuard(policy.byteOptions);
+			return createByteGuard(byteOptions);
 		},
 	};
 }

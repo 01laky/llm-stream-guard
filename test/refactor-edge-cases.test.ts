@@ -23,7 +23,7 @@ import {
 } from "../src/audit/format-report.js";
 import { loadPoliciesForScan } from "../src/audit/load-policies.js";
 import { resolveManifestFiles } from "../src/audit/resolve-manifests.js";
-import { staticScanToSarif } from "../src/audit/sarif-preview.js";
+import { staticScanToSarif } from "../src/audit/sarif.js";
 import { runStaticScan } from "../src/audit/static-scan.js";
 import type { StaticScanReport } from "../src/audit/types.js";
 import { compilePolicy } from "../src/policy/compile.js";

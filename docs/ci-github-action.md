@@ -1,13 +1,13 @@
 # GitHub Action — CI audit
 
-**Status:** **0.9.0** — composite action at [`action/`](../action/) wrapping `llm-stream-guard` CLI. See also [Getting started](./getting-started.md) and [Documentation map](./docs-map.md).
+**Status:** **1.0.0** — composite action at [`action/`](../action/) wrapping `llm-stream-guard` CLI. See also [Getting started](./getting-started.md) and [Documentation map](./docs-map.md).
 
 ![CI action flow](https://raw.githubusercontent.com/01laky/llm-stream-guard/main/docs/img/ci-action-flow.svg)
 
 ## Quick start
 
 ```yaml
-- uses: 01laky/llm-stream-guard/action@v0.9.0
+- uses: 01laky/llm-stream-guard/action@v1.0.0
   with:
     policy: policies/agent-gate.json
     scan-paths: test/fixtures/events/
@@ -17,14 +17,14 @@
     annotate: true
 ```
 
-Pin `@v0.9.0` for semver. See [`action/README.md`](../action/README.md) for all inputs and outputs.
+Pin `@v1.0.0` for semver. See [`action/README.md`](../action/README.md) for all inputs and outputs.
 
 ## What it runs
 
 1. **`validate`** — policy schema (optional **`diff baseline --check`** when `baseline-policy` is set)
 2. **`scan`** — stream/event fixtures against policy (`scan-paths`)
-3. **`audit static`** — tool manifest drift, dangerous patterns (D001–D006), `blockToolArgs` preview
-4. **SARIF** — optional `--sarif-out` when `sarif-out` input is set
+3. **`audit static`** — tool manifest drift, dangerous patterns (D001–D006), `blockToolArgs` static analysis
+4. **SARIF** — optional `--sarif-out` when `sarif-out` input is set (stable 1.x rule IDs)
 5. **Fail gate** — exit 1 when `fail-on` matches findings (`violations`, `drift`, `static`, `any`, or `none`)
 
 ## Matrix workflow (LSG-ACT16)
@@ -50,7 +50,7 @@ jobs:
           node-version: 22
           cache: pnpm
       - run: pnpm install --frozen-lockfile && pnpm build
-      - uses: 01laky/llm-stream-guard/action@v0.9.0
+      - uses: 01laky/llm-stream-guard/action@v1.0.0
         with:
           policy: policies/agent-gate.json
           scan-paths: test/fixtures/events/
@@ -67,7 +67,7 @@ jobs:
           node-version: 22
           cache: pnpm
       - run: pnpm install --frozen-lockfile && pnpm build
-      - uses: 01laky/llm-stream-guard/action@v0.9.0
+      - uses: 01laky/llm-stream-guard/action@v1.0.0
         with:
           policy: policies/agent-gate.json
           static-root: .
@@ -87,10 +87,10 @@ jobs:
 
 ## SARIF upload (LSG-ACT18)
 
-SARIF output is a **preview** — schema and rule metadata may change before v1.0. Validate in a fork before enabling GitHub Advanced Security dashboards.
+Stable SARIF 2.1.0 export — rule IDs documented in [sarif-rule-ids.md](./sarif-rule-ids.md).
 
 ```yaml
-- uses: 01laky/llm-stream-guard/action@v0.9.0
+- uses: 01laky/llm-stream-guard/action@v1.0.0
   id: guard
   with:
     policy: policies/agent-gate.json
@@ -103,29 +103,19 @@ SARIF output is a **preview** — schema and rule metadata may change before v1.
   if: always() && steps.guard.outputs.sarif-path != ''
   with:
     sarif_file: findings.sarif
-    category: llm-stream-guard-preview
+    category: llm-stream-guard
 ```
 
-Preview SARIF uses rule IDs from drift codes (`DRIFT_*`), dangerous catalog (`D001`–`D006`), and `BLOCK_ARGS_STATIC`.
+Rule IDs: drift codes (`DRIFT_*`), dangerous catalog (`D001`–`D006`), and `BLOCK_ARGS_STATIC`.
 
 ## Local audit CLI
 
 From repo root after `pnpm build` (or with `llm-stream-guard` installed):
 
 ```bash
-# Same steps as the Action — policy + fixtures + manifest
 pnpm exec llm-stream-guard validate policies/agent-gate.json
 pnpm exec llm-stream-guard scan --policy policies/agent-gate.json --json test/fixtures/events/clean-tool.json
 pnpm exec llm-stream-guard audit static --policy policies/agent-gate.json --root . --manifest tools/manifest.json --json
-
-# Action wrapper smoke (uses dist/cli.js when present)
-node action/run.mjs --policy policies/agent-gate.json --static-root . --manifest tools/manifest.json
 ```
 
-Shell script: [`examples/policy-ci/scan-fixtures.sh`](../examples/policy-ci/scan-fixtures.sh).
-
-## Related
-
-- [Static scanning](./static-scanning.md) — manifest formats, drift rules, exit codes
-- [Pre-commit recipe](./pre-commit-recipe.md) — optional local hook
-- [Integration cookbook §11](./integration-cookbook.md#11-ci--github-action) — manual workflow without Action
+See [CLI reference](./cli-reference.md) and [static scanning](./static-scanning.md).

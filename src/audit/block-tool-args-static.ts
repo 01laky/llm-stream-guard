@@ -2,7 +2,7 @@ import { matchesBlockToolArgs } from "../policy/block-tool-args-matcher.js";
 import type { PolicyToolSets } from "./policy-tool-names.js";
 import type { StaticPatternFinding } from "./types.js";
 
-/** Match manifest string fields against policy blockToolArgs rules (static preview). */
+/** Match manifest string fields against policy blockToolArgs rules (static analysis). */
 export function scanBlockToolArgsStatic(
 	file: string,
 	strings: Array<{ field: string; value: string; line?: number }>,

@@ -87,6 +87,8 @@ Synthetic secrets only — never real keys.
 | LSG-C9-67 | byte-sse/phase9/split-67.sse + split-67.expected.sse | byte redactSecrets | block | split index 29 |
 | LSG-C9-68 | byte-sse/phase9/split-68.sse + split-68.expected.sse | byte redactSecrets | block | split index 30 |
 
+| LSG-SAR22 | sarif/empty-report.golden.json | SARIF export | — | empty report golden (1.0) |
+
 Policy rows are also tracked in `policies/REGISTRY.md` (`pnpm fixtures:audit-policy-registry`).
 
 Tool manifest rows are tracked in `tools/REGISTRY.md` (`pnpm fixtures:audit-tools-registry`).

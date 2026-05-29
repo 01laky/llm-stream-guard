@@ -4,7 +4,7 @@ import { AuditExit } from "../audit/exit-codes.js";
 import { computeDrift } from "../audit/drift.js";
 import { parseManifestFile } from "../audit/extract-tools.js";
 import { extractPolicyToolSets } from "../audit/policy-tool-names.js";
-import { staticScanToSarif } from "../audit/sarif-preview.js";
+import { staticScanToSarif } from "../audit/sarif.js";
 import { countStaticErrors, formatStaticScanReport, runStaticScan } from "../audit/static-scan.js";
 import type { DriftFinding, StaticScanReport } from "../audit/types.js";
 import { validateManifestFile } from "../audit/validate-manifest.js";

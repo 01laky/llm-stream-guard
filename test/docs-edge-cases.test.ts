@@ -94,9 +94,9 @@ describe("LSG-DOC-E09–E20: troubleshooting & security docs", () => {
 		expect(section).not.toMatch(/\| Mistake\s+\| Fix\s+\|/);
 	});
 
-	it("DOC-E16: SECURITY.md lists 0.8.x as supported", () => {
+	it("DOC-E16: SECURITY.md lists 1.0.x as supported", () => {
 		const doc = read("SECURITY.md");
-		expect(doc).toMatch(/0\.8\.x/);
+		expect(doc).toMatch(/1\.0\.x/);
 		expect(doc).toMatch(/Supported/i);
 	});
 
@@ -112,8 +112,8 @@ describe("LSG-DOC-E09–E20: troubleshooting & security docs", () => {
 		expect(read("docs/security-reporting.md")).toMatch(/test\/fixtures/);
 	});
 
-	it("DOC-E19: security-reporting links threat-model stub", () => {
-		expect(read("docs/security-reporting.md")).toContain("threat-model-stub.md");
+	it("DOC-E19: security-reporting links threat model", () => {
+		expect(read("docs/security-reporting.md")).toContain("threat-model.md");
 	});
 
 	it("DOC-E20: FAQ beginners block links docs-map", () => {
@@ -134,8 +134,8 @@ describe("LSG-DOC-E21–E32: upgrade, threat model, schemas, action parity", () 
 		expect(doc).toMatch(/GitHub `docs\/`/i);
 	});
 
-	it("DOC-E22: threat-model-stub has scope, boundaries, in/out scope, assumptions", () => {
-		const doc = read("docs/threat-model-stub.md");
+	it("DOC-E22: threat-model has scope, boundaries, in/out scope, assumptions", () => {
+		const doc = read("docs/threat-model.md");
 		expect(doc).toMatch(/Scope/i);
 		expect(doc).toMatch(/Trust boundaries/i);
 		expect(doc).toMatch(/In-scope threats/i);
@@ -144,7 +144,7 @@ describe("LSG-DOC-E21–E32: upgrade, threat model, schemas, action parity", () 
 	});
 
 	it("DOC-E23: threat-model links proposal non-goals", () => {
-		expect(read("docs/threat-model-stub.md")).toMatch(/proposal\.MD#non-goals/i);
+		expect(read("docs/threat-model.md")).toMatch(/proposal\.MD#non-goals/i);
 	});
 
 	it("DOC-E24: README documents all Phase 8.2 guide links", () => {
@@ -153,7 +153,7 @@ describe("LSG-DOC-E21–E32: upgrade, threat model, schemas, action parity", () 
 			"troubleshooting.md",
 			"upgrade-guide.md",
 			"security-reporting.md",
-			"threat-model-stub.md",
+			"threat-model.md",
 			"schemas/README.md",
 			"SECURITY.md",
 		]) {
@@ -307,11 +307,10 @@ describe("LSG-DOC-E33–E42: link checker, version sync, examples registry", () 
 		expect(readme).toContain(`Stable \`${pkg}\``);
 	});
 
-	it("DOC-E38: CHANGELOG current version mentions doc gates and check-doc-links", () => {
+	it("DOC-E38: CHANGELOG current version mentions Phase 10 gates", () => {
 		const version = pkgVersion();
 		const section = read("CHANGELOG.md").split(`## [${version}]`)[1]?.split("\n## [")[0] ?? "";
-		expect(section).toMatch(/troubleshooting|LSG-DOC/i);
-		expect(section).toMatch(/check-doc-links|doc:check-links/i);
+		expect(section).toMatch(/onFinish|LSG-RPT|LSG-SAR|gate:stable-language/i);
 	});
 
 	it("DOC-E39: examples README table paths exist and personas are valid", () => {
@@ -353,7 +352,7 @@ describe("LSG-DOC-E43–E55: diagrams, contributing, publishing, release prep", 
 	it("DOC-E43: every committed docs/img mmd has matching svg", () => {
 		const imgDir = join(rootDir, "docs/img");
 		const mmds = readdirSync(imgDir).filter((f) => f.endsWith(".mmd"));
-		expect(mmds.length).toBe(19);
+		expect(mmds.length).toBe(21);
 		for (const mmd of mmds) {
 			expect(existsSync(join(imgDir, mmd.replace(".mmd", ".svg"))), mmd).toBe(true);
 		}
@@ -398,7 +397,7 @@ describe("LSG-DOC-E43–E55: diagrams, contributing, publishing, release prep", 
 			"docs/troubleshooting.md",
 			"docs/security-reporting.md",
 			"docs/upgrade-guide.md",
-			"docs/threat-model-stub.md",
+			"docs/threat-model.md",
 		]) {
 			const line = read(file)
 				.split("\n")
@@ -421,10 +420,10 @@ describe("LSG-DOC-E43–E55: diagrams, contributing, publishing, release prep", 
 		expect(topic).toContain("schemas/README.md");
 	});
 
-	it("DOC-E53: faq retains historical What works sections", () => {
-		const faq = read("docs/faq.md");
+	it("DOC-E53: faq-archive retains historical What works sections", () => {
+		const archive = read("docs/faq-archive.md");
 		for (const ver of ["0.7.0", "0.6.0", "0.5.0"]) {
-			expect(faq).toContain(`What works in ${ver}?`);
+			expect(archive).toContain(`What works in ${ver}?`);
 		}
 	});
 
@@ -456,8 +455,8 @@ describe("LSG-DOC-E56–E75: Phase 9 test fortress docs", () => {
 		expect(read("docs/testing-strategy.md")).toMatch(/shard|vitest run --shard/);
 	});
 
-	it("DOC-E58: README mentions 0.9.0 test fortress", () => {
-		expect(read("README.md")).toMatch(/0\.9\.0|4000|test fortress/i);
+	it("DOC-E58: README mentions 1.0.0 stable release", () => {
+		expect(read("README.md")).toMatch(/1\.0\.0|onFinish/i);
 	});
 
 	it("DOC-E59: CHANGELOG 0.9.0 section lists matrix test files", () => {
@@ -469,18 +468,18 @@ describe("LSG-DOC-E56–E75: Phase 9 test fortress docs", () => {
 		expect(existsSync(join(rootDir, "docs/img/test-fortress.mmd"))).toBe(true);
 	});
 
-	it("DOC-E61: build-diagrams includes test-fortress (19 diagrams)", () => {
+	it("DOC-E61: build-diagrams includes test-fortress (21 diagrams)", () => {
 		const script = read("scripts/build-diagrams.mjs");
 		expect(script).toContain("test-fortress.mmd");
-		expect((script.match(/\.mmd"/g) ?? []).length).toBe(19);
+		expect((script.match(/^\t"[^"]+\.mmd"/gm) ?? []).length).toBe(21);
 	});
 
 	it("DOC-E62: upgrade-guide mentions 0.9.0 test-only release", () => {
 		expect(read("docs/upgrade-guide.md")).toMatch(/0\.9\.0|test-only|4000/i);
 	});
 
-	it("DOC-E63: faq What works in 0.9.0", () => {
-		expect(read("docs/faq.md")).toContain("What works in 0.9.0?");
+	it("DOC-E63: faq What works in 1.0.0", () => {
+		expect(read("docs/faq.md")).toContain("What works in 1.0.0?");
 	});
 
 	it("DOC-E64: security-reporting mentions SEC negative suite", () => {
@@ -509,5 +508,144 @@ describe("LSG-DOC-E56–E75: Phase 9 test fortress docs", () => {
 
 	it("DOC-E70: golden-runner helper referenced in testing-strategy", () => {
 		expect(read("docs/testing-strategy.md")).toMatch(/golden-runner|golden runner/i);
+	});
+});
+
+describe("LSG-DOC-E71–E100: Phase 10 (1.0.0) docs", () => {
+	it("DOC-E71: api-stability documents onFinish and SARIF freeze", () => {
+		const doc = read("docs/api-stability.md");
+		expect(doc).toMatch(/onFinish|StreamGuardSummary/);
+		expect(doc).toMatch(/SARIF|sarif-rule-ids/);
+	});
+
+	it("DOC-E72: threat-model.md linked from security-reporting", () => {
+		expect(read("docs/security-reporting.md")).toContain("threat-model.md");
+	});
+
+	it("DOC-E73: migration doc links Action v1.0.0", () => {
+		expect(read("docs/migration-0.x-to-1.0.md")).toContain("@v1.0.0");
+	});
+
+	it("DOC-E74: ci-github-action uses category llm-stream-guard", () => {
+		const doc = read("docs/ci-github-action.md");
+		expect(doc).toContain("category: llm-stream-guard");
+		expect(doc).not.toContain("llm-stream-guard-preview");
+	});
+
+	it("DOC-E75: ci-github-action pins v1.0.0", () => {
+		expect(read("docs/ci-github-action.md")).toContain("@v1.0.0");
+	});
+
+	it("DOC-E76: faq What works in 1.0.0", () => {
+		expect(read("docs/faq.md")).toContain("What works in 1.0.0?");
+	});
+
+	it("DOC-E77: faq-archive retains 0.9.0 history", () => {
+		expect(read("docs/faq-archive.md")).toContain("0.9.0");
+	});
+
+	it("DOC-E78: schemas README lists three v1 report schemas", () => {
+		const doc = read("schemas/README.md");
+		expect(doc).toContain("scan-report-v1.json");
+		expect(doc).toContain("static-scan-report-v1.json");
+		expect(doc).toContain("stream-guard-summary-v1.json");
+	});
+
+	it("DOC-E79: sarif-rule-ids lists DRIFT and D001", () => {
+		const doc = read("docs/sarif-rule-ids.md");
+		expect(doc).toContain("DRIFT_ALLOW");
+		expect(doc).toContain("D001");
+	});
+
+	it("DOC-E80: performance references bench smoke", () => {
+		expect(read("docs/performance.md")).toContain("bench:smoke");
+	});
+
+	it("DOC-E81: README links api-stability and migration", () => {
+		const readme = read("README.md");
+		expect(readme).toContain("api-stability.md");
+		expect(readme).toContain("migration-0.x-to-1.0.md");
+	});
+
+	it("DOC-E82: action README no SARIF preview wording", () => {
+		expect(read("action/README.md")).not.toMatch(/SARIF preview/i);
+	});
+
+	it("DOC-E83: action.yml sarif-out description stable", () => {
+		expect(read("action/action.yml")).toContain("SARIF 2.1.0");
+	});
+
+	it("DOC-E84: upgrade-guide 0.9 to 1.0 section", () => {
+		expect(read("docs/upgrade-guide.md")).toMatch(/0\.9\.0.*1\.0\.0|1\.0\.0/);
+	});
+
+	it("DOC-E85: testing-strategy Phase 10 section", () => {
+		expect(read("docs/testing-strategy.md")).toMatch(/Phase 10|RPT01|SAR01/);
+	});
+
+	it("DOC-E86: CONTRIBUTING lists LSG-RPT and LSG-SAR", () => {
+		const doc = read("CONTRIBUTING.md");
+		expect(doc).toContain("LSG-RPT");
+		expect(doc).toContain("LSG-SAR");
+	});
+
+	it("DOC-E87: package.json doctor script", () => {
+		const pkg = JSON.parse(read("package.json")) as { scripts: Record<string, string> };
+		expect(pkg.scripts.doctor).toBeDefined();
+	});
+
+	it("DOC-E88: v1-stable-architecture mmd exists", () => {
+		expect(existsSync(join(rootDir, "docs/img/v1-stable-architecture.mmd"))).toBe(true);
+	});
+
+	it("DOC-E89: violation-report-flow mmd exists", () => {
+		expect(existsSync(join(rootDir, "docs/img/violation-report-flow.mmd"))).toBe(true);
+	});
+
+	it("DOC-E90: build-diagrams includes 21 diagrams", () => {
+		const count = (read("scripts/build-diagrams.mjs").match(/^\t"[^"]+\.mmd"/gm) ?? []).length;
+		expect(count).toBe(21);
+	});
+
+	it("DOC-E91: examples README on-finish-summary", () => {
+		expect(read("examples/README.md")).toContain("on-finish-summary.mjs");
+	});
+
+	it("DOC-E92: api README index", () => {
+		expect(read("docs/api/README.md")).toContain("stream-guard-summary-v1.json");
+	});
+
+	it("DOC-E93: SECURITY.md 1.0.x supported", () => {
+		expect(read("SECURITY.md")).toContain("1.0.x");
+	});
+
+	it("DOC-E94: security-reporting template Version 1.0.0", () => {
+		expect(read("docs/security-reporting.md")).toContain("1.0.0");
+	});
+
+	it("DOC-E95: static-scanning Status 1.0.0", () => {
+		expect(read("docs/static-scanning.md")).toMatch(/Status.*1\.0\.0/);
+	});
+
+	it("DOC-E96: cli-reference no SARIF preview label", () => {
+		expect(read("docs/cli-reference.md")).not.toMatch(/SARIF preview/i);
+	});
+
+	it("DOC-E97: docs-map threat-model.md", () => {
+		expect(read("docs/docs-map.md")).toContain("threat-model.md");
+	});
+
+	it("DOC-E98: roadmap-post-1.0 Status 1.0.0", () => {
+		expect(read("docs/roadmap-post-1.0.md")).toMatch(/Status.*1\.0\.0/);
+	});
+
+	it("DOC-E99: docs-edge-cases covers E71–E100", () => {
+		const src = read("test/docs-edge-cases.test.ts");
+		expect(src).toMatch(/DOC-E71/);
+		expect(src).toMatch(/DOC-E100/);
+	});
+
+	it("DOC-E100: proposal historical status note", () => {
+		expect(read("docs/proposal.MD")).toMatch(/historical|1\.0\.0/i);
 	});
 });

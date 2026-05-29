@@ -18,7 +18,7 @@ export type StaticScanOptions = {
 	mode?: string;
 };
 
-/** Run static manifest audit: drift + dangerous patterns + blockToolArgs preview. */
+/** Run static manifest audit: drift + dangerous patterns + blockToolArgs static analysis. */
 export function runStaticScan(opts: StaticScanOptions): StaticScanReport {
 	const policies = loadPoliciesForScan(opts);
 	const manifests = resolveManifestFiles(opts);

@@ -5,7 +5,7 @@ Composite action wrapping `llm-stream-guard` CLI for CI: policy validation, stre
 ## Usage
 
 ```yaml
-- uses: 01laky/llm-stream-guard/action@v0.9.0
+- uses: 01laky/llm-stream-guard/action@v1.0.0
   with:
     policy: policies/agent-gate.json
     scan-paths: test/fixtures/events/
@@ -17,7 +17,7 @@ Composite action wrapping `llm-stream-guard` CLI for CI: policy validation, stre
     sarif-out: findings.sarif
 ```
 
-Pin `@v0.9.0` for semver (or `@main` for bleeding edge). A floating `@v1` tag requires a separate `v1` git tag on the release commit.
+Pin `@v1.0.0` for semver (or `@main` for bleeding edge). A floating `@v1` tag tracks the latest 1.x release.
 
 See [Getting started](../docs/getting-started.md) for policy basics and [CI guide](../docs/ci-github-action.md) for matrix workflows.
 
@@ -35,7 +35,7 @@ See [Getting started](../docs/getting-started.md) for policy basics and [CI guid
 | `exclude`         | no       | `''`    | Path prefix exclusions                            |
 | `fail-on`         | no       | `any`   | `violations`, `drift`, `static`, `any`, or `none` |
 | `annotate`        | no       | `true`  | GitHub workflow command annotations               |
-| `sarif-out`       | no       | `''`    | SARIF preview output path                         |
+| `sarif-out`       | no       | `''`    | SARIF 2.1.0 output path                           |
 | `mode`            | no       | `''`    | Sets `GUARD_MODE`                                 |
 
 ## Outputs

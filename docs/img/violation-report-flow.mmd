@@ -1,0 +1,13 @@
+sequenceDiagram
+	participant Stream
+	participant Guard as Guard pipeline
+	participant Ctx as GuardContext
+	participant CB as onFinish callback
+
+	Stream->>Guard: chunk / GuardEvent
+	Guard->>Ctx: recordViolation / redactions++
+	Guard-->>Stream: safe output
+	Stream->>Guard: stream end / flush
+	Guard->>Ctx: summarizeGuardContext
+	Ctx-->>CB: StreamGuardSummary
+	Note over CB: violations, countsByRule,<br/>toolsTouched, redactions, mode

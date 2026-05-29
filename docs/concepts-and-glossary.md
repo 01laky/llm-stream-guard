@@ -148,12 +148,12 @@ Stable error codes from `validatePolicy()`. E.g. E009 = overlapping allow/deny l
 
 Separate from live `guardEvents()`:
 
-| Term          | Meaning                                                                             |
-| ------------- | ----------------------------------------------------------------------------------- |
-| **Manifest**  | File listing tools (`tools/manifest.json`, MCP export, OpenAPI `x-tools`)           |
-| **Drift**     | Tool name in manifest but not allowed by policy (or reverse)                        |
-| **D001–D006** | Built-in dangerous string patterns in manifest text fields                          |
-| **SARIF**     | Static analysis interchange format — preview export from `audit static --sarif-out` |
+| Term          | Meaning                                                                                           |
+| ------------- | ------------------------------------------------------------------------------------------------- |
+| **Manifest**  | File listing tools (`tools/manifest.json`, MCP export, OpenAPI `x-tools`)                         |
+| **Drift**     | Tool name in manifest but not allowed by policy (or reverse)                                      |
+| **D001–D006** | Built-in dangerous string patterns in manifest text fields                                        |
+| **SARIF**     | Static analysis interchange format — stable export from `audit static --sarif-out` (1.x rule IDs) |
 
 ![Static audit flow](./img/static-audit-flow.svg)
 

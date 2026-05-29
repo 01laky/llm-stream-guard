@@ -1,8 +1,8 @@
 # Security reporting
 
-**Status:** **0.9.0** — how to report confirmed security issues in llm-stream-guard.
+**Status:** **1.0.0** — how to report confirmed security issues in llm-stream-guard.
 
-**Regression suite:** `test/security-negative.test.ts` (LSG-SEC01–20) documents known non-bypasses at 0.9.0 — not a substitute for responsible disclosure of new bypasses.
+**Regression suite:** `test/security-negative.test.ts` (LSG-SEC01–20) and `test/security-negative-b.test.ts` (LSG-SEC21–50) document known non-bypasses — not a substitute for responsible disclosure of new bypasses.
 
 **GitHub entrypoint:** [`SECURITY.md`](../SECURITY.md)
 
@@ -40,7 +40,7 @@
 ## Redaction bypass template
 
 ```markdown
-**Version:** 0.8.2
+**Version:** 1.0.0
 **Mode:** byte | event
 **Policy:** (attach minimal JSON)
 **Input:** (sanitized fixture)
@@ -48,12 +48,12 @@
 **Actual:** (what you observed)
 ```
 
-See also [Threat model stub](./threat-model-stub.md) for scope boundaries.
+See also [Threat model](./threat-model.md) for scope boundaries.
 
 ---
 
 ## Response
 
-Maintainer triage via GitHub issues. No guaranteed SLA in 0.8.x.
+Maintainer triage via GitHub issues. No guaranteed SLA; 1.0.x receives priority triage per [SECURITY.md](../SECURITY.md).
 
 Related: [Troubleshooting](./troubleshooting.md) · [FAQ](./faq.md)

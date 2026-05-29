@@ -1,5 +1,6 @@
 import { parseArgs } from "../shared/parse-args.js";
 import { runAuditSubcommand } from "./audit-runner.js";
+import { cmdDoctor } from "./commands/doctor.js";
 import { cmdDiff } from "./commands/diff.js";
 import { cmdProfiles } from "./commands/profiles.js";
 import { cmdResolve } from "./commands/resolve.js";
@@ -32,6 +33,8 @@ async function main(): Promise<number> {
 			return cmdProfiles(cmdRest[0], cmdRest.slice(1), json);
 		case "scan":
 			return cmdScan(cmdRest, flags);
+		case "doctor":
+			return cmdDoctor(cmdRest, json);
 		case "audit":
 			return runAuditSubcommand(cmdRest[0], flags, cmdRest.slice(1));
 		default:
