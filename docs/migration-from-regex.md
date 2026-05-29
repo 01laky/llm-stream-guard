@@ -1,6 +1,6 @@
 # Migration from regex middleware
 
-**Status:** **0.8.2** — upgrade path from ad-hoc filters to llm-stream-guard.
+**Status:** **0.9.0** — upgrade path from ad-hoc filters to llm-stream-guard.
 
 ![Migration path](https://raw.githubusercontent.com/01laky/llm-stream-guard/main/docs/img/migration-path.svg)
 

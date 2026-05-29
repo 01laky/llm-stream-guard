@@ -1,6 +1,8 @@
 # Security reporting
 
-**Status:** **0.8.2** — how to report confirmed security issues in llm-stream-guard.
+**Status:** **0.9.0** — how to report confirmed security issues in llm-stream-guard.
+
+**Regression suite:** `test/security-negative.test.ts` (LSG-SEC01–20) documents known non-bypasses at 0.9.0 — not a substitute for responsible disclosure of new bypasses.
 
 **GitHub entrypoint:** [`SECURITY.md`](../SECURITY.md)
 

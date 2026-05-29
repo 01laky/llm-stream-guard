@@ -1,6 +1,6 @@
 # Documentation map
 
-**Status:** **0.8.2** — structured learning paths for beginners through maintainers.
+**Status:** **0.9.0** — structured learning paths for beginners through maintainers.
 
 Use this page when you are not sure **which doc to read first**. Every guide links back here.
 

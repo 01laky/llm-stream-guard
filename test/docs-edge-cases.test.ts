@@ -353,7 +353,7 @@ describe("LSG-DOC-E43–E55: diagrams, contributing, publishing, release prep", 
 	it("DOC-E43: every committed docs/img mmd has matching svg", () => {
 		const imgDir = join(rootDir, "docs/img");
 		const mmds = readdirSync(imgDir).filter((f) => f.endsWith(".mmd"));
-		expect(mmds.length).toBe(18);
+		expect(mmds.length).toBe(19);
 		for (const mmd of mmds) {
 			expect(existsSync(join(imgDir, mmd.replace(".mmd", ".svg"))), mmd).toBe(true);
 		}
@@ -442,5 +442,72 @@ describe("LSG-DOC-E43–E55: diagrams, contributing, publishing, release prep", 
 		expect(core).toMatch(/DOC-E08/);
 		expect(ext).toMatch(/DOC-E09/);
 		expect(ext).toMatch(/DOC-E55/);
+	});
+});
+
+describe("LSG-DOC-E56–E75: Phase 9 test fortress docs", () => {
+	it("DOC-E56: testing-strategy documents LSG-XEC and PROP prefixes", () => {
+		const doc = read("docs/testing-strategy.md");
+		expect(doc).toMatch(/LSG-XEC|Phase 9/);
+		expect(doc).toMatch(/LSG-PROP|PKG01|SEC01/);
+	});
+
+	it("DOC-E57: testing-strategy documents CI shard recipe", () => {
+		expect(read("docs/testing-strategy.md")).toMatch(/shard|vitest run --shard/);
+	});
+
+	it("DOC-E58: README mentions 0.9.0 test fortress", () => {
+		expect(read("README.md")).toMatch(/0\.9\.0|4000|test fortress/i);
+	});
+
+	it("DOC-E59: CHANGELOG 0.9.0 section lists matrix test files", () => {
+		const section = read("CHANGELOG.md").split("## [0.9.0]")[1]?.split("\n## [")[0] ?? "";
+		expect(section).toMatch(/byte-split-matrix|property-invariants/);
+	});
+
+	it("DOC-E60: test-fortress diagram mmd exists", () => {
+		expect(existsSync(join(rootDir, "docs/img/test-fortress.mmd"))).toBe(true);
+	});
+
+	it("DOC-E61: build-diagrams includes test-fortress (19 diagrams)", () => {
+		const script = read("scripts/build-diagrams.mjs");
+		expect(script).toContain("test-fortress.mmd");
+		expect((script.match(/\.mmd"/g) ?? []).length).toBe(19);
+	});
+
+	it("DOC-E62: upgrade-guide mentions 0.9.0 test-only release", () => {
+		expect(read("docs/upgrade-guide.md")).toMatch(/0\.9\.0|test-only|4000/i);
+	});
+
+	it("DOC-E63: faq What works in 0.9.0", () => {
+		expect(read("docs/faq.md")).toContain("What works in 0.9.0?");
+	});
+
+	it("DOC-E64: security-reporting mentions SEC negative suite", () => {
+		expect(read("docs/security-reporting.md")).toMatch(/SEC01|security-negative|0\.9\.0/i);
+	});
+
+	it("DOC-E65: package.json test:count-gate script documented in testing-strategy", () => {
+		expect(read("docs/testing-strategy.md")).toMatch(/test:count-gate|count-gate/);
+	});
+
+	it("DOC-E66: CONTRIBUTING mentions LSG-XEC prefix", () => {
+		expect(read("CONTRIBUTING.md")).toMatch(/LSG-XEC|Phase 9/i);
+	});
+
+	it("DOC-E67: docs-map links testing-strategy", () => {
+		expect(read("docs/docs-map.md")).toContain("testing-strategy.md");
+	});
+
+	it("DOC-E68: img README lists test-fortress", () => {
+		expect(read("docs/img/README.md")).toMatch(/test-fortress|test-coverage/);
+	});
+
+	it("DOC-E69: release-prep checks test-count-gate", () => {
+		expect(read("scripts/release-prep.mjs")).toMatch(/test-count-gate|4000/);
+	});
+
+	it("DOC-E70: golden-runner helper referenced in testing-strategy", () => {
+		expect(read("docs/testing-strategy.md")).toMatch(/golden-runner|golden runner/i);
 	});
 });

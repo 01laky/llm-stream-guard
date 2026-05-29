@@ -216,6 +216,19 @@ if (!verifyScript.includes("doc:check-links")) {
 	ok("doc gates (LSG-REL43): docs-readiness, troubleshooting link, SECURITY.md, schemas README");
 }
 
+if (!pkg.scripts?.["test:count-gate"]) {
+	errors.push("missing test:count-gate script (REL51)");
+}
+if (!existsSync(join(rootDir, "scripts/test-count-gate.mjs"))) {
+	errors.push("missing scripts/test-count-gate.mjs");
+}
+if (!existsSync(join(rootDir, "test/byte-split-matrix.test.ts"))) {
+	errors.push("missing test/byte-split-matrix.test.ts (Phase 9)");
+}
+if (!existsSync(join(rootDir, "docs/img/test-fortress.mmd"))) {
+	errors.push("missing docs/img/test-fortress.mmd");
+}
+
 if (errors.length > 0) {
 	console.error("\nRelease prep failed:");
 	for (const message of errors) console.error(`  - ${message}`);

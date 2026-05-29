@@ -1,6 +1,6 @@
 # Threat model (stub)
 
-**Status:** **0.8.2** — scope boundaries for v0.8.x. Not a formal STRIDE analysis (see v1.0 roadmap in [proposal.MD](./proposal.MD)).
+**Status:** **0.9.0** — scope boundaries for v0.9.x. Not a formal STRIDE analysis (see v1.0 roadmap in [proposal.MD](./proposal.MD)).
 
 ---
 

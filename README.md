@@ -1,17 +1,17 @@
 # llm-stream-guard
 
-![core](https://img.shields.io/badge/core-0.8.2-brightgreen)
+![core](https://img.shields.io/badge/core-0.9.0-brightgreen)
 ![node](https://img.shields.io/badge/node-%3E%3D18-339933)
 ![runtime deps](https://img.shields.io/badge/runtime_deps-0-brightgreen)
-![tests](https://img.shields.io/badge/tests-1205_passing-brightgreen)
+![tests](https://img.shields.io/badge/tests-4157_passing-brightgreen)
 [![ci](https://github.com/01laky/llm-stream-guard/actions/workflows/ci.yml/badge.svg)](https://github.com/01laky/llm-stream-guard/actions/workflows/ci.yml)
-![status](https://img.shields.io/badge/status-stable_0.8.2-brightgreen)
+![status](https://img.shields.io/badge/status-stable_0.9.0-brightgreen)
 
 **Security filter for LLM streams** — redact secrets and PII, enforce tool-call policy, sanitize errors. Works on raw bytes (`TransformStream`) and parsed event streams. **Declarative JSON/YAML policies** and a **CLI** for offline scans.
 
 > A standalone, zero-dependency TypeScript security filter for LLM proxy and agent pipelines. Byte mode: chunk-safe secret redaction on raw SSE. Event mode: tool allow/deny, arg blocking, PII & error sanitization on parsed streams. Policy files + `llm-stream-guard scan` for CI prep.
 
-**Status:** Stable `0.8.2` — Phase 8 documentation completion (troubleshooting, schemas README, doc gates). Start at [Getting started](./docs/getting-started.md) if you are new to LLM streams. Review [CHANGELOG.md](./CHANGELOG.md) before upgrades.
+**Status:** Stable `0.9.0` — Phase 9 test fortress (≥4000 edge-case tests, count gate, golden-runner). Start at [Getting started](./docs/getting-started.md) if you are new to LLM streams. Review [CHANGELOG.md](./CHANGELOG.md) before upgrades.
 
 > **New to LLM streaming?** Read [Getting started](./docs/getting-started.md) (~15 min) → [Concepts & glossary](./docs/concepts-and-glossary.md) → [Documentation map](./docs/docs-map.md) for your role.
 
@@ -287,7 +287,7 @@ Use the [modes diagram](#two-modes) above, or:
 
 ## Documentation
 
-### Start here (0.8.2)
+### Start here (0.9.0)
 
 | Guide                                                      | Audience                                                   |
 | ---------------------------------------------------------- | ---------------------------------------------------------- |
@@ -308,7 +308,7 @@ Policy drift detection, static tool manifest scanning, and a composite GitHub Ac
 - [Pre-commit recipe](./docs/pre-commit-recipe.md) — local hook with `audit static --quiet`
 - [GitHub Action README](./action/README.md) — consumer inputs/outputs
 
-### Integration cookbook (0.8.2)
+### Integration cookbook (0.9.0)
 
 End-to-end recipes for byte proxies (Hono, Express, Workers), agent tool gates, policy-driven setup, assemble/AI SDK mappers, dual-stream audit, MCP mapping, LiteLLM hooks, CI scans, and migration from regex middleware:
 

@@ -1,6 +1,6 @@
 # Pre-commit recipe
 
-**Status:** **0.8.2** — optional local hook for policy validate + static manifest audit.
+**Status:** **0.9.0** — optional local hook for policy validate + static manifest audit.
 
 Fast gate before push: schema-valid policy and no drift/dangerous findings in declared tools. Does not replace CI stream `scan` on fixtures.
 

@@ -5,7 +5,7 @@ Composite action wrapping `llm-stream-guard` CLI for CI: policy validation, stre
 ## Usage
 
 ```yaml
-- uses: 01laky/llm-stream-guard/action@v0.8.2
+- uses: 01laky/llm-stream-guard/action@v0.9.0
   with:
     policy: policies/agent-gate.json
     scan-paths: test/fixtures/events/
@@ -17,7 +17,7 @@ Composite action wrapping `llm-stream-guard` CLI for CI: policy validation, stre
     sarif-out: findings.sarif
 ```
 
-Pin `@v0.8.2` for semver (or `@main` for bleeding edge). A floating `@v1` tag requires a separate `v1` git tag on the release commit.
+Pin `@v0.9.0` for semver (or `@main` for bleeding edge). A floating `@v1` tag requires a separate `v1` git tag on the release commit.
 
 See [Getting started](../docs/getting-started.md) for policy basics and [CI guide](../docs/ci-github-action.md) for matrix workflows.
 

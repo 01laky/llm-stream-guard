@@ -1,6 +1,6 @@
 # Integration cookbook
 
-**Status:** **0.8.2** — adoption guide with typechecked examples under [`examples/`](../examples/README.md).
+**Status:** **0.9.0** — adoption guide with typechecked examples under [`examples/`](../examples/README.md).
 **Prerequisite:** Read [Getting started](./getting-started.md) if you are new to byte vs event mode.
 
 Cookbook examples are **app-level only** — the guard package stays zero-dep and does not import assemble or provider SDKs.

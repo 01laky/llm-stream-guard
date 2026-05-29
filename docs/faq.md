@@ -1,6 +1,6 @@
 # FAQ
 
-**Status:** **Stable 0.8.2** — Phase 8 doc completion, LSG-DOC01–35 gates. Publish via [`docs/publishing.md`](./publishing.md).
+**Status:** **Stable 0.9.0** — Phase 9 test fortress (≥4000 tests), LSG-XEC/PROP gates. Publish via [`docs/publishing.md`](./publishing.md).
 
 ## Beginners
 
@@ -41,11 +41,15 @@ pnpm add github:01laky/llm-stream-guard
 
 ### Is there a GitHub Action?
 
-Yes — **`01laky/llm-stream-guard/action@v0.8.2`** (or `@main`) validates policy, scans event fixtures, and runs static manifest audit with optional SARIF preview and PR annotations. See [`docs/ci-github-action.md`](./ci-github-action.md).
+Yes — **`01laky/llm-stream-guard/action@v0.9.0`** (or `@v0.8.2`, `@main`) validates policy, scans event fixtures, and runs static manifest audit with optional SARIF preview and PR annotations. See [`docs/ci-github-action.md`](./ci-github-action.md).
+
+### What works in 0.9.0?
+
+Phase 9 **test fortress** — **≥4000** Vitest tests (LSG-XEC matrices, PROP invariants, PKG tarball smoke, SEC negatives), `pnpm test:count-gate`, `golden-runner` fixtures, `test-fortress` diagram. **No API breaking changes.** See [Testing strategy](./testing-strategy.md#phase-90-test-fortress-090) and [Upgrade guide](./upgrade-guide.md).
 
 ### What works in 0.8.2?
 
-Phase 8 completion: [Troubleshooting](./troubleshooting.md), [schemas README](../schemas/README.md), [security reporting](./security-reporting.md), [upgrade guide](./upgrade-guide.md), [threat model stub](./threat-model-stub.md), **LSG-DOC01–35** + **REL31–43** gates, `pnpm doc:check-links`. Action docs pin `@v0.8.2`. No API breaking changes. See [Upgrade guide](./upgrade-guide.md).
+Phase 8 completion: [Troubleshooting](./troubleshooting.md), [schemas README](../schemas/README.md), [security reporting](./security-reporting.md), [upgrade guide](./upgrade-guide.md), [threat model stub](./threat-model-stub.md), **LSG-DOC01–35** + **REL31–43** gates, `pnpm doc:check-links`. Action docs pin `@v0.9.0`. No API breaking changes. See [Upgrade guide](./upgrade-guide.md).
 
 ### What works in 0.8.1?
 

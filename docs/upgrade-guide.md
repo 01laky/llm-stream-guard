@@ -1,8 +1,22 @@
 # Upgrade guide
 
-**Status:** **0.8.2** — semver jumps for npm, GitHub Action, and documentation layout.
+**Status:** **0.9.0** — semver jumps for npm, GitHub Action, test fortress, and documentation layout.
 
 Historical per-release notes remain in FAQ **What works in X.Y.Z?** sections.
+
+---
+
+## From 0.8.2 → 0.9.0
+
+- **Test-only release** — **≥4000** Vitest tests; programmatic edge matrices (LSG-XEC), property invariants (PROP), npm pack smoke (PKG), security negatives (SEC).
+- **No API / CLI / Action schema changes** — upgrade for confidence and CI gates only.
+- **New scripts:** `pnpm test:count-gate`, `pnpm test:coverage-map`, `pnpm test:timing` (informational).
+- **npm:** `npm install llm-stream-guard@0.9.0`
+- **GitHub Action:** optional pin `@v0.9.0` when released on Action track (docs may still reference `@v0.8.2` until Action tag published).
+
+```yaml
+- uses: 01laky/llm-stream-guard/action@v0.9.0
+```
 
 ---
 

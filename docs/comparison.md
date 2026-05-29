@@ -1,6 +1,6 @@
 # How llm-stream-guard compares
 
-**Status:** **Stable 0.8.2** — MVP rules + declarative policy + CLI + static manifest audit + GitHub Action + integration cookbook. See [`proposal.MD`](./proposal.MD).
+**Status:** **Stable 0.9.0** — MVP rules + declarative policy + CLI + static manifest audit + GitHub Action + integration cookbook. See [`proposal.MD`](./proposal.MD).
 
 ## At a glance
 

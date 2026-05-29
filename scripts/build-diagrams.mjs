@@ -25,6 +25,7 @@ const diagrams = [
 	"tool-call-lifecycle.mmd",
 	"policy-rules-map.mmd",
 	"static-audit-flow.mmd",
+	"test-fortress.mmd",
 ];
 
 for (const name of diagrams) {

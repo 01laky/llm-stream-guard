@@ -1,0 +1,22 @@
+flowchart TB
+  subgraph phase9["Phase 9 test fortress (0.9.0)"]
+    XEC[LSG-XEC001–2795 matrices]
+    PROP[LSG-PROP01–50 invariants]
+    COV[LSG-COV221–490 fuzz + JSON hash]
+    PKG[LSG-PKG01–18 tarball]
+    SEC[LSG-SEC01–20 security negatives]
+  end
+  subgraph gates["Quality gates"]
+    TC[test-count-gate ≥4000]
+    CM[audit-test-coverage-map]
+    GR[golden-runner fixtures]
+    REL[LSG-REL45–62]
+  end
+  XEC --> TC
+  PROP --> TC
+  COV --> TC
+  PKG --> REL
+  SEC --> REL
+  GR --> CM
+  TC --> REL
+  CM --> REL

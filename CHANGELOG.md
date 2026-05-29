@@ -5,6 +5,31 @@ Format based on [Keep a Changelog](https://keepachangelog.com/); versioning foll
 
 ## [Unreleased]
 
+## [0.9.0]
+
+### Added
+
+- **Test fortress — ≥4000 Vitest tests** — programmatic edge-case matrices (LSG-XEC001–2795), property invariants (PROP01–50), CLI JSON hash regression (COV451–490), npm pack tarball smoke (PKG01–18), security negatives (SEC01–20).
+- **New test files** — `byte-split-matrix`, `edge-cases-exhaustive`, `edge-cases-exhaustive-b`, `policy-matrix`, `cli-matrix`, `audit-matrix`, `action-matrix`, `cross-mode-golden`, `property-invariants`, `json-regression`, `package-tarball`, `security-negative`.
+- **Quality gates** — `scripts/test-count-gate.mjs`, `scripts/audit-test-coverage-map.mjs`, `scripts/test-timing-smoke.mjs`, `scripts/generate-phase9-fixtures.mjs`; `pnpm test:count-gate`, `test:coverage-map`, `test:timing`.
+- **Test helpers** — `golden-runner`, `split-matrix`, `cartesian`, `cli-exec`, `json-hash`.
+- **Fixtures** — 35 byte-sse phase9 golden pairs under `test/fixtures/byte-sse/phase9/` (≥80 REGISTRY rows total).
+- **Diagram** — `docs/img/test-fortress.mmd` + SVG (19 diagrams).
+- **Tests — LSG-REL45–REL62** — count gate, coverage map, Phase 9 file gates.
+- **Docs continuity** — [`docs/troubleshooting.md`](./docs/troubleshooting.md) status sync; **LSG-DOC** gates and `pnpm doc:check-links` remain in `pnpm verify`.
+
+### Changed
+
+- `pnpm verify` runs `test:count-gate` and `test:coverage-map` after `pnpm test`.
+- `vitest.config.ts` — `testTimeout: 15s` for heavy matrix suites.
+- `docs/testing-strategy.md` — Phase 9 section, CI shard recipe, timing budget.
+- README badges and status **0.9.0**; tests badge **4157+**.
+- **action/README** and **ci-github-action.md** — pin `@v0.9.0`.
+
+### Unchanged
+
+- Public runtime API, CLI command surface, GitHub Action inputs/outputs schema, zero runtime npm dependencies.
+
 ## [0.8.2]
 
 ### Added

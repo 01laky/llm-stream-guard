@@ -1,6 +1,6 @@
 {
 	"name": "llm-stream-guard",
-	"version": "0.8.2",
+	"version": "0.9.0",
 	"description": "Zero-dependency TypeScript security filter for LLM streams — redact secrets, enforce tool policy, byte and event modes.",
 	"license": "MIT",
 	"author": "Ladislav Kostolny <01laky@gmail.com>",
@@ -40,6 +40,10 @@
 		"format": "prettier --check .",
 		"format:fix": "prettier --write .",
 		"test": "vitest run",
+		"test:count-gate": "node scripts/test-count-gate.mjs --check --min 4000",
+		"test:coverage-map": "node scripts/audit-test-coverage-map.mjs --check --min 2",
+		"test:timing": "node scripts/test-timing-smoke.mjs --warn-only",
+		"fixtures:generate-phase9": "node scripts/generate-phase9-fixtures.mjs",
 		"fixtures:check-redaction": "node scripts/check-redaction-fixtures.mjs --check",
 		"fixtures:audit-registry": "node scripts/audit-fixture-registry.mjs --check",
 		"bench:smoke": "node scripts/bench-smoke.mjs",
@@ -55,7 +59,7 @@
 		"examples:typecheck": "pnpm build && pnpm exec tsc --noEmit -p examples/tsconfig.json",
 		"examples:smoke": "pnpm build && node examples/minimal-node/smoke.mjs",
 		"cookbook:check-examples": "node scripts/check-cookbook-examples.mjs --check",
-		"verify": "pnpm verify:deps && pnpm format && pnpm doc:check-links && pnpm typecheck && pnpm build && pnpm test && pnpm fixtures:check-redaction && pnpm fixtures:audit-registry && pnpm fixtures:check-policies && pnpm fixtures:audit-policy-registry && pnpm fixtures:audit-tools-registry && pnpm examples:typecheck && pnpm cookbook:check-examples && pnpm examples:smoke && pnpm action:smoke && pnpm smoke:package"
+		"verify": "pnpm verify:deps && pnpm format && pnpm doc:check-links && pnpm typecheck && pnpm build && pnpm test && pnpm test:count-gate && pnpm test:coverage-map && pnpm fixtures:check-redaction && pnpm fixtures:audit-registry && pnpm fixtures:check-policies && pnpm fixtures:audit-policy-registry && pnpm fixtures:audit-tools-registry && pnpm examples:typecheck && pnpm cookbook:check-examples && pnpm examples:smoke && pnpm action:smoke && pnpm smoke:package"
 	},
 	"repository": {
 		"type": "git",

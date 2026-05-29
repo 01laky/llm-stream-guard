@@ -339,4 +339,106 @@ describe("LSG-REL: release readiness", () => {
 		expect(source).toMatch(/DOC-E55/);
 		expect(source).toContain("check-doc-links");
 	});
+
+	it("LSG-REL45: README tests badge ≥ 4000", () => {
+		const readme = read("README.md");
+		const m = readme.match(/tests-(\d+)_passing/);
+		expect(m).toBeTruthy();
+		expect(Number(m![1])).toBeGreaterThanOrEqual(4000);
+	});
+
+	it("LSG-REL46: edge-cases-exhaustive.test.ts exists with XEC001", () => {
+		expect(read("test/edge-cases-exhaustive.test.ts")).toMatch(/XEC001/);
+	});
+
+	it("LSG-REL47: testing-strategy documents Phase 9 test fortress", () => {
+		const doc = read("docs/testing-strategy.md");
+		expect(doc).toMatch(/Phase 9|0\.9\.0|LSG-XEC/);
+		expect(doc).toMatch(/4157|4114|4000|≥4000/);
+	});
+
+	it("LSG-REL48: CHANGELOG documents 0.9.0 test fortress", () => {
+		expect(read("CHANGELOG.md")).toMatch(/## \[0\.9\.0\]/);
+		expect(read("CHANGELOG.md")).toMatch(/test fortress|LSG-XEC/i);
+	});
+
+	it("LSG-REL49: fixture registry has ≥ 80 table rows", () => {
+		const registry = read("test/fixtures/REGISTRY.md");
+		const rows = registry.match(/^\| LSG-/gm) ?? [];
+		expect(rows.length).toBeGreaterThanOrEqual(80);
+	});
+
+	it("LSG-REL50: matrix test files exist", () => {
+		for (const f of [
+			"byte-split-matrix.test.ts",
+			"policy-matrix.test.ts",
+			"cli-matrix.test.ts",
+			"audit-matrix.test.ts",
+			"action-matrix.test.ts",
+		]) {
+			expect(existsSync(join(rootDir, "test", f))).toBe(true);
+		}
+	});
+
+	it("LSG-REL51: test-count-gate script wired", () => {
+		const pkg = JSON.parse(read("package.json")) as { scripts: Record<string, string> };
+		expect(pkg.scripts["test:count-gate"]).toContain("test-count-gate.mjs");
+		expect(read("scripts/test-count-gate.mjs")).toContain("--min");
+	});
+
+	it("LSG-REL52: test-timing-smoke script exists", () => {
+		expect(read("scripts/test-timing-smoke.mjs")).toMatch(/480000|max-ms/);
+	});
+
+	it("LSG-REL53: audit-test-coverage-map script wired in verify", () => {
+		const pkg = JSON.parse(read("package.json")) as { scripts: Record<string, string> };
+		expect(pkg.scripts["test:coverage-map"]).toContain("audit-test-coverage-map.mjs");
+		expect(pkg.scripts.verify).toContain("test:coverage-map");
+	});
+
+	it("LSG-REL54: golden-runner helper exists", () => {
+		expect(read("test/helpers/golden-runner.ts")).toContain("runByteGolden");
+	});
+
+	it("LSG-REL55: property-invariants test file exists", () => {
+		expect(read("test/property-invariants.test.ts")).toMatch(/PROP01/);
+	});
+
+	it("LSG-REL56: json-regression test file exists", () => {
+		expect(read("test/json-regression.test.ts")).toMatch(/COV451/);
+	});
+
+	it("LSG-REL57: package-tarball test file exists", () => {
+		expect(read("test/package-tarball.test.ts")).toMatch(/PKG01/);
+	});
+
+	it("LSG-REL58: security-negative test file exists", () => {
+		expect(read("test/security-negative.test.ts")).toMatch(/SEC01/);
+	});
+
+	it("LSG-REL59: CBK44 examples matrix in cookbook tests", () => {
+		const src = read("test/cookbook-recipes.test.ts");
+		expect(src).toMatch(/CBK44|byte-proxy\/hono/);
+	});
+
+	it("LSG-REL60: version sync 0.9.0", () => {
+		const pkg = JSON.parse(read("package.json")) as { version: string };
+		expect(pkg.version).toBe("0.9.0");
+		expect(read("src/version.ts")).toContain("0.9.0");
+		expect(read("README.md")).toContain("0.9.0");
+	});
+
+	it("LSG-REL61: zero runtime deps unchanged", () => {
+		const pkg = JSON.parse(read("package.json")) as {
+			dependencies?: unknown;
+			peerDependencies?: unknown;
+		};
+		expect(pkg.dependencies).toBeUndefined();
+		expect(pkg.peerDependencies).toBeUndefined();
+	});
+
+	it("LSG-REL62: verify includes test:count-gate", () => {
+		const pkg = JSON.parse(read("package.json")) as { scripts: Record<string, string> };
+		expect(pkg.scripts.verify).toContain("test:count-gate");
+	});
 });

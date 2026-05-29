@@ -36,21 +36,25 @@ git config core.hooksPath   # should print: .githooks
 
 ## Fixture and test ID convention
 
-| Prefix      | Purpose                         |
-| ----------- | ------------------------------- |
-| **LSG-S**   | Scaffold / smoke                |
-| **LSG-B**   | Build artifact / dist hygiene   |
-| **LSG-E**   | Extended edge-case wiring       |
-| **LSG-C**   | Chunk-boundary byte streams     |
-| **LSG-R**   | Redaction golden fixtures       |
-| **LSG-T**   | Tool policy tests               |
-| **LSG-P**   | Performance smoke (local)       |
-| **LSG-POL** | Policy loader / CLI             |
-| **LSG-CBK** | Integration cookbook / examples |
-| **LSG-STA** | Static manifest audit / CLI     |
-| **LSG-ACT** | GitHub Action / CI docs         |
-| **LSG-REL** | Release / publish readiness     |
-| **LSG-DOC** | Documentation completeness      |
+| Prefix       | Purpose                          |
+| ------------ | -------------------------------- |
+| **LSG-S**    | Scaffold / smoke                 |
+| **LSG-B**    | Build artifact / dist hygiene    |
+| **LSG-E**    | Extended edge-case wiring        |
+| **LSG-C**    | Chunk-boundary byte streams      |
+| **LSG-R**    | Redaction golden fixtures        |
+| **LSG-T**    | Tool policy tests                |
+| **LSG-P**    | Performance smoke (local)        |
+| **LSG-POL**  | Policy loader / CLI              |
+| **LSG-CBK**  | Integration cookbook / examples  |
+| **LSG-STA**  | Static manifest audit / CLI      |
+| **LSG-ACT**  | GitHub Action / CI docs          |
+| **LSG-REL**  | Release / publish readiness      |
+| **LSG-DOC**  | Documentation completeness       |
+| **LSG-XEC**  | Phase 9 exhaustive edge matrices |
+| **LSG-PROP** | Property invariants (0.9.0+)     |
+| **LSG-PKG**  | npm pack tarball smoke           |
+| **LSG-SEC**  | Security negative / bypass docs  |
 
 Document new IDs in test headers; maintain `test/fixtures/REGISTRY.md`; run `pnpm fixtures:audit-registry` to enforce parity. Rule edge cases: **LSG-E18–E38** in `test/edge-cases-rules.test.ts`.
 
@@ -62,6 +66,7 @@ Document new IDs in test headers; maintain `test/fixtures/REGISTRY.md`; run `pnp
 - **Policy/CLI changes:** update [policy-reference.md](./docs/policy-reference.md) and [cli-reference.md](./docs/cli-reference.md) in the same PR.
 - **New examples:** register in `examples/README.md` and cookbook section; run `pnpm cookbook:check-examples`.
 - **Doc tests:** `test/docs-readiness.test.ts` (LSG-DOC\*) must pass; add DOC ID if adding release-critical doc gates.
+- **Phase 9 tests:** matrix files (`byte-split-matrix`, `edge-cases-exhaustive*`, `*-matrix.test.ts`); run `pnpm test:count-gate` before release.
 - **Link checks:** run `pnpm doc:check-links` before PR; wired in `pnpm verify`.
 - **Status lines:** bump guide status when releasing; do not change `proposal.MD` draft status.
 

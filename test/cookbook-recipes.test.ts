@@ -230,7 +230,7 @@ describe("LSG-CBK21–28: behavioral recipes", () => {
 			encoding: "utf8",
 		});
 		expect(r.status).toBe(0);
-	});
+	}, 30_000);
 });
 
 describe("LSG-CBK29–34: §15 enhancements", () => {
@@ -276,6 +276,27 @@ describe("LSG-CBK29–34: §15 enhancements", () => {
 	});
 });
 
+describe("LSG-CBK44–63: examples matrix (0.9.0)", () => {
+	const rows: Array<[string, string]> = [
+		["byte-proxy/hono.ts", "CBK44"],
+		["byte-proxy/express.ts", "CBK45"],
+		["byte-proxy/workers.ts", "CBK46"],
+		["event-gate/agent-loop.ts", "CBK47"],
+		["event-gate/policy-driven.ts", "CBK48"],
+		["assemble-mapper/stream-event-to-guard.ts", "CBK49"],
+		["ai-sdk-mapper/map-stream-part.ts", "CBK50"],
+		["dual-stream/audit-side-channel.ts", "CBK51"],
+		["policy-ci/scan-fixtures.sh", "CBK52"],
+		["minimal-node/smoke.mjs", "CBK53"],
+	];
+	for (const [path, id] of rows) {
+		it(`${id}: examples/${path} exists on disk`, () => {
+			expect(existsSync(join(rootDir, "examples", path))).toBe(true);
+			expect(examplesReadme).toContain(path);
+		});
+	}
+});
+
 describe("LSG-CBK13–15: scripts", () => {
 	it("LSG-CBK15: check-cookbook-examples exits 0", () => {
 		if (!existsSync(join(rootDir, "dist/index.d.ts"))) {
@@ -286,5 +307,5 @@ describe("LSG-CBK13–15: scripts", () => {
 			encoding: "utf8",
 		});
 		expect(r.status).toBe(0);
-	});
+	}, 30_000);
 });

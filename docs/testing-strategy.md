@@ -1,26 +1,30 @@
 # Testing strategy
 
-**Status:** Phase 7 shipped — exhaustive coverage (LSG-COV), stretch goals, **1157** tests.
+**Status:** Phase 9 shipped — test fortress (**4157+** tests, LSG-XEC/PROP/PKG/SEC).
 
 ## Test ID prefixes
 
-| Prefix      | Purpose                                                 |
-| ----------- | ------------------------------------------------------- |
-| **LSG-S**   | Scaffold smoke (build, deps, passthrough API)           |
-| **LSG-B**   | Build artifacts and dist hygiene                        |
-| **LSG-E**   | Extended edge-case wiring (LSG-E01–E38)                 |
-| **LSG-C**   | Chunk-boundary byte redaction                           |
-| **LSG-R**   | Redaction golden input → output                         |
-| **LSG-T**   | Tool policy + transform ordering                        |
-| **LSG-P**   | Performance smoke (local timing, not CI gate)           |
-| **LSG-POL** | Policy validate, merge, compile, load, diff, CLI        |
-| **LSG-CBK** | Integration cookbook docs, examples, behavioral recipes |
-| **LSG-STA** | Static manifest audit, drift, dangerous catalog, SARIF  |
-| **LSG-ACT** | GitHub Action composite, CI docs, dogfood workflow      |
-| **LSG-REF** | 0.6.0 refactor re-export / shared module edges          |
-| **LSG-COV** | 0.7.0 exhaustive coverage matrix + stretch goals        |
-| **LSG-DOC** | 0.8.0 documentation completeness + link integrity       |
-| **LSG-REL** | Release / publish readiness                             |
+| Prefix       | Purpose                                                 |
+| ------------ | ------------------------------------------------------- |
+| **LSG-S**    | Scaffold smoke (build, deps, passthrough API)           |
+| **LSG-B**    | Build artifacts and dist hygiene                        |
+| **LSG-E**    | Extended edge-case wiring (LSG-E01–E38)                 |
+| **LSG-C**    | Chunk-boundary byte redaction                           |
+| **LSG-R**    | Redaction golden input → output                         |
+| **LSG-T**    | Tool policy + transform ordering                        |
+| **LSG-P**    | Performance smoke (local timing, not CI gate)           |
+| **LSG-POL**  | Policy validate, merge, compile, load, diff, CLI        |
+| **LSG-CBK**  | Integration cookbook docs, examples, behavioral recipes |
+| **LSG-STA**  | Static manifest audit, drift, dangerous catalog, SARIF  |
+| **LSG-ACT**  | GitHub Action composite, CI docs, dogfood workflow      |
+| **LSG-REF**  | 0.6.0 refactor re-export / shared module edges          |
+| **LSG-COV**  | 0.7.0 exhaustive coverage matrix + stretch goals        |
+| **LSG-DOC**  | 0.8.0 documentation completeness + link integrity       |
+| **LSG-REL**  | Release / publish readiness                             |
+| **LSG-XEC**  | 0.9.0 exhaustive edge-case matrices                     |
+| **LSG-PROP** | 0.9.0 property invariants                               |
+| **LSG-PKG**  | 0.9.0 npm pack tarball smoke                            |
+| **LSG-SEC**  | 0.9.0 security negative tests                           |
 
 ## Phase 1 coverage
 
@@ -186,6 +190,39 @@ Closes Phase 8 debt — **`LSG-DOC01–DOC35`**, **`LSG-REL31–REL43`**, **`pnp
 | `scripts/release-prep.mjs`       | REL43                | Pre-tag doc gates                                              |
 
 New docs: `troubleshooting.md`, `security-reporting.md`, `upgrade-guide.md`, `threat-model-stub.md`, `schemas/README.md`, `SECURITY.md`.
+
+### Phase 9 test fortress (0.9.0)
+
+Closes coverage debt toward **≥4000** Vitest tests — programmatic matrices, property invariants, golden-runner fixtures, count gate. Prompt: `prompts/phase-9.0-test-fortress-prompt.md`.
+
+| Area                                   | IDs          | Focus                              |
+| -------------------------------------- | ------------ | ---------------------------------- |
+| `test/byte-split-matrix.test.ts`       | XEC1201–1600 | Byte secret split enumeration      |
+| `test/edge-cases-exhaustive.test.ts`   | XEC001–0500  | Event/tool cartesian               |
+| `test/edge-cases-exhaustive-b.test.ts` | XEC0501–1200 | PII, UTF-8, pipeGuard, idempotency |
+| `test/policy-matrix.test.ts`           | XEC1601–1850 | Policy validate/YAML               |
+| `test/cli-matrix.test.ts`              | XEC1851–2100 | CLI argv/exit                      |
+| `test/audit-matrix.test.ts`            | XEC2101–2350 | Static audit                       |
+| `test/action-matrix.test.ts`           | XEC2351–2545 | GitHub Action                      |
+| `test/cross-mode-golden.test.ts`       | XEC2546–2795 | Profile×fixture parity             |
+| `test/property-invariants.test.ts`     | PROP01–50    | Formal invariants                  |
+| `test/json-regression.test.ts`         | COV451–490   | CLI `--json` hash regression       |
+| `test/package-tarball.test.ts`         | PKG01–18     | npm pack smoke                     |
+| `test/security-negative.test.ts`       | SEC01–20     | Bypass documentation               |
+| `scripts/test-count-gate.mjs`          | REL51        | Min 4000 tests                     |
+| `scripts/audit-test-coverage-map.mjs`  | REL53        | Export→test refs                   |
+| `test/helpers/golden-runner.ts`        | REL54        | Fixture golden runner              |
+
+**CI timing:** target **≤8 min** for `pnpm test` on `ubuntu-latest`; use `pnpm vitest run --shard=1/2` and `--shard=2/2` if exceeded (full count gate runs once pre-release).
+
+```bash
+pnpm test
+pnpm test:count-gate      # fails if < 4000
+pnpm test:coverage-map    # export reference audit
+pnpm test:timing          # informational WARN locally
+```
+
+Diagram: `docs/img/test-fortress.mmd` + SVG (19 diagrams total).
 
 ### Test files (Phase 4)
 

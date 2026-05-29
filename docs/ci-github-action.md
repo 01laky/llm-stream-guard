@@ -1,13 +1,13 @@
 # GitHub Action — CI audit
 
-**Status:** **0.8.2** — composite action at [`action/`](../action/) wrapping `llm-stream-guard` CLI. See also [Getting started](./getting-started.md) and [Documentation map](./docs-map.md).
+**Status:** **0.9.0** — composite action at [`action/`](../action/) wrapping `llm-stream-guard` CLI. See also [Getting started](./getting-started.md) and [Documentation map](./docs-map.md).
 
 ![CI action flow](https://raw.githubusercontent.com/01laky/llm-stream-guard/main/docs/img/ci-action-flow.svg)
 
 ## Quick start
 
 ```yaml
-- uses: 01laky/llm-stream-guard/action@v0.8.2
+- uses: 01laky/llm-stream-guard/action@v0.9.0
   with:
     policy: policies/agent-gate.json
     scan-paths: test/fixtures/events/
@@ -17,7 +17,7 @@
     annotate: true
 ```
 
-Pin `@v0.8.2` for semver. See [`action/README.md`](../action/README.md) for all inputs and outputs.
+Pin `@v0.9.0` for semver. See [`action/README.md`](../action/README.md) for all inputs and outputs.
 
 ## What it runs
 
@@ -50,7 +50,7 @@ jobs:
           node-version: 22
           cache: pnpm
       - run: pnpm install --frozen-lockfile && pnpm build
-      - uses: 01laky/llm-stream-guard/action@v0.8.2
+      - uses: 01laky/llm-stream-guard/action@v0.9.0
         with:
           policy: policies/agent-gate.json
           scan-paths: test/fixtures/events/
@@ -67,7 +67,7 @@ jobs:
           node-version: 22
           cache: pnpm
       - run: pnpm install --frozen-lockfile && pnpm build
-      - uses: 01laky/llm-stream-guard/action@v0.8.2
+      - uses: 01laky/llm-stream-guard/action@v0.9.0
         with:
           policy: policies/agent-gate.json
           static-root: .
@@ -90,7 +90,7 @@ jobs:
 SARIF output is a **preview** — schema and rule metadata may change before v1.0. Validate in a fork before enabling GitHub Advanced Security dashboards.
 
 ```yaml
-- uses: 01laky/llm-stream-guard/action@v0.8.2
+- uses: 01laky/llm-stream-guard/action@v0.9.0
   id: guard
   with:
     policy: policies/agent-gate.json

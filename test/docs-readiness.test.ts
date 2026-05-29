@@ -139,10 +139,10 @@ describe("LSG-DOC: documentation readiness", () => {
 		expect(doc).toContain(`@v${version}`);
 	});
 
-	it("DOC13: build-diagrams.mjs renders 18 diagrams", () => {
+	it("DOC13: build-diagrams.mjs renders 19 diagrams", () => {
 		const script = read("scripts/build-diagrams.mjs");
 		const count = (script.match(/\.mmd"/g) ?? []).length;
-		expect(count).toBe(18);
+		expect(count).toBe(19);
 	});
 
 	it("DOC14: getting-started has common mistakes section", () => {
@@ -373,7 +373,7 @@ describe("LSG-DOC edge cases", () => {
 		});
 	}, 30_000);
 
-	it("DOC-E08: all 18 diagram SVGs exist", () => {
+	it("DOC-E08: all 19 diagram SVGs exist", () => {
 		const script = read("scripts/build-diagrams.mjs");
 		const names = [...script.matchAll(/"([^"]+\.mmd)"/g)].map((m) => m[1].replace(".mmd", ".svg"));
 		for (const svg of names) {
