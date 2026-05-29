@@ -5,6 +5,26 @@ Format based on [Keep a Changelog](https://keepachangelog.com/); versioning foll
 
 ## [Unreleased]
 
+## [0.8.0]
+
+### Added
+
+- **Beginner docs** — [`docs/getting-started.md`](./docs/getting-started.md) (install, byte + event first examples, mode decision, common mistakes), [`docs/concepts-and-glossary.md`](./docs/concepts-and-glossary.md) (SSE, GuardEvent, violation modes), [`docs/docs-map.md`](./docs/docs-map.md) (persona learning paths).
+- **Reference docs** — [`docs/policy-reference.md`](./docs/policy-reference.md) (all `RULE_KEYS`, POLICY_E001–E011, profiles, `extends`), [`docs/cli-reference.md`](./docs/cli-reference.md) (every CLI command; separate CLI router vs audit exit-code tables).
+- **Diagrams** — five new Mermaid/SVG pairs: `stream-anatomy`, `getting-started-journey`, `tool-call-lifecycle`, `policy-rules-map`, `static-audit-flow`; enhanced `pipeline`, `policy-compile`, `agent-gate-loop`, `guard-event` (18 total in `pnpm diagrams:build`).
+- **README** — “New to LLM streams?” entry block and expanded Documentation table linking the new guides.
+
+### Changed
+
+- **FAQ** — beginner section; version history through 0.7.0; expanded Action/docs pointers.
+- **Integration cookbook**, **static scanning**, **CI & GitHub Action** — status bumps and cross-links to getting-started / CLI reference.
+- **`docs/testing-strategy.md`** — Phase 8 / documentation overhaul section.
+- **`docs/img/README.md`** — diagram index grouped by core / policy / beginner / CI.
+
+### Unchanged
+
+- Public runtime API, CLI command surface, audit JSON report keys, GitHub Action inputs/outputs schema, zero runtime npm dependencies.
+
 ## [0.7.0]
 
 ### Added
