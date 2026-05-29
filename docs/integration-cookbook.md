@@ -28,7 +28,7 @@ Cookbook examples are **app-level only** — the guard package stays zero-dep an
 **When to use:** Starting any integration.
 
 - Node **18+** (Web Streams, `Readable.fromWeb`)
-- `pnpm add llm-stream-guard` (or git install before npm publish)
+- `pnpm add llm-stream-guard`
 - Read [Getting started](./getting-started.md) — byte vs event, first examples
 - Choose **byte mode** (opaque SSE) vs **event mode** (parsed `GuardEvent`s) — [Mode decision guide](../README.md#mode-decision-guide)
 

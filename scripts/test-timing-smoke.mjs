@@ -24,11 +24,10 @@ console.log(`test-timing-smoke: ${elapsed}ms (budget ${maxMs}ms)`);
 
 if (elapsed > maxMs) {
 	const msg = `test suite exceeded ${maxMs}ms (${elapsed}ms) — consider vitest --shard`;
-	if (warnOnly && !ci) {
-		console.warn(`WARN: ${msg}`);
-	} else if (ci) {
+	if (warnOnly) {
 		console.warn(`WARN: ${msg}`);
 	} else {
-		console.warn(`WARN: ${msg}`);
+		console.error(msg);
+		process.exit(1);
 	}
 }

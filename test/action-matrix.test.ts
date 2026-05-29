@@ -2,7 +2,7 @@
  * LSG-XEC2351–XEC2545 — GitHub Action wrapper matrix (~195 tests).
  */
 import { execFileSync, spawnSync } from "node:child_process";
-import { existsSync, mkdtempSync } from "node:fs";
+import { existsSync, mkdtempSync, readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -14,6 +14,16 @@ const POLICY = "policies/agent-gate.json";
 const BAD = "test/fixtures/events/bad-tool.json";
 const CLEAN = "test/fixtures/events/clean-tool.json";
 
+function parseGithubOutput(text: string): Record<string, string> {
+	const out: Record<string, string> = {};
+	for (const line of text.split("\n")) {
+		const idx = line.indexOf("=");
+		if (idx === -1) continue;
+		out[line.slice(0, idx)] = line.slice(idx + 1);
+	}
+	return out;
+}
+
 function runAction(env: Record<string, string>, inputs: Record<string, string> = {}) {
 	const inputEnv: Record<string, string> = { ...env };
 	for (const [k, v] of Object.entries(inputs)) {
@@ -21,11 +31,12 @@ function runAction(env: Record<string, string>, inputs: Record<string, string> =
 	}
 	const outDir = mkdtempSync(join(tmpdir(), "lsg-act-out-"));
 	const ghOut = join(outDir, "github-output.txt");
-	return spawnSync(process.execPath, [runPath], {
+	const result = spawnSync(process.execPath, [runPath], {
 		cwd: rootDir,
 		encoding: "utf8",
 		env: { ...process.env, ...inputEnv, GITHUB_OUTPUT: ghOut },
 	});
+	return { ...result, ghOut };
 }
 
 beforeAll(() => {
@@ -157,6 +168,9 @@ describe("LSG-XEC2543: action smoke outputs", () => {
 			},
 		);
 		expect(r.status).toBe(0);
+		const outputs = parseGithubOutput(readFileSync(r.ghOut, "utf8"));
+		expect(outputs.violations).toBeDefined();
+		expect(Number(outputs.violations)).toBeGreaterThan(0);
 	});
 
 	it("XEC2544: missing policy fails gracefully", () => {

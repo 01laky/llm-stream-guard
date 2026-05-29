@@ -34,8 +34,9 @@ export function formatStaticScanReport(report: StaticScanReport, quiet: boolean)
 export function countStaticErrors(report: StaticScanReport, strict: boolean): number {
 	let n = report.drift.filter((f) => f.severity === "error").length;
 	n += report.blockToolArgs.filter((f) => f.severity === "error").length;
+	n += report.dangerous.filter((f) => f.code === "MANIFEST_PARSE_ERROR").length;
 	if (strict) {
-		n += report.dangerous.length;
+		n += report.dangerous.filter((f) => f.code !== "MANIFEST_PARSE_ERROR").length;
 	}
 	return n;
 }

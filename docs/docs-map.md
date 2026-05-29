@@ -52,7 +52,7 @@ Diagram: [`docs/img/getting-started-journey.svg`](./img/getting-started-journey.
 | Byte vs event mode  | [Getting started](./getting-started.md#which-mode-do-i-need)                         | [modes.svg](./img/modes.svg)                             |
 | End-to-end pipeline | [README § Architecture](../README.md#architecture)                                   | [pipeline.svg](./img/pipeline.svg)                       |
 | `GuardEvent` shapes | [Concepts § GuardEvent](./concepts-and-glossary.md#guardevent)                       | [guard-event.svg](./img/guard-event.svg)                 |
-| Tool call phases    | [Concepts § Tool calls](./concepts-and-glossary.md#tool-calls)                       | [tool-call-lifecycle.svg](./img/tool-call-lifecycle.svg) |
+| Tool call phases    | [Concepts § Tool call](./concepts-and-glossary.md#tool-call)                         | [tool-call-lifecycle.svg](./img/tool-call-lifecycle.svg) |
 | Violation modes     | [Concepts § Modes](./concepts-and-glossary.md#violation-modes-block-warn-audit)      | [violation-modes.svg](./img/violation-modes.svg)         |
 | Chunk redaction     | [Concepts § Byte lookback](./concepts-and-glossary.md#byte-mode-and-chunk-redaction) | [chunk-redaction.svg](./img/chunk-redaction.svg)         |
 | Agent loop wiring   | [Cookbook §3](./integration-cookbook.md#3-event-mode-tool-gate)                      | [agent-gate-loop.svg](./img/agent-gate-loop.svg)         |

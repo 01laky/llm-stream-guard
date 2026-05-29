@@ -39,6 +39,6 @@ Pre-1.0 releases did not promise semver on SARIF or Action pins. From **1.0.0**,
 ## Verification
 
 - `pnpm gate:stable-language` — no pre-release SARIF wording in `src/`, `action/`, `docs/` (allowlisted historical docs).
-- `test/sarif-stable.test.ts` (LSG-SAR01–80), `test/schema-contract.test.ts` (LSG-SCH01–35), `test/edge-cases-phase10-exhaustive.test.ts` (LSG-XEC1201–2220).
+- `test/sarif-stable.test.ts` (LSG-SAR01–80), `test/schema-contract.test.ts` (LSG-SCH01–35), `test/edge-cases-phase10-exhaustive.test.ts` (LSG-XEC1201–2220), `test/edge-cases-phase10.1-exhaustive.test.ts` (LSG-XEC2231–2830).
 
 See [migration-0.x-to-1.0.md](./migration-0.x-to-1.0.md) when upgrading from 0.9.x.

@@ -476,7 +476,7 @@ describe("LSG-ACT39: missing policy inputs graceful failure", () => {
 			INPUT_POLICY: "",
 			INPUT_POLICY_DIR: "",
 		});
-		expect([0, 1, 2, 3]).toContain(r.status ?? -1);
+		expect(r.status).toBe(3);
 		expect(r.stderr + r.stdout).not.toMatch(/uncaught/i);
 	});
 });

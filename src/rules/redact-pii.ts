@@ -46,7 +46,13 @@ export function redactPII(options?: RedactPIIOptions): GuardTransform {
 			return text === event.text ? event : { ...event, text };
 		}
 
-		if (event.type === "tool_call" && event.phase === "done") {
+		if (event.type === "tool_call") {
+			if (event.phase === "delta" && typeof event.argsText === "string") {
+				const text = scanPiiText(event.argsText, ctx, event, patterns, placeholder);
+				return text === event.argsText ? event : { ...event, argsText: text };
+			}
+
+			if (event.phase !== "done") return event;
 			let next = event;
 			let changed = false;
 

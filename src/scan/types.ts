@@ -29,7 +29,7 @@ export function violationToScan(
 		rule: v.rule,
 		message: v.message,
 		mode: v.mode,
-		...(policyVersion ? { policyVersion } : {}),
+		...(policyVersion !== undefined ? { policyVersion } : {}),
 	};
 }
 

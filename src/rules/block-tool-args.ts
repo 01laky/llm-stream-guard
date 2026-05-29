@@ -7,10 +7,20 @@ export type BlockToolArgsMatcher =
 	| string
 	| ((args: unknown, ctx: GuardContext) => boolean);
 
+function tryStringifyArgs(args: unknown): string | null {
+	try {
+		return JSON.stringify(args);
+	} catch {
+		return null;
+	}
+}
+
 function matchesArgs(matcher: BlockToolArgsMatcher, args: unknown, ctx: GuardContext): boolean {
 	if (typeof matcher === "function") return matcher(args, ctx);
-	if (typeof matcher === "string") return JSON.stringify(args).includes(matcher);
-	return matcher.test(JSON.stringify(args));
+	const serialized = tryStringifyArgs(args);
+	if (serialized === null) return false;
+	if (typeof matcher === "string") return serialized.includes(matcher);
+	return matcher.test(serialized);
 }
 
 function resolveArgs(event: { args?: unknown; argsText?: string }): unknown | undefined {

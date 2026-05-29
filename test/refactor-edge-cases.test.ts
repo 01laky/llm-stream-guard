@@ -638,19 +638,27 @@ describe("LSG-REF19: CLI refactor command routing", () => {
 });
 
 describe("LSG-REF20: walkFiles symlink and mixed tree", () => {
-	it("walks through symlinked subdirectory when target not skipped", () => {
+	const canSymlink = (() => {
+		try {
+			const dir = tempDir("symlink-probe-");
+			const target = join(dir, "t");
+			mkdirSync(target);
+			symlinkSync(target, join(dir, "l"));
+			rmSync(dir, { recursive: true, force: true });
+			return true;
+		} catch {
+			return false;
+		}
+	})();
+
+	it.skipIf(!canSymlink)("walks through symlinked subdirectory when target not skipped", () => {
 		const dir = tempDir("walk-symlink-");
 		const real = join(dir, "real");
 		mkdirSync(real);
 		writeFileSync(join(real, "inside.txt"), "x");
-		try {
-			symlinkSync(real, join(dir, "link"));
-			const files = walkFiles([join(dir, "link")]);
-			expect(files.some((f) => f.endsWith("inside.txt"))).toBe(true);
-		} catch {
-			// symlinks may be unavailable in sandbox — skip assertion
-			expect(true).toBe(true);
-		}
+		symlinkSync(real, join(dir, "link"));
+		const files = walkFiles([join(dir, "link")]);
+		expect(files.some((f) => f.endsWith("inside.txt"))).toBe(true);
 		rmSync(dir, { recursive: true, force: true });
 	});
 });

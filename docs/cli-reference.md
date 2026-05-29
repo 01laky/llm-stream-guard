@@ -2,7 +2,7 @@
 
 **Binary:** `llm-stream-guard` (also `npx llm-stream-guard`)  
 **Entry:** `dist/cli.js` after build  
-**Version:** 0.8.2+
+**Version:** **1.0.0**
 
 For conceptual background see [Getting started](./getting-started.md) and [Policy reference](./policy-reference.md).
 
@@ -30,8 +30,31 @@ llm-stream-guard profiles list
 llm-stream-guard profiles show <id>
 llm-stream-guard audit validate-manifest --manifest <path> [--json]
 llm-stream-guard audit drift --policy <p> --manifest <m> [--json]
+llm-stream-guard doctor [policy-path] [--json]
 llm-stream-guard audit static [options]
 ```
+
+---
+
+## `doctor`
+
+Readiness checks before wiring guard in CI or production.
+
+```bash
+npx llm-stream-guard doctor
+npx llm-stream-guard doctor policies/proxy-strict.json --json
+pnpm doctor   # package script alias (requires pnpm build)
+```
+
+| Check      | Pass condition                          |
+| ---------- | --------------------------------------- |
+| `node`     | Node.js ≥ 18                            |
+| `dist`     | `dist/cli.js` and `dist/index.js` exist |
+| `policy`   | Policy validates (`validate` command)   |
+| `manifest` | Default `tools/manifest.json` valid     |
+| `version`  | Package version string present          |
+
+Exit **0** when all checks pass; **1** when any check fails. `--json` emits `{ ok, checks: [{ name, ok, detail }] }`.
 
 ---
 

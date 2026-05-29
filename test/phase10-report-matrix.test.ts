@@ -22,6 +22,12 @@ const policies = [
 	"policies/audit-only.json",
 ] as const;
 
+function expectsRedaction(policy: string, secret: string): boolean {
+	if (secret === "plain-no-secret") return false;
+	if (policy.includes("agent-gate")) return false;
+	return secret.includes("sk-proj") || secret.startsWith("Bearer");
+}
+
 const matrix = cartesian({
 	mode: modes,
 	secret: secrets,
@@ -56,12 +62,10 @@ describe("LSG-RPT36: phase10 onFinish matrix", () => {
 
 			expect(summary).toBeDefined();
 			expect(summary!.mode).toBe(row.mode);
-			if (
-				row.secret.includes("sk-proj") ||
-				row.secret.startsWith("Bearer") ||
-				row.secret.startsWith("eyJ")
-			) {
-				expect(summary!.redactions).toBeGreaterThanOrEqual(0);
+			if (expectsRedaction(row.policy, row.secret)) {
+				expect(summary!.redactions).toBeGreaterThan(0);
+			} else if (row.secret === "plain-no-secret" || row.policy.includes("agent-gate")) {
+				expect(summary!.redactions).toBe(0);
 			}
 		});
 	}
@@ -113,7 +117,11 @@ describe("LSG-RPT36: redact onFinish byte sweep", () => {
 					redactions = s.redactions;
 				},
 			});
-			expect(redactions).toBeGreaterThanOrEqual(0);
+			if (expectsRedaction("policies/proxy-strict.json", secret)) {
+				expect(redactions).toBeGreaterThan(0);
+			} else if (secret === "plain-no-secret") {
+				expect(redactions).toBe(0);
+			}
 		});
 	}
 });
@@ -123,8 +131,9 @@ describe("LSG-RPT36: event redactSecrets matrix", () => {
 		const id = 36 + matrix.length + 21 + i;
 		it(`RPT${String(id).padStart(2, "0")}: event redact ${i}`, async () => {
 			let redactions = 0;
+			const secret = secrets[i % secrets.length]!;
 			for await (const _ of guardEvents(
-				eventsFrom([{ type: "text", phase: "done", text: secrets[i % secrets.length]! }]),
+				eventsFrom([{ type: "text", phase: "done", text: secret }]),
 				{
 					mode: modes[i % 3]!,
 					transforms: [redactSecrets()],
@@ -133,7 +142,11 @@ describe("LSG-RPT36: event redactSecrets matrix", () => {
 			)) {
 				/* drain */
 			}
-			expect(redactions).toBeGreaterThanOrEqual(0);
+			if (secret.includes("sk-proj") || secret.startsWith("Bearer")) {
+				expect(redactions).toBeGreaterThan(0);
+			} else if (secret === "plain-no-secret") {
+				expect(redactions).toBe(0);
+			}
 		});
 	}
 });

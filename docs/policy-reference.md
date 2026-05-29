@@ -19,14 +19,14 @@
 }
 ```
 
-| Field           | Required | Description                                                      |
-| --------------- | -------- | ---------------------------------------------------------------- |
-| `version`       | Yes      | Must be `"1"`                                                    |
-| `policyVersion` | No       | Opaque string echoed in scan reports / violations                |
-| `mode`          | No       | Default `warn`; overridden by `GUARD_MODE` or CLI `--mode`       |
-| `extends`       | No       | Merge parent policy (see [Inheritance](#inheritance-extends))    |
-| `byte`          | No       | Flags for `createByteGuard()` when using `createGuardFromPolicy` |
-| `rules`         | Yes      | Array of rule objects (one key each)                             |
+| Field           | Required | Description                                                                                                                                                |
+| --------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `version`       | Yes      | Must be `"1"`                                                                                                                                              |
+| `policyVersion` | No       | Opaque string echoed in scan reports / violations                                                                                                          |
+| `mode`          | No       | Default `block` when omitted from a policy file; programmatic guards default to `warn` (see [Violation modes](./concepts-and-glossary.md#violation-modes)) |
+| `extends`       | No       | Merge parent policy (see [Inheritance](#inheritance-extends))                                                                                              |
+| `byte`          | No       | Flags for `createByteGuard()` when using `createGuardFromPolicy`                                                                                           |
+| `rules`         | Yes      | Array of rule objects (one key each)                                                                                                                       |
 
 Validate locally:
 

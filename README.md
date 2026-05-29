@@ -3,7 +3,7 @@
 ![core](https://img.shields.io/badge/core-1.0.0-brightgreen)
 ![node](https://img.shields.io/badge/node-%3E%3D18-339933)
 ![runtime deps](https://img.shields.io/badge/runtime_deps-0-brightgreen)
-![tests](https://img.shields.io/badge/tests-5564_passing-brightgreen)
+![tests](https://img.shields.io/badge/tests-6117_passing-brightgreen)
 [![ci](https://github.com/01laky/llm-stream-guard/actions/workflows/ci.yml/badge.svg)](https://github.com/01laky/llm-stream-guard/actions/workflows/ci.yml)
 ![status](https://img.shields.io/badge/status-stable_1.0.0-brightgreen)
 
@@ -123,11 +123,11 @@ Full spec: [`docs/proposal.MD`](./docs/proposal.MD#guardevent-model-independent)
 
 ![block / warn / audit](https://raw.githubusercontent.com/01laky/llm-stream-guard/main/docs/img/violation-modes.svg)
 
-| Mode    | Secrets / PII                          | Tool policy                                 |
-| ------- | -------------------------------------- | ------------------------------------------- |
-| `block` | Always redact                          | Safe substitute + `policy_violation` finish |
-| `warn`  | Always redact                          | Block tool + `onViolation`                  |
-| `audit` | Always redact + `onViolation` on match | Pass tool through + `onViolation`           |
+| Mode    | Byte mode (secrets)                     | Event mode (secrets + PII)      | Tool policy                                 |
+| ------- | --------------------------------------- | ------------------------------- | ------------------------------------------- |
+| `block` | Redact secrets                          | Redact secrets/PII              | Safe substitute + `policy_violation` finish |
+| `warn`  | Redact secrets                          | Redact secrets/PII              | Block tool + `onViolation`                  |
+| `audit` | Redact secrets + `onViolation` on match | Redact + `onViolation` on match | Pass tool through + `onViolation`           |
 
 ---
 
@@ -260,6 +260,8 @@ npx llm-stream-guard scan --policy policies/agent-gate.json test/fixtures/events
 cat capture.log | npx llm-stream-guard scan --policy policies/proxy-strict.json -
 npx llm-stream-guard diff policies/v1.json policies/v2.json --check
 npx llm-stream-guard profiles list
+npx llm-stream-guard doctor
+npx llm-stream-guard audit static --policy policies/agent-gate.json --manifest tools/manifest.json
 ```
 
 | Env variable        | Effect                                              |

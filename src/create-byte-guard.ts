@@ -1,7 +1,7 @@
 import { createGuardContext } from "./create-guard-context.js";
 import { summarizeGuardContext } from "./summarize-guard-context.js";
 import { pipeGuard } from "./pipe-guard.js";
-import { byteSanitizeErrors } from "./rules/byte/sanitize-errors-byte.js";
+import { byteSanitizeErrors, flushByteSanitizeErrors } from "./rules/byte/sanitize-errors-byte.js";
 import { byteRedactSecrets, flushByteRedactSecrets } from "./rules/byte/redact-secrets-byte.js";
 import type { ByteGuardOptions } from "./types.js";
 
@@ -36,6 +36,9 @@ export function createByteGuard(
 		flush(controller) {
 			if (options.redactSecrets) {
 				enqueueByteResults(controller, flushByteRedactSecrets(ctx, options));
+			}
+			if (options.sanitizeErrors) {
+				enqueueByteResults(controller, flushByteSanitizeErrors(ctx));
 			}
 			options.onFinish?.(summarizeGuardContext(ctx));
 		},

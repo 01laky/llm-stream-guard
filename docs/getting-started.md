@@ -2,7 +2,7 @@
 
 **Audience:** Developers new to LLM streaming **or** new to this package.  
 **Time:** ~15 minutes to a working guard.  
-**Version:** 0.8.2+ (stable)
+**Version:** **1.0.0** (stable)
 
 > **Not sure where to go next?** See the [documentation map](./docs-map.md) for learning paths by role.
 

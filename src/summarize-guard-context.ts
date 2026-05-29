@@ -19,7 +19,7 @@ export function summarizeGuardContext(ctx: GuardContext): StreamGuardSummary {
 		countsByRule,
 		toolsTouched: [...toolsSet].sort(),
 		redactions: state.redactions,
-		...(state.policyVersion ? { policyVersion: state.policyVersion } : {}),
+		...(state.policyVersion !== undefined ? { policyVersion: state.policyVersion } : {}),
 		mode: ctx.mode as ViolationMode,
 	};
 }

@@ -33,11 +33,7 @@ No. Use **byte mode** on raw `response.body`, or map any parsed events to `Guard
 
 ### Is this on npm?
 
-Publish-ready — run [`pnpm release:prep`](./publishing.md) then `npm publish` + GitHub Release.
-
-```bash
-pnpm add llm-stream-guard@1.0.0
-```
+Yes — install with `pnpm add llm-stream-guard` (pin `@1.0.0` for reproducible builds). See [`docs/publishing.md`](./publishing.md) for maintainer release steps.
 
 ### Is there a GitHub Action?
 

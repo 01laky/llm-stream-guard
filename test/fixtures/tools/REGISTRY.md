@@ -14,5 +14,6 @@
 | walk/apps/agent/tools/manifest.json | Include-prefix fixture                        |
 | walk/binary-tools.dat               | Binary skipped without throw                  |
 | coverage/multiline-manifest.json    | D002 rm -rf on line 4 for COV212–214          |
+| corrupt-manifest.raw                | Unparseable manifest (MANIFEST_PARSE_ERROR)   |
 
 `node_modules` skip is covered by **LSG-STA13** (temp dir in test, not a committed fixture — `node_modules/` is gitignored).

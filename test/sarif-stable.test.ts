@@ -200,12 +200,9 @@ describe("LSG-SAR21–SAR30: golden and CLI parity", () => {
 			policy: "policies/audit-only.json",
 			manifest: "test/fixtures/tools/agent-tools-dangerous.json",
 		});
-		if (report.dangerous.length > 0) {
-			const res = sarifDoc(report).runs[0]!.results.find((r) => r.ruleId.startsWith("D"));
-			expect(res?.level).toBe("warning");
-		} else {
-			expect(report.dangerous.length).toBe(0);
-		}
+		expect(report.dangerous.length).toBeGreaterThan(0);
+		const res = sarifDoc(report).runs[0]!.results.find((r) => r.ruleId.startsWith("D"));
+		expect(res?.level).toBe("warning");
 	});
 
 	it("SAR26: staticScanToSarif is exported from audit index", async () => {

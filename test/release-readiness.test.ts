@@ -524,4 +524,16 @@ describe("LSG-REL: release readiness", () => {
 	it("LSG-REL81: edge-cases-phase10-exhaustive XEC1201", () => {
 		expect(read("test/edge-cases-phase10-exhaustive.test.ts")).toMatch(/XEC1201/);
 	});
+
+	it("LSG-REL82: phase10-audit-fixes AUD01", () => {
+		expect(read("test/phase10-audit-fixes.test.ts")).toMatch(/AUD01/);
+	});
+
+	it("LSG-REL83: byte-sse-phase9-golden C9-G01", () => {
+		expect(read("test/byte-sse-phase9-golden.test.ts")).toMatch(/C9-G01/);
+	});
+
+	it("LSG-REL84: edge-cases-phase10.1-exhaustive XEC2231", () => {
+		expect(read("test/edge-cases-phase10.1-exhaustive.test.ts")).toMatch(/XEC2231/);
+	});
 });

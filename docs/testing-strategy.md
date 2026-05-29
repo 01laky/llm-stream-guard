@@ -1,6 +1,6 @@
 # Testing strategy
 
-**Status:** Phase 9 shipped — test fortress (**4157+** tests, LSG-XEC/PROP/PKG/SEC).
+**Status:** Phase 10 / **1.0.0** — test fortress (**6117+** Vitest tests; doc/release meta suites listed separately in `pnpm test:count-gate` output).
 
 ## Test ID prefixes
 
@@ -189,7 +189,7 @@ Closes Phase 8 debt — **`LSG-DOC01–DOC35`**, **`LSG-REL31–REL43`**, **`pnp
 | `scripts/check-doc-links.mjs`    | DOC30                | Relative link integrity in verify                              |
 | `scripts/release-prep.mjs`       | REL43                | Pre-tag doc gates                                              |
 
-New docs: `troubleshooting.md`, `security-reporting.md`, `upgrade-guide.md`, `threat-model-stub.md`, `schemas/README.md`, `SECURITY.md`.
+New docs: `troubleshooting.md`, `security-reporting.md`, `upgrade-guide.md`, `threat-model.md`, `schemas/README.md`, `SECURITY.md`.
 
 ### Phase 9 test fortress (0.9.0)
 
@@ -224,23 +224,26 @@ pnpm test:timing          # informational WARN locally
 
 Diagram: `docs/img/test-fortress.mmd` + SVG.
 
-### Phase 10 (1.0.0 release)
+### Phase 10 release
 
 Stable API contracts, SARIF freeze, stream reporting, and doc gates for 1.0.0.
 
-| Area                                         | IDs           | Focus                                                     |
-| -------------------------------------------- | ------------- | --------------------------------------------------------- |
-| `test/stream-reporting.test.ts`              | RPT01–35      | `onFinish`, `summarizeGuardContext`, policy-driven guards |
-| `test/phase10-report-matrix.test.ts`         | RPT36+ (~120) | Programmatic onFinish matrix                              |
-| `test/edge-cases-phase10-exhaustive.test.ts` | XEC1201–2220  | Phase 10 exhaustive: summary, onFinish, byte flush        |
-| `test/sarif-stable.test.ts`                  | SAR01–80      | SARIF catalog, schema, golden, edge matrix                |
-| `test/schema-contract.test.ts`               | SCH01–35      | `schemas/*-v1.json` shapes                                |
-| `test/doctor.test.ts`                        | DTR01–40      | `doctor` CLI + policy path matrix                         |
-| `test/security-negative-b.test.ts`           | SEC21–50      | Extended security negatives                               |
-| `test/release-readiness.test.ts`             | REL63–REL80   | Phase 10 file and gate checks                             |
-| `test/docs-edge-cases.test.ts`               | DOC-E71–E100  | 1.0 docs, diagrams, stable language                       |
-| `scripts/grep-stable-gate.mjs`               | REL67         | No preview/stub in src/action/docs                        |
-| `scripts/check-policy-profiles.mjs`          | REL68         | Profile hash manifest                                     |
+| Area                                           | IDs           | Focus                                                             |
+| ---------------------------------------------- | ------------- | ----------------------------------------------------------------- |
+| `test/stream-reporting.test.ts`                | RPT01–35      | `onFinish`, `summarizeGuardContext`, policy-driven guards         |
+| `test/phase10-report-matrix.test.ts`           | RPT36+ (~120) | Programmatic onFinish matrix                                      |
+| `test/edge-cases-phase10-exhaustive.test.ts`   | XEC1201–2220  | Phase 10 exhaustive: summary, onFinish, byte flush                |
+| `test/edge-cases-phase10.1-exhaustive.test.ts` | XEC2231–2830  | Phase 10.1 audit-fix matrices: sanitize splits, reset, PII deltas |
+| `test/byte-sse-phase9-golden.test.ts`          | C9-G01–G02    | Validated phase9 byte-sse golden pairs (68)                       |
+| `test/phase10-audit-fixes.test.ts`             | AUD01–AUD09   | Phase 10.1 audit behavior fixes                                   |
+| `test/sarif-stable.test.ts`                    | SAR01–80      | SARIF catalog, schema, golden, edge matrix                        |
+| `test/schema-contract.test.ts`                 | SCH01–35      | `schemas/*-v1.json` shapes                                        |
+| `test/doctor.test.ts`                          | DTR01–40      | `doctor` CLI + policy path matrix                                 |
+| `test/security-negative-b.test.ts`             | SEC21–50      | Extended security negatives                                       |
+| `test/release-readiness.test.ts`               | REL63–REL84   | Phase 10 file and gate checks                                     |
+| `test/docs-edge-cases.test.ts`                 | DOC-E71–E100  | 1.0 docs, diagrams, stable language                               |
+| `scripts/grep-stable-gate.mjs`                 | REL67         | No preview/stub in src/action/docs                                |
+| `scripts/check-policy-profiles.mjs`            | REL68         | Profile hash manifest                                             |
 
 ```bash
 pnpm gate:stable-language

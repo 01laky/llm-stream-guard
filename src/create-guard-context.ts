@@ -16,6 +16,7 @@ export function createGuardContextState(policyVersion?: string): GuardContextSta
 	return {
 		byteLookback: emptyBytes(),
 		pendingUtf8: emptyBytes(),
+		sanitizeLookback: emptyBytes(),
 		toolArgsBytesById: new Map(),
 		redactions: 0,
 		...(policyVersion !== undefined ? { policyVersion } : {}),
@@ -56,7 +57,10 @@ export function createGuardContext(options: CreateGuardContextOptions = {}): Gua
 			if (state) {
 				state.byteLookback = emptyBytes();
 				state.pendingUtf8 = emptyBytes();
+				state.sanitizeLookback = emptyBytes();
 				state.toolArgsBytesById.clear();
+				state.redactions = 0;
+				delete state.eventIndex;
 			}
 		},
 	};

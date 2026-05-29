@@ -72,7 +72,7 @@ Document new IDs in test headers; maintain `test/fixtures/REGISTRY.md`; run `pnp
 - **Doc tests:** `test/docs-readiness.test.ts` (LSG-DOC\*) must pass; add DOC ID if adding release-critical doc gates.
 - **Phase 9 tests:** matrix files (`byte-split-matrix`, `edge-cases-exhaustive*`, `*-matrix.test.ts`); run `pnpm test:count-gate` before release.
 - **Link checks:** run `pnpm doc:check-links` before PR; wired in `pnpm verify`.
-- **Status lines:** bump guide status when releasing; do not change `proposal.MD` draft status.
+- **Status lines:** bump guide status when releasing; do not change `proposal.MD` historical-status line.
 
 ## Releases
 

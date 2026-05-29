@@ -82,6 +82,7 @@ export type GuardContext = {
 export type GuardContextState = {
 	byteLookback: Uint8Array;
 	pendingUtf8: Uint8Array;
+	sanitizeLookback: Uint8Array;
 	toolArgsBytesById: Map<string, number>;
 	redactions: number;
 	policyVersion?: string;

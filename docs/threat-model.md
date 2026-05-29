@@ -6,11 +6,11 @@
 
 ## Scope — what guard protects
 
-| Layer             | Protection                                                        |
-| ----------------- | ----------------------------------------------------------------- |
-| **Proxy wire**    | Secret/PII redaction on raw SSE bytes; error sanitization         |
-| **Agent runtime** | Tool allow/deny, arg patterns, size limits before execution       |
-| **CI / repo**     | Static manifest drift, dangerous tool patterns, policy diff gates |
+| Layer             | Protection                                                                                     |
+| ----------------- | ---------------------------------------------------------------------------------------------- |
+| **Proxy wire**    | Secret redaction (+ optional error sanitization) on raw SSE bytes; **PII requires event mode** |
+| **Agent runtime** | Tool allow/deny, arg patterns, size limits before execution                                    |
+| **CI / repo**     | Static manifest drift, dangerous tool patterns, policy diff gates                              |
 
 ![Pipeline](./img/pipeline.svg)
 

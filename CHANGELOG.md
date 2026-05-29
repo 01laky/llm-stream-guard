@@ -13,11 +13,26 @@ Format based on [Keep a Changelog](https://keepachangelog.com/); versioning foll
 - **Stable SARIF 1.x** — `src/audit/sarif.ts` with `SARIF_RULE_CATALOG` and `staticScanToSarif`; frozen rule IDs documented in [`docs/sarif-rule-ids.md`](./docs/sarif-rule-ids.md).
 - **CLI `doctor`** — readiness checks for Node, dist, policy, manifest, and version (`pnpm doctor`).
 - **JSON schemas** — `scan-report-v1.json`, `static-scan-report-v1.json`, `stream-guard-summary-v1.json` under `schemas/`.
-- **Phase 10 tests** — `stream-reporting` (RPT01–35), `sarif-stable` (SAR01–80), `schema-contract` (SCH01–35), `doctor` (DTR01–40), `security-negative-b` (SEC21–50), `phase10-report-matrix`, `edge-cases-phase10-exhaustive` (XEC1201–2220, +1095 cases); REL63–REL80, DOC-E71–E100, CBK54–58, PKG19–25.
+- **Phase 10 tests** — `stream-reporting` (RPT01–35), `sarif-stable` (SAR01–80), `schema-contract` (SCH01–35), `doctor` (DTR01–40), `security-negative-b` (SEC21–50), `phase10-report-matrix`, `edge-cases-phase10-exhaustive` (XEC1201–2220, +1095 cases), `edge-cases-phase10.1-exhaustive` (XEC2231–2830, +471 cases); REL63–REL84, DOC-E71–E100, CBK54–58, PKG19–25.
 - **Quality gates** — `pnpm gate:stable-language`, `pnpm fixtures:check-profiles`, `pnpm doc:check-links`; `scripts/grep-stable-gate.mjs`, `scripts/check-policy-profiles.mjs`.
 - **Docs** — [`docs/api-stability.md`](./docs/api-stability.md), [`docs/threat-model.md`](./docs/threat-model.md), [`docs/performance.md`](./docs/performance.md), [`docs/migration-0.x-to-1.0.md`](./docs/migration-0.x-to-1.0.md), [`docs/roadmap-post-1.0.md`](./docs/roadmap-post-1.0.md), [`docs/faq-archive.md`](./docs/faq-archive.md), [`docs/api/README.md`](./docs/api/README.md).
 - **Diagrams** — `v1-stable-architecture`, `violation-report-flow` (21 total in `pnpm diagrams:build`).
 - **Example** — `examples/minimal-node/on-finish-summary.mjs`.
+
+### Fixed (Phase 10.1 audit)
+
+- **Policy `mode` default** — docs now match compile default `block` for policy files; programmatic default remains `warn`.
+- **Byte `sanitizeErrors`** — rolling lookback + flush (cross-chunk error message sanitization).
+- **`redactPII`** — redacts `tool_call` delta `argsText` (parity with `redactSecrets`).
+- **`GuardContext.reset()`** — clears `redactions` counter and `eventIndex`.
+- **`blockToolArgs`** — non-serializable args no longer crash the pipeline.
+- **Static audit** — unparseable manifests emit `MANIFEST_PARSE_ERROR` (non-zero exit).
+- **`policyVersion: ""`** — propagated consistently to summaries and scan reports.
+- **Phase 9 byte-sse goldens** — regenerated via `createByteGuard`; validated by `test/byte-sse-phase9-golden.test.ts`.
+- **Phase 10.1 exhaustive edge matrices** — `edge-cases-phase10.1-exhaustive` (XEC2231–2830): byte sanitize splits, reset/redactions, blockToolArgs safety, policyVersion, PII delta argsText, combined byte guards, MANIFEST_PARSE_ERROR.
+- **Redaction count tests** — `onFinish`/`StreamGuardSummary.redactions` assertions hardened (`toBeGreaterThan(0)` where applicable).
+- **`test:coverage-map`** — gate raised to `--min 5`; **`test:timing:ci`** fails on budget exceed.
+- **Docs** — `doctor` in CLI reference; version lines `1.0.0`; FAQ npm answer; threat model byte vs event PII scope; stale anchors fixed.
 
 ### Changed
 

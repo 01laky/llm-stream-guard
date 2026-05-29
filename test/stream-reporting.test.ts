@@ -116,7 +116,7 @@ describe("LSG-RPT11–RPT20: onFinish byte and event", () => {
 				redactions = s.redactions;
 			},
 		});
-		expect(redactions).toBeGreaterThanOrEqual(0);
+		expect(redactions).toBeGreaterThan(0);
 	});
 
 	it("RPT13: byte onFinish without redact still calls back", async () => {
@@ -194,7 +194,7 @@ describe("LSG-RPT11–RPT20: onFinish byte and event", () => {
 				summaryRedactions = s.redactions;
 			},
 		});
-		expect(summaryRedactions).toBeGreaterThanOrEqual(0);
+		expect(summaryRedactions).toBeGreaterThan(0);
 	});
 
 	it("RPT20: event policyVersion flows to summary", async () => {

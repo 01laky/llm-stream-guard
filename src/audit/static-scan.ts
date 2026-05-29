@@ -5,7 +5,7 @@ import { applyStrict } from "./format-report.js";
 import { parseManifestFile } from "./extract-tools.js";
 import { loadPoliciesForScan } from "./load-policies.js";
 import { resolveManifestFiles } from "./resolve-manifests.js";
-import type { DriftFinding, StaticScanReport } from "./types.js";
+import type { DriftFinding, StaticPatternFinding, StaticScanReport } from "./types.js";
 
 export type StaticScanOptions = {
 	root: string;
@@ -23,15 +23,22 @@ export function runStaticScan(opts: StaticScanOptions): StaticScanReport {
 	const policies = loadPoliciesForScan(opts);
 	const manifests = resolveManifestFiles(opts);
 	let drift: DriftFinding[] = [];
-	const dangerous = [];
-	const blockToolArgs = [];
+	const dangerous: StaticPatternFinding[] = [];
+	const blockToolArgs: StaticPatternFinding[] = [];
 	let toolsDeclared = 0;
 
 	for (const mf of manifests) {
 		let parsed;
 		try {
 			parsed = parseManifestFile(mf);
-		} catch {
+		} catch (err) {
+			dangerous.push({
+				code: "MANIFEST_PARSE_ERROR",
+				severity: "error" as const,
+				file: mf,
+				field: "(manifest)",
+				message: err instanceof Error ? err.message : "Failed to parse manifest",
+			});
 			continue;
 		}
 		toolsDeclared += parsed.tools.length;

@@ -179,13 +179,14 @@ describe("LSG-E21: sanitizeErrors edge cases", () => {
 		expect(utf8String(out)).toContain("An error occurred.");
 	});
 
-	it("byte sanitizeErrors is best-effort per chunk (split may miss)", async () => {
-		const payload = utf8('data: {"error":{"message":"internal leak"}}\n\n');
-		const [a, b] = splitAtByteIndex(payload, 12);
+	it("byte sanitizeErrors survives TCP split with rolling lookback", async () => {
+		const payload = utf8('data: {"error":{"message":"internal /etc/passwd leak"}}\n\n');
+		const [a, b] = splitAtByteIndex(payload, 14);
 		const out = await collectBytes(
 			readableFromChunks([a, b]).pipeThrough(createByteGuard({ sanitizeErrors: true })),
 		);
-		expect(out.length).toBeGreaterThan(0);
+		expect(utf8String(out)).not.toContain("/etc/passwd");
+		expect(utf8String(out)).toContain("An error occurred.");
 	});
 
 	it("custom safe message on event error", async () => {

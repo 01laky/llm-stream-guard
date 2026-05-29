@@ -20,7 +20,7 @@ Typical dev-machine results (order of magnitude, not guarantees):
 | Event guard 10k text deltas    | < 300 ms wall  |
 | Static audit default repo root | < 2 s wall     |
 
-CI does not fail on bench regressions today (`bench:smoke` is maintainer-local). See [testing-strategy.md](./testing-strategy.md#phase-10-100-release).
+CI does not fail on bench regressions today (`bench:smoke` is maintainer-local). See [testing-strategy.md](./testing-strategy.md#phase-10-release).
 
 ---
 
