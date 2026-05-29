@@ -19,6 +19,7 @@ const diagrams = [
 	"dual-stream.mmd",
 	"migration-path.mmd",
 	"ci-action-flow.mmd",
+	"test-coverage.mmd",
 ];
 
 for (const name of diagrams) {

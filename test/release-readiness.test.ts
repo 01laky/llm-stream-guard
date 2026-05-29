@@ -171,4 +171,53 @@ describe("LSG-REL: release readiness", () => {
 		expect(source).toMatch(/LSG-REF01/);
 		expect(source).toMatch(/LSG-REF25/);
 	});
+
+	it("LSG-REL25: CHANGELOG documents 0.7.0 coverage release", () => {
+		const changelog = read("CHANGELOG.md");
+		expect(changelog).toContain("## [0.7.0]");
+		expect(changelog).toMatch(/LSG-COV|coverage/i);
+		expect(changelog).toMatch(/stretch|fuzz|schema/i);
+	});
+
+	it("LSG-REL26: README test badge matches package version 0.7.0", () => {
+		const readme = read("README.md");
+		const pkg = JSON.parse(read("package.json")) as { version: string };
+		expect(pkg.version).toBe("0.7.0");
+		expect(readme).toContain("0.7.0");
+		expect(readme).toMatch(/tests-\d+_passing/);
+	});
+
+	it("LSG-REL27: all coverage test files exist", () => {
+		const files = [
+			"test/coverage-matrix.test.ts",
+			"test/coverage-audit-exhaustive.test.ts",
+			"test/coverage-cli-exhaustive.test.ts",
+			"test/coverage-policy-exhaustive.test.ts",
+			"test/coverage-scan-exhaustive.test.ts",
+			"test/coverage-shared-exhaustive.test.ts",
+			"test/coverage-refactor-parity.test.ts",
+			"test/coverage-schemas.test.ts",
+			"test/coverage-fuzz.test.ts",
+			"test/coverage-stretch.test.ts",
+		];
+		for (const f of files) {
+			expect(read(f).length).toBeGreaterThan(100);
+		}
+	});
+
+	it("LSG-REL28: testing-strategy documents Phase 7 LSG-COV", () => {
+		const doc = read("docs/testing-strategy.md");
+		expect(doc).toMatch(/Phase 7|LSG-COV|0\.7\.0/i);
+		expect(doc).toMatch(/coverage-matrix|coverage-stretch/);
+	});
+
+	it("LSG-REL29: guard-audit workflow dogfood commands gate", () => {
+		const workflow = read(".github/workflows/guard-audit.yml");
+		expect(workflow).toContain("audit static");
+		expect(workflow).toContain("validate-manifest");
+		expect(workflow).toContain("pnpm build");
+		const stretch = read("test/coverage-stretch.test.ts");
+		expect(stretch).toMatch(/LSG-COV219/);
+		expect(stretch).toMatch(/LSG-COV220/);
+	});
 });

@@ -95,4 +95,48 @@ describe("build-artifacts.test.ts", () => {
 			expect(existsSync(join(rootDir, "dist/policy/profiles/agent-gate.json"))).toBe(true);
 		});
 	});
+
+	describe("LSG-B10", () => {
+		it("dist/audit/index.js exists", () => {
+			expect(existsSync(join(rootDir, "dist/audit/index.js"))).toBe(true);
+		});
+	});
+
+	describe("LSG-B11", () => {
+		it("dist/audit/index.cjs exists", () => {
+			expect(existsSync(join(rootDir, "dist/audit/index.cjs"))).toBe(true);
+		});
+	});
+
+	describe("LSG-B12", () => {
+		it("dist/audit/index.d.ts exists", () => {
+			expect(existsSync(join(rootDir, "dist/audit/index.d.ts"))).toBe(true);
+		});
+	});
+
+	describe("LSG-B13", () => {
+		it("dist/audit/index.d.ts does not leak ../src paths", () => {
+			const text = readFileSync(join(rootDir, "dist/audit/index.d.ts"), "utf8");
+			expect(text).not.toMatch(/from ["']\.\.\/src/);
+		});
+	});
+
+	describe("LSG-B14", () => {
+		it('package.json exports["./audit"] resolves to dist/audit/index.js', () => {
+			const pkg = JSON.parse(readFileSync(join(rootDir, "package.json"), "utf8")) as {
+				exports: { "./audit": { import: string } };
+			};
+			const rel = pkg.exports["./audit"].import.replace(/^\.\//, "");
+			expect(existsSync(join(rootDir, rel))).toBe(true);
+		});
+	});
+
+	describe("LSG-B15", () => {
+		it("audit d.ts exports runStaticScan and walkManifestFiles", () => {
+			const text = readFileSync(join(rootDir, "dist/audit/index.d.ts"), "utf8");
+			expect(text).toContain("runStaticScan");
+			expect(text).toContain("walkManifestFiles");
+			expect(text).toContain("computeDrift");
+		});
+	});
 });

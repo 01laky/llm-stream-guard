@@ -1,17 +1,17 @@
 # llm-stream-guard
 
-![core](https://img.shields.io/badge/core-0.6.0-brightgreen)
+![core](https://img.shields.io/badge/core-0.7.0-brightgreen)
 ![node](https://img.shields.io/badge/node-%3E%3D18-339933)
 ![runtime deps](https://img.shields.io/badge/runtime_deps-0-brightgreen)
-![tests](https://img.shields.io/badge/tests-782_passing-brightgreen)
+![tests](https://img.shields.io/badge/tests-1100_passing-brightgreen)
 [![ci](https://github.com/01laky/llm-stream-guard/actions/workflows/ci.yml/badge.svg)](https://github.com/01laky/llm-stream-guard/actions/workflows/ci.yml)
-![status](https://img.shields.io/badge/status-stable_0.6.0-brightgreen)
+![status](https://img.shields.io/badge/status-stable_0.7.0-brightgreen)
 
 **Security filter for LLM streams** — redact secrets and PII, enforce tool-call policy, sanitize errors. Works on raw bytes (`TransformStream`) and parsed event streams. **Declarative JSON/YAML policies** and a **CLI** for offline scans.
 
 > A standalone, zero-dependency TypeScript security filter for LLM proxy and agent pipelines. Byte mode: chunk-safe secret redaction on raw SSE. Event mode: tool allow/deny, arg blocking, PII & error sanitization on parsed streams. Policy files + `llm-stream-guard scan` for CI prep.
 
-**Status:** Stable `0.6.0` — internal source refactor (shared walk/parse, `src/scan/`, `./audit` export). Static manifest audit, GitHub Action, and integration cookbook from 0.4–0.5 unchanged. Review [CHANGELOG.md](./CHANGELOG.md) before upgrades.
+**Status:** Stable `0.7.0` — exhaustive edge-case test coverage (LSG-COV01–220), stretch goals (schema contracts, fuzz, SARIF line tracking, `./audit` tarball smoke). No API or CLI changes. Review [CHANGELOG.md](./CHANGELOG.md) before upgrades.
 
 ---
 

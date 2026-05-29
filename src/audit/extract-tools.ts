@@ -1,3 +1,4 @@
+import { readFileSync } from "node:fs";
 import { extname } from "node:path";
 import { parseStructuredText, readStructuredFile } from "../shared/structured-file.js";
 import type { ParsedManifest } from "./types.js";
@@ -103,7 +104,18 @@ function extractOpenApiTools(doc: Record<string, unknown>): {
 	return { tools, strings };
 }
 
-function parseManifestDocument(filePath: string, doc: unknown): ParsedManifest {
+function enrichStringLines(strings: ParsedManifest["strings"], rawText: string): void {
+	let searchFrom = 0;
+	for (const entry of strings) {
+		const idx = rawText.indexOf(entry.value, searchFrom);
+		if (idx >= 0) {
+			entry.line = lineOf(rawText, idx);
+			searchFrom = idx + entry.value.length;
+		}
+	}
+}
+
+function parseManifestDocument(filePath: string, doc: unknown, rawText?: string): ParsedManifest {
 	if (!doc || typeof doc !== "object") {
 		throw new Error(`Invalid manifest document: ${filePath}`);
 	}
@@ -114,17 +126,19 @@ function parseManifestDocument(filePath: string, doc: unknown): ParsedManifest {
 		tools = oa.tools;
 		strings = strings.concat(oa.strings);
 	}
+	if (rawText) enrichStringLines(strings, rawText);
 	return { file: filePath, tools, strings };
 }
 
 /** Parse manifest file → tool names + scannable strings. */
 export function parseManifestFile(filePath: string): ParsedManifest {
-	return parseManifestDocument(filePath, readStructuredFile(filePath));
+	const rawText = readFileSync(filePath, "utf8");
+	return parseManifestDocument(filePath, readStructuredFile(filePath), rawText);
 }
 
 /** Parse manifest text with path hint for extension detection. */
 export function parseManifestText(filePath: string, text: string): ParsedManifest {
-	return parseManifestDocument(filePath, parseStructuredText(text, filePath));
+	return parseManifestDocument(filePath, parseStructuredText(text, filePath), text);
 }
 
 export { lineOf };

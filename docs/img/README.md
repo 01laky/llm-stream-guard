@@ -17,6 +17,7 @@ execute Mermaid — always commit updated **`.svg`** files alongside **`.mmd`** 
 | `dual-stream.mmd`        | Client stream + server audit side-channel (`onViolation` collector) |
 | `migration-path.mmd`     | Regex middleware → rule factories → policy files → CLI scan         |
 | `ci-action-flow.mmd`     | GitHub Action: validate → scan → audit static → SARIF → fail gate   |
+| `test-coverage.mmd`      | Phase 7 LSG-COV suite layout (core → stretch → release gates)       |
 
 Regenerate after editing sources:
 

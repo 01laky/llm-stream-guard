@@ -1,0 +1,24 @@
+flowchart TB
+  subgraph core["LSG-COV01–165 core"]
+    M[coverage-matrix]
+    A[coverage-audit-exhaustive]
+    C[coverage-cli-exhaustive]
+    P[coverage-policy-exhaustive]
+    S[coverage-scan-exhaustive]
+    SH[coverage-shared-exhaustive]
+    R[edge-cases-rules COV151–165]
+  end
+  subgraph stretch["LSG-COV166–220 stretch"]
+    RP[coverage-refactor-parity]
+    SC[coverage-schemas]
+    FZ[coverage-fuzz]
+    ST[coverage-stretch]
+  end
+  subgraph gates["Release gates"]
+    B[LSG-B10–15 dist/audit]
+    EX[LSG-S08–11 exports]
+    ACT[LSG-ACT31–40 Action outputs]
+    REL[LSG-REL25–29]
+  end
+  core --> stretch
+  stretch --> gates

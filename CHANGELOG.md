@@ -5,6 +5,23 @@ Format based on [Keep a Changelog](https://keepachangelog.com/); versioning foll
 
 ## [Unreleased]
 
+## [0.7.0]
+
+### Added
+
+- **Tests — LSG-COV01–COV220** — ten new coverage suites (`coverage-matrix`, `coverage-audit-exhaustive`, `coverage-cli-exhaustive`, `coverage-policy-exhaustive`, `coverage-scan-exhaustive`, `coverage-shared-exhaustive`, `coverage-refactor-parity`, `coverage-schemas`, `coverage-fuzz`, `coverage-stretch`); **LSG-COV151–165** rule residual gaps; **LSG-B10–B15** `./audit` dist hygiene; **LSG-S08–S11** audit export surface; **LSG-ACT31–ACT40** GitHub Action `GITHUB_OUTPUT` contract; **LSG-REL25–REL29** release gates. **1100** tests total.
+- **Fixture** — `test/fixtures/tools/coverage/multiline-manifest.json` for SARIF `startLine` tests (COV212–214).
+- **Docs** — Phase 7 section in `docs/testing-strategy.md`; `test-coverage` diagram.
+- **Smoke** — `scripts/smoke-package.mjs` imports `llm-stream-guard/audit` from npm tarball (ESM + CJS).
+
+### Fixed
+
+- **Manifest line tracking** — `parseManifestFile` / `parseManifestText` now attach `line` metadata to scannable strings for dangerous-pattern findings and SARIF `region.startLine`.
+
+### Unchanged
+
+- Public runtime API, CLI command surface, audit report JSON keys, zero runtime npm dependencies.
+
 ## [0.6.0]
 
 ### Changed

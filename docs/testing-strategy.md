@@ -1,6 +1,6 @@
 # Testing strategy
 
-**Status:** Phase 4 shipped — GitHub Action, static manifest audit, **LSG-STA** / **LSG-ACT** tests.
+**Status:** Phase 7 shipped — exhaustive coverage (LSG-COV), stretch goals, **1100** tests.
 
 ## Test ID prefixes
 
@@ -17,6 +17,8 @@
 | **LSG-CBK** | Integration cookbook docs, examples, behavioral recipes |
 | **LSG-STA** | Static manifest audit, drift, dangerous catalog, SARIF  |
 | **LSG-ACT** | GitHub Action composite, CI docs, dogfood workflow      |
+| **LSG-REF** | 0.6.0 refactor re-export / shared module edges          |
+| **LSG-COV** | 0.7.0 exhaustive coverage matrix + stretch goals        |
 | **LSG-REL** | Release / publish readiness                             |
 
 ## Phase 1 coverage
@@ -131,7 +133,30 @@
 - Docs: matrix workflow + SARIF upload preview (**LSG-ACT05–06**, **LSG-ACT16**, **LSG-ACT18**).
 - Diagram: `ci-action-flow.mmd` + SVG (**LSG-ACT11–12**).
 - PR annotations (**LSG-ACT13**).
-- Extended wrapper edge cases: `fail-on` matrix, GITHUB_OUTPUT, baseline gate, annotate off (**LSG-ACT19–ACT30** in `test/action-edge-cases.test.ts`).
+- Extended wrapper edge cases: `fail-on` matrix, GITHUB_OUTPUT, baseline gate, annotate off (**LSG-ACT19–ACT40** in `test/action-edge-cases.test.ts`).
+
+### Phase 7 coverage (0.7.0)
+
+Test-only release — closes coverage gaps with programmatic matrices, CLI unit tests, schema contracts, seeded fuzz, and CI dogfood parity. **1100** tests total.
+
+| File                                      | IDs        | Focus                            |
+| ----------------------------------------- | ---------- | -------------------------------- |
+| `test/coverage-matrix.test.ts`            | COV01–25   | Cross-module integration         |
+| `test/coverage-audit-exhaustive.test.ts`  | COV26–55   | Audit exhaustive                 |
+| `test/coverage-cli-exhaustive.test.ts`    | COV56–80   | CLI exhaustive                   |
+| `test/coverage-policy-exhaustive.test.ts` | COV81–105  | Policy E001–E010 matrix          |
+| `test/coverage-scan-exhaustive.test.ts`   | COV106–130 | Scan detectFormat matrix         |
+| `test/coverage-shared-exhaustive.test.ts` | COV131–150 | Shared walk/parse/annotation     |
+| `test/edge-cases-rules.test.ts`           | COV151–165 | Residual rule/runtime gaps       |
+| `test/coverage-refactor-parity.test.ts`   | COV166–175 | Re-export shim parity            |
+| `test/coverage-schemas.test.ts`           | COV176–185 | Schema vs runtime validators     |
+| `test/coverage-fuzz.test.ts`              | COV186–195 | Seeded fuzz (seed 42)            |
+| `test/coverage-stretch.test.ts`           | COV196–220 | Env, formatters, SARIF lines, CI |
+| `test/build-artifacts.test.ts`            | B10–15     | `dist/audit/*` hygiene           |
+| `test/exports.test.ts`                    | S08–11     | `./audit` export surface         |
+| `test/release-readiness.test.ts`          | REL25–29   | 0.7.0 release gates              |
+
+Diagram: `docs/img/test-coverage.mmd` + SVG.
 
 ### Test files (Phase 4)
 
@@ -145,32 +170,42 @@
 
 ## Test files
 
-| File                               | IDs              | Focus                           |
-| ---------------------------------- | ---------------- | ------------------------------- |
-| `test/chunk-redaction.test.ts`     | LSG-C\*          | Byte chunk redaction            |
-| `test/redact-secrets.test.ts`      | LSG-R\*          | Event redaction + violations    |
-| `test/tool-policy.test.ts`         | LSG-T\*          | Tool policy                     |
-| `test/idempotency.test.ts`         | LSG-R13          | Double-pass redaction           |
-| `test/cross-mode-parity.test.ts`   | LSG-C13          | Event vs byte parity            |
-| `test/transform-ordering.test.ts`  | LSG-T08          | Transform order contract        |
-| `test/performance-smoke.test.ts`   | LSG-P\*          | 1 MiB smoke + bounded buffer    |
-| `test/scaffold.test.ts`            | LSG-S\*, E01–E02 | Core smoke                      |
-| `test/edge-cases.test.ts`          | LSG-E03–E07      | SSE splits, transform order     |
-| `test/edge-cases-extended.test.ts` | LSG-E08–E17      | Extended edge cases             |
-| `test/edge-cases-rules.test.ts`    | LSG-E18–E38      | Rule edge cases + fuzz          |
-| `test/build-artifacts.test.ts`     | LSG-B\*          | dist hygiene                    |
-| `test/exports.test.ts`             | LSG-S06          | public export surface           |
-| `test/policy-load.test.ts`         | LSG-POL01–31     | Policy validate, merge, compile |
-| `test/policy-cli.test.ts`          | LSG-POL16–32     | CLI validate, scan, diff        |
-| `test/policy-edge-cases.test.ts`   | LSG-POL33–52     | Policy/CLI extended edge cases  |
-| `test/cookbook-recipes.test.ts`    | LSG-CBK01–34     | Cookbook docs + example recipes |
-| `test/cookbook-edge-cases.test.ts` | LSG-CBK35–43     | Cookbook behavioral edge cases  |
-| `test/static-audit.test.ts`        | LSG-STA01–35     | Static manifest audit core      |
-| `test/audit-edge-cases.test.ts`    | LSG-STA36–70     | Static audit extended edges     |
-| `test/github-action.test.ts`       | LSG-ACT01–18     | GitHub Action + CI docs         |
-| `test/action-edge-cases.test.ts`   | LSG-ACT19–30     | Action wrapper edge cases       |
-| `test/refactor-edge-cases.test.ts` | LSG-REF01–25     | 0.6.0 refactor module edges     |
-| `test/release-readiness.test.ts`   | LSG-REL\*        | publish prep gates              |
+| File                                      | IDs              | Focus                           |
+| ----------------------------------------- | ---------------- | ------------------------------- |
+| `test/chunk-redaction.test.ts`            | LSG-C\*          | Byte chunk redaction            |
+| `test/redact-secrets.test.ts`             | LSG-R\*          | Event redaction + violations    |
+| `test/tool-policy.test.ts`                | LSG-T\*          | Tool policy                     |
+| `test/idempotency.test.ts`                | LSG-R13          | Double-pass redaction           |
+| `test/cross-mode-parity.test.ts`          | LSG-C13          | Event vs byte parity            |
+| `test/transform-ordering.test.ts`         | LSG-T08          | Transform order contract        |
+| `test/performance-smoke.test.ts`          | LSG-P\*          | 1 MiB smoke + bounded buffer    |
+| `test/scaffold.test.ts`                   | LSG-S\*, E01–E02 | Core smoke                      |
+| `test/edge-cases.test.ts`                 | LSG-E03–E07      | SSE splits, transform order     |
+| `test/edge-cases-extended.test.ts`        | LSG-E08–E17      | Extended edge cases             |
+| `test/edge-cases-rules.test.ts`           | LSG-E18–E38      | Rule edge cases + fuzz          |
+| `test/build-artifacts.test.ts`            | LSG-B\*          | dist hygiene                    |
+| `test/exports.test.ts`                    | LSG-S06          | public export surface           |
+| `test/policy-load.test.ts`                | LSG-POL01–31     | Policy validate, merge, compile |
+| `test/policy-cli.test.ts`                 | LSG-POL16–32     | CLI validate, scan, diff        |
+| `test/policy-edge-cases.test.ts`          | LSG-POL33–52     | Policy/CLI extended edge cases  |
+| `test/cookbook-recipes.test.ts`           | LSG-CBK01–34     | Cookbook docs + example recipes |
+| `test/cookbook-edge-cases.test.ts`        | LSG-CBK35–43     | Cookbook behavioral edge cases  |
+| `test/static-audit.test.ts`               | LSG-STA01–35     | Static manifest audit core      |
+| `test/audit-edge-cases.test.ts`           | LSG-STA36–70     | Static audit extended edges     |
+| `test/github-action.test.ts`              | LSG-ACT01–18     | GitHub Action + CI docs         |
+| `test/action-edge-cases.test.ts`          | LSG-ACT19–40     | Action wrapper edge cases       |
+| `test/refactor-edge-cases.test.ts`        | LSG-REF01–25     | 0.6.0 refactor module edges     |
+| `test/coverage-matrix.test.ts`            | LSG-COV01–25     | Cross-module integration        |
+| `test/coverage-audit-exhaustive.test.ts`  | LSG-COV26–55     | Audit exhaustive                |
+| `test/coverage-cli-exhaustive.test.ts`    | LSG-COV56–80     | CLI exhaustive                  |
+| `test/coverage-policy-exhaustive.test.ts` | LSG-COV81–105    | Policy exhaustive               |
+| `test/coverage-scan-exhaustive.test.ts`   | LSG-COV106–130   | Scan exhaustive                 |
+| `test/coverage-shared-exhaustive.test.ts` | LSG-COV131–150   | Shared module exhaustive        |
+| `test/coverage-refactor-parity.test.ts`   | LSG-COV166–175   | Re-export parity                |
+| `test/coverage-schemas.test.ts`           | LSG-COV176–185   | Schema contracts                |
+| `test/coverage-fuzz.test.ts`              | LSG-COV186–195   | Seeded fuzz                     |
+| `test/coverage-stretch.test.ts`           | LSG-COV196–220   | Stretch (env, SARIF, CI)        |
+| `test/release-readiness.test.ts`          | LSG-REL\*        | publish prep gates              |
 
 ## Running tests
 

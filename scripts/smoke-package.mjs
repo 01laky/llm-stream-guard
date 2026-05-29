@@ -65,6 +65,38 @@ if (typeof pipeGuard !== "function") throw new Error("pipeGuard CJS import faile
 	execFileSync("node", ["esm.mjs"], { cwd: temp, stdio: "pipe" });
 	execFileSync("node", ["cjs.cjs"], { cwd: temp, stdio: "pipe" });
 
+	writeFileSync(
+		join(temp, "esm-audit.mjs"),
+		`
+import { runStaticScan, walkManifestFiles, computeDrift, validateManifestDocument } from "llm-stream-guard/audit";
+if (typeof runStaticScan !== "function") throw new Error("runStaticScan ESM audit import failed");
+if (typeof walkManifestFiles !== "function") throw new Error("walkManifestFiles ESM audit import failed");
+if (typeof computeDrift !== "function") throw new Error("computeDrift ESM audit import failed");
+if (typeof validateManifestDocument !== "function") throw new Error("validateManifestDocument ESM audit import failed");
+`,
+	);
+
+	writeFileSync(
+		join(temp, "cjs-audit.cjs"),
+		`
+const { runStaticScan, walkManifestFiles, computeDrift, validateManifestDocument } = require("llm-stream-guard/audit");
+if (typeof runStaticScan !== "function") throw new Error("runStaticScan CJS audit import failed");
+if (typeof walkManifestFiles !== "function") throw new Error("walkManifestFiles CJS audit import failed");
+if (typeof computeDrift !== "function") throw new Error("computeDrift CJS audit import failed");
+if (typeof validateManifestDocument !== "function") throw new Error("validateManifestDocument CJS audit import failed");
+`,
+	);
+
+	execFileSync("node", ["esm-audit.mjs"], { cwd: temp, stdio: "pipe" });
+	execFileSync("node", ["cjs-audit.cjs"], { cwd: temp, stdio: "pipe" });
+
+	if (!paths.some((p) => p.includes("package/dist/audit/index.js"))) {
+		throw new Error("npm pack must include dist/audit/index.js");
+	}
+	if (!paths.some((p) => p.includes("package/dist/audit/index.d.ts"))) {
+		throw new Error("npm pack must include dist/audit/index.d.ts");
+	}
+
 	const cliPath = join(temp, "node_modules", "llm-stream-guard", "dist", "cli.js");
 	execFileSync(
 		process.execPath,

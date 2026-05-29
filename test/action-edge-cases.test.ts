@@ -259,3 +259,238 @@ describe("LSG-ACT30: fail-on drift only ignores scan violations", () => {
 		expect(r.status).toBe(0);
 	});
 });
+
+function parseGithubOutput(text: string): Record<string, string> {
+	const out: Record<string, string> = {};
+	for (const line of text.split("\n")) {
+		const idx = line.indexOf("=");
+		if (idx > 0) out[line.slice(0, idx)] = line.slice(idx + 1);
+	}
+	return out;
+}
+
+function githubOutFile(): string {
+	const tmp = mkdtempSync(join(tmpdir(), "lsg-act-out-"));
+	const outFile = join(tmp, "github-out.txt");
+	writeFileSync(outFile, "");
+	return outFile;
+}
+
+describe("LSG-ACT31: clean dogfood sets all GITHUB_OUTPUT keys", () => {
+	it("violations=0 and policy-changed=false on clean run", () => {
+		const outFile = githubOutFile();
+		const r = runAction(
+			[
+				"--policy",
+				"policies/agent-gate.json",
+				"--manifest",
+				"tools/manifest.json",
+				"--scan-paths",
+				"test/fixtures/events/clean-tool.json",
+				"--fail-on",
+				"none",
+			],
+			{ GITHUB_OUTPUT: outFile },
+		);
+		expect(r.status).toBe(0);
+		const outputs = parseGithubOutput(readFileSync(outFile, "utf8"));
+		expect(outputs.violations).toBe("0");
+		expect(outputs["policy-changed"]).toBe("false");
+		expect(outputs["drift-count"]).toBeDefined();
+		expect(outputs["static-findings"]).toBeDefined();
+		rmSync(dirname(outFile), { recursive: true, force: true });
+	});
+});
+
+describe("LSG-ACT32: bad scan fixture violations output", () => {
+	it("sets violations > 0 when scan-paths has bad fixture", () => {
+		const outFile = githubOutFile();
+		runAction(
+			[
+				"--policy",
+				"policies/agent-gate.json",
+				"--scan-paths",
+				"test/fixtures/events/bad-tool.json",
+				"--manifest",
+				"tools/manifest.json",
+				"--fail-on",
+				"none",
+			],
+			{ GITHUB_OUTPUT: outFile },
+		);
+		const outputs = parseGithubOutput(readFileSync(outFile, "utf8"));
+		expect(Number(outputs.violations)).toBeGreaterThan(0);
+		rmSync(dirname(outFile), { recursive: true, force: true });
+	});
+});
+
+describe("LSG-ACT33: drift manifest static outputs", () => {
+	it("sets drift-count or static-findings when drift manifest used", () => {
+		const outFile = githubOutFile();
+		runAction(
+			[
+				"--policy",
+				"policies/agent-gate.json",
+				"--manifest",
+				"test/fixtures/tools/agent-tools-drift.json",
+				"--fail-on",
+				"none",
+			],
+			{ GITHUB_OUTPUT: outFile },
+		);
+		const outputs = parseGithubOutput(readFileSync(outFile, "utf8"));
+		expect(Number(outputs["drift-count"]) > 0 || Number(outputs["static-findings"]) > 0).toBe(true);
+		rmSync(dirname(outFile), { recursive: true, force: true });
+	});
+});
+
+describe("LSG-ACT34: baseline mismatch policy-changed", () => {
+	it("sets policy-changed=true when baseline differs", () => {
+		const tmp = mkdtempSync(join(tmpdir(), "lsg-act34-"));
+		const changed = join(tmp, "changed.json");
+		writeFileSync(
+			changed,
+			readFileSync(join(rootDir, "policies/agent-gate.json"), "utf8").replace(
+				'"grep"',
+				'"grep_mutated"',
+			),
+		);
+		const outFile = join(tmp, "github-out.txt");
+		writeFileSync(outFile, "");
+		const r = runAction(
+			[
+				"--policy",
+				changed,
+				"--baseline-policy",
+				"policies/agent-gate.baseline.json",
+				"--manifest",
+				"tools/manifest.json",
+				"--fail-on",
+				"any",
+			],
+			{ GITHUB_OUTPUT: outFile },
+		);
+		const outputs = parseGithubOutput(readFileSync(outFile, "utf8"));
+		expect(outputs["policy-changed"]).toBe("true");
+		expect(r.status).toBe(1);
+		rmSync(tmp, { recursive: true, force: true });
+	});
+});
+
+describe("LSG-ACT35: sarif-path output contract", () => {
+	it("sets sarif-path when sarif-out provided", () => {
+		const tmp = mkdtempSync(join(tmpdir(), "lsg-act-sarif-"));
+		const sarif = join(tmp, "report.sarif");
+		const outFile = join(tmp, "github-out.txt");
+		writeFileSync(outFile, "");
+		runAction(
+			[
+				"--policy",
+				"policies/agent-gate.json",
+				"--manifest",
+				"tools/manifest.json",
+				"--sarif-out",
+				sarif,
+				"--fail-on",
+				"none",
+			],
+			{ GITHUB_OUTPUT: outFile },
+		);
+		expect(parseGithubOutput(readFileSync(outFile, "utf8"))["sarif-path"]).toContain(
+			"report.sarif",
+		);
+		expect(existsSync(sarif)).toBe(true);
+		rmSync(tmp, { recursive: true, force: true });
+	});
+});
+
+describe("LSG-ACT36: drift-count from static JSON", () => {
+	it("drift-count matches parsed static report on drift manifest", () => {
+		const outFile = githubOutFile();
+		runAction(
+			[
+				"--policy",
+				"policies/agent-gate.json",
+				"--manifest",
+				"test/fixtures/tools/agent-tools-drift.json",
+				"--fail-on",
+				"none",
+			],
+			{ GITHUB_OUTPUT: outFile },
+		);
+		const outputs = parseGithubOutput(readFileSync(outFile, "utf8"));
+		expect(Number(outputs["drift-count"])).toBeGreaterThan(0);
+		rmSync(dirname(outFile), { recursive: true, force: true });
+	});
+});
+
+describe("LSG-ACT37: fail-on violations ignores drift", () => {
+	it("exit 0 with clean scan despite drift manifest", () => {
+		const outFile = githubOutFile();
+		const r = runAction(
+			[
+				"--policy",
+				"policies/agent-gate.json",
+				"--manifest",
+				"test/fixtures/tools/agent-tools-drift.json",
+				"--scan-paths",
+				"test/fixtures/events/clean-tool.json",
+				"--fail-on",
+				"violations",
+			],
+			{ GITHUB_OUTPUT: outFile },
+		);
+		expect(r.status).toBe(0);
+		expect(parseGithubOutput(readFileSync(outFile, "utf8")).violations).toBe("0");
+		rmSync(dirname(outFile), { recursive: true, force: true });
+	});
+});
+
+describe("LSG-ACT38: fail-on drift still sets output keys", () => {
+	it("GITHUB_OUTPUT keys present when fail-on is drift", () => {
+		const outFile = githubOutFile();
+		runAction(
+			[
+				"--policy",
+				"policies/agent-gate.json",
+				"--scan-paths",
+				"test/fixtures/events/bad-tool.json",
+				"--manifest",
+				"tools/manifest.json",
+				"--fail-on",
+				"drift",
+			],
+			{ GITHUB_OUTPUT: outFile },
+		);
+		const outputs = parseGithubOutput(readFileSync(outFile, "utf8"));
+		expect(outputs.violations).toBeDefined();
+		expect(outputs["drift-count"]).toBeDefined();
+		rmSync(dirname(outFile), { recursive: true, force: true });
+	});
+});
+
+describe("LSG-ACT39: missing policy inputs graceful failure", () => {
+	it("does not throw when policy and policy-dir missing", () => {
+		const r = runAction(["--manifest", "tools/manifest.json", "--fail-on", "none"], {
+			GUARD_POLICY_PATH: "",
+			INPUT_POLICY: "",
+			INPUT_POLICY_DIR: "",
+		});
+		expect([0, 1, 2, 3]).toContain(r.status ?? -1);
+		expect(r.stderr + r.stdout).not.toMatch(/uncaught/i);
+	});
+});
+
+describe("LSG-ACT40: invalid policy static internal error", () => {
+	it("exits 3 when policy path is invalid for static scan", () => {
+		const r = runAction([
+			"--policy",
+			"/nonexistent/policy-does-not-exist.json",
+			"--manifest",
+			"tools/manifest.json",
+			"--fail-on",
+			"none",
+		]);
+		expect(r.status).toBe(3);
+	});
+});

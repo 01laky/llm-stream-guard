@@ -7,6 +7,7 @@ import { createByteGuard } from "../src/create-byte-guard.js";
 import {
 	allowTools,
 	blockToolArgs,
+	compilePolicy,
 	denyTools,
 	guardEvents,
 	maxToolArgsBytes,
@@ -687,5 +688,218 @@ describe("LSG-E38: passthrough byte unchanged without flags", () => {
 		const chunks = splitAtIndices(payload, randomSplitIndices(payload.length, rng, 12));
 		const out = await collectBytes(readableFromChunks(chunks).pipeThrough(createByteGuard()));
 		expect(bytesEqual(out, payload)).toBe(true);
+	});
+});
+
+describe("LSG-COV151: redact-secrets near-miss prefix only", () => {
+	it("sk- prefix without full secret passes through", async () => {
+		const out = await collect(
+			guardEvents(
+				eventsFrom([{ type: "text", phase: "done", text: "prefix sk- suffix" }]),
+				redactSecrets(),
+			),
+		);
+		expect((out[0] as { text?: string }).text).toContain("sk-");
+	});
+});
+
+describe("LSG-COV152: redact-secrets custom placeholder", () => {
+	it("uses custom placeholder when configured", async () => {
+		const out = await collect(
+			guardEvents(
+				eventsFrom([{ type: "text", phase: "done", text: "ghp_1234567890abcdefghij1234567890ab" }]),
+				redactSecrets({ placeholder: "***" }),
+			),
+		);
+		expect((out[0] as { text?: string }).text).toContain("***");
+	});
+});
+
+describe("LSG-COV153: finish event never redacted", () => {
+	it("finish payload unchanged by redactSecrets", async () => {
+		const out = await collect(
+			guardEvents(
+				eventsFrom([
+					{ type: "finish", reason: "stop", usage: { input_tokens: 1, output_tokens: 2 } },
+				]),
+				redactSecrets(),
+			),
+		);
+		expect(out[0]).toEqual({
+			type: "finish",
+			reason: "stop",
+			usage: { input_tokens: 1, output_tokens: 2 },
+		});
+	});
+});
+
+describe("LSG-COV154: error event never redacted", () => {
+	it("error payload unchanged by redactSecrets", async () => {
+		const out = await collect(
+			guardEvents(
+				eventsFrom([{ type: "error", message: "sk-test-leak-should-stay" }]),
+				redactSecrets(),
+			),
+		);
+		expect((out[0] as { message?: string }).message).toContain("sk-test-leak-should-stay");
+	});
+});
+
+describe("LSG-COV155: redactPII email only", () => {
+	it("redacts email when email flag true", async () => {
+		const out = await collect(
+			guardEvents(
+				eventsFrom([{ type: "text", phase: "done", text: "contact user@example.com now" }]),
+				redactPII({ email: true }),
+			),
+		);
+		expect((out[0] as { text?: string }).text).not.toContain("user@example.com");
+	});
+});
+
+describe("LSG-COV156: maxToolArgsBytes boundary", () => {
+	it("passes when exactly at byte limit", async () => {
+		const body = "x".repeat(100);
+		const out = await collect(
+			guardEvents(
+				eventsFrom([
+					{ type: "tool_call", phase: "delta", id: "1", name: "t", argsText: body },
+					{ type: "tool_call", phase: "done", id: "1", name: "t", args: {} },
+				]),
+				{ mode: "block" },
+				maxToolArgsBytes(100),
+			),
+		);
+		expect(out.filter((e) => e.type === "tool_call")).toHaveLength(2);
+	});
+});
+
+describe("LSG-COV157: maxToolArgsBytes over boundary", () => {
+	it("blocks when args exceed max", async () => {
+		const body = "x".repeat(101);
+		const out = await collect(
+			guardEvents(
+				eventsFrom([
+					{ type: "tool_call", phase: "delta", id: "1", name: "t", argsText: body },
+					{ type: "tool_call", phase: "done", id: "1", name: "t", args: {} },
+				]),
+				{ mode: "block" },
+				maxToolArgsBytes(100),
+			),
+		);
+		expect(out.some((e) => e.type === "finish" && e.reason === "policy_violation")).toBe(true);
+	});
+});
+
+describe("LSG-COV158: sanitizeErrors masks stack", () => {
+	it("replaces error message with generic text", async () => {
+		const out = await collect(
+			guardEvents(
+				eventsFrom([{ type: "error", message: "ENOENT: secret path /etc/shadow" }]),
+				sanitizeErrors(),
+			),
+		);
+		expect((out[0] as { message?: string }).message).not.toContain("/etc/shadow");
+	});
+});
+
+describe("LSG-COV159: blockToolArgs function matcher", () => {
+	it("blocks when function matcher returns true", async () => {
+		const out = await collect(
+			guardEvents(
+				eventsFrom([
+					{ type: "tool_call", phase: "done", name: "run", argsText: '{"cmd":"rm -rf /"}' },
+				]),
+				blockToolArgs((args) => JSON.stringify(args).includes("rm -rf")),
+			),
+		);
+		expect(out.some((e) => (e as { reason?: string }).reason === "policy_violation")).toBe(true);
+	});
+});
+
+describe("LSG-COV160: blockToolArgs string contains via policy compile", () => {
+	it("matches contains substring in argsText JSON", async () => {
+		const loaded = compilePolicy({
+			version: "1",
+			rules: [{ blockToolArgs: { contains: "DROP TABLE" } }],
+		});
+		const out = await collect(
+			guardEvents(
+				eventsFrom([
+					{
+						type: "tool_call",
+						phase: "done",
+						name: "sql",
+						argsText: '{"query":"DROP TABLE users"}',
+					},
+				]),
+				{ mode: "block", transforms: loaded.transforms },
+			),
+		);
+		expect(out.some((e) => (e as { reason?: string }).reason === "policy_violation")).toBe(true);
+	});
+});
+
+describe("LSG-COV161: denyTools warn mode emits violation", () => {
+	it("warn mode still emits policy_violation for denied tool", async () => {
+		const out = await collect(
+			guardEvents(eventsFrom([{ type: "tool_call", phase: "done", name: "bash", id: "1" }]), {
+				mode: "warn",
+				transforms: [denyTools(["bash"])],
+			}),
+		);
+		expect(out.some((e) => (e as { reason?: string }).reason === "policy_violation")).toBe(true);
+	});
+});
+
+describe("LSG-COV162: allowTools audit mode violation", () => {
+	it("audit mode records violation without dropping event", async () => {
+		const violations: Violation[] = [];
+		const out = await collect(
+			guardEvents(eventsFrom([{ type: "tool_call", phase: "done", name: "unknown", id: "1" }]), {
+				mode: "audit",
+				transforms: [allowTools(["search"])],
+				onViolation: (v) => violations.push(v),
+			}),
+		);
+		expect(out.some((e) => e.type === "tool_call")).toBe(true);
+		expect(violations.some((v) => v.rule === "allow_tools")).toBe(true);
+	});
+});
+
+describe("LSG-COV163: byte redactSecrets audit mode", () => {
+	it("still redacts bytes in audit mode when flag enabled", async () => {
+		const payload = utf8("token sk-test-123456789012345678901234567890");
+		const out = await pipeThroughByteGuard(payload, [payload], {
+			mode: "audit",
+			redactSecrets: true,
+		});
+		expectNoLeak(out, "sk-test-123456789012345678901234567890");
+	});
+});
+
+describe("LSG-COV164: overlapping secret patterns single redaction", () => {
+	it("redacts overlapping sk- patterns once per occurrence region", async () => {
+		const out = await collect(
+			guardEvents(
+				eventsFrom([
+					{ type: "text", phase: "done", text: "sk-test-123456789012345678901234567890" },
+				]),
+				redactSecrets(),
+			),
+		);
+		expect((out[0] as { text?: string }).text).not.toContain(
+			"sk-test-123456789012345678901234567890",
+		);
+	});
+});
+
+describe("LSG-COV165: createGuardContext isolation", () => {
+	it("separate contexts do not share violation state", () => {
+		const ctxA = createGuardContext();
+		const ctxB = createGuardContext();
+		ctxA.violations.push({ rule: "redact_secrets", message: "hit", mode: "warn" });
+		expect(ctxA.violations.length).toBe(1);
+		expect(ctxB.violations.length).toBe(0);
 	});
 });
