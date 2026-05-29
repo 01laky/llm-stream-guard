@@ -179,12 +179,18 @@ describe("LSG-REL: release readiness", () => {
 		expect(changelog).toMatch(/stretch|fuzz|schema/i);
 	});
 
-	it("LSG-REL26: README test badge matches package version 0.7.0", () => {
+	it("LSG-REL26: README test badge matches package version", () => {
 		const readme = read("README.md");
 		const pkg = JSON.parse(read("package.json")) as { version: string };
-		expect(pkg.version).toBe("0.7.0");
-		expect(readme).toContain("0.7.0");
+		expect(readme).toContain(pkg.version);
 		expect(readme).toMatch(/tests-\d+_passing/);
+	});
+
+	it("LSG-REL30: bin path is npm-publish safe (no ./ prefix)", () => {
+		const pkg = JSON.parse(read("package.json")) as { bin?: Record<string, string> };
+		const cliBin = pkg.bin?.["llm-stream-guard"];
+		expect(cliBin).toBe("dist/cli.js");
+		expect(cliBin?.startsWith("./")).toBe(false);
 	});
 
 	it("LSG-REL27: all coverage test files exist", () => {

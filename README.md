@@ -1,17 +1,17 @@
 # llm-stream-guard
 
-![core](https://img.shields.io/badge/core-0.7.0-brightgreen)
+![core](https://img.shields.io/badge/core-0.8.1-brightgreen)
 ![node](https://img.shields.io/badge/node-%3E%3D18-339933)
 ![runtime deps](https://img.shields.io/badge/runtime_deps-0-brightgreen)
 ![tests](https://img.shields.io/badge/tests-1100_passing-brightgreen)
 [![ci](https://github.com/01laky/llm-stream-guard/actions/workflows/ci.yml/badge.svg)](https://github.com/01laky/llm-stream-guard/actions/workflows/ci.yml)
-![status](https://img.shields.io/badge/status-stable_0.7.0-brightgreen)
+![status](https://img.shields.io/badge/status-stable_0.8.1-brightgreen)
 
 **Security filter for LLM streams** — redact secrets and PII, enforce tool-call policy, sanitize errors. Works on raw bytes (`TransformStream`) and parsed event streams. **Declarative JSON/YAML policies** and a **CLI** for offline scans.
 
 > A standalone, zero-dependency TypeScript security filter for LLM proxy and agent pipelines. Byte mode: chunk-safe secret redaction on raw SSE. Event mode: tool allow/deny, arg blocking, PII & error sanitization on parsed streams. Policy files + `llm-stream-guard scan` for CI prep.
 
-**Status:** Stable `0.7.0` — exhaustive edge-case test coverage (LSG-COV01–220). **Docs expanded for 0.8.0** — start at [Getting started](./docs/getting-started.md) if you are new to LLM streams. Review [CHANGELOG.md](./CHANGELOG.md) before upgrades.
+**Status:** Stable `0.8.1` — documentation overhaul (0.8.0) plus npm publish fix. Start at [Getting started](./docs/getting-started.md) if you are new to LLM streams. Review [CHANGELOG.md](./CHANGELOG.md) before upgrades.
 
 > **New to LLM streaming?** Read [Getting started](./docs/getting-started.md) (~15 min) → [Concepts & glossary](./docs/concepts-and-glossary.md) → [Documentation map](./docs/docs-map.md) for your role.
 

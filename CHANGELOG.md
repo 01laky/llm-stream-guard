@@ -5,6 +5,13 @@ Format based on [Keep a Changelog](https://keepachangelog.com/); versioning foll
 
 ## [Unreleased]
 
+## [0.8.1]
+
+### Fixed
+
+- **`package.json` bin path** — `bin.llm-stream-guard` uses `dist/cli.js` (not `./dist/cli.js`) so `npm publish` no longer strips the CLI entry; `llm-stream-guard` links correctly after `npm install`.
+- **Version sync** — package metadata, README badges, and `src/version.ts` aligned with the 0.8.x documentation release track (0.8.0 GitHub release; first npm publish at 0.8.1).
+
 ## [0.8.0]
 
 ### Added

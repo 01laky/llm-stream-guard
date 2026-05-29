@@ -1,6 +1,6 @@
 {
 	"name": "llm-stream-guard",
-	"version": "0.7.0",
+	"version": "0.8.1",
 	"description": "Zero-dependency TypeScript security filter for LLM streams — redact secrets, enforce tool policy, byte and event modes.",
 	"license": "MIT",
 	"author": "Ladislav Kostolny <01laky@gmail.com>",
@@ -16,7 +16,7 @@
 		"README.md"
 	],
 	"bin": {
-		"llm-stream-guard": "./dist/cli.js"
+		"llm-stream-guard": "dist/cli.js"
 	},
 	"main": "./dist/index.cjs",
 	"module": "./dist/index.js",
