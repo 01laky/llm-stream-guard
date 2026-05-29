@@ -1,0 +1,21 @@
+mindmap
+  root((Policy rules))
+    redactSecrets
+      event text/reasoning
+      byte mode flag
+    redactPII
+      email opt-in
+      phone opt-in
+    allowTools
+      names list
+      empty denies all
+    denyTools
+      blocklist names
+    blockToolArgs
+      pattern RegExp
+      contains string
+    maxToolArgsBytes
+      max integer
+    sanitizeErrors
+      event errors
+      byte mode flag

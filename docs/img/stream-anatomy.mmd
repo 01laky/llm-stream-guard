@@ -1,0 +1,25 @@
+flowchart TB
+  subgraph WIRE["Provider SSE wire (simplified)"]
+    direction TB
+    L1["HTTP response · Content-Type: text/event-stream"]
+    L2[": ping comment · ignored by many clients"]
+    L3["data: {&quot;type&quot;:&quot;text&quot;,&quot;text&quot;:&quot;Hel&quot;}"]
+    L4["data: {&quot;type&quot;:&quot;text&quot;,&quot;text&quot;:&quot;lo&quot;}"]
+    L5["data: {&quot;type&quot;:&quot;tool_call&quot;,&quot;phase&quot;:&quot;start&quot;,...}"]
+    L6["data: {&quot;type&quot;:&quot;tool_call&quot;,&quot;phase&quot;:&quot;done&quot;,...}"]
+    L1 --> L2 --> L3 --> L4 --> L5 --> L6
+  end
+
+  subgraph MODES["Where llm-stream-guard applies"]
+    direction LR
+    BYTE["Byte mode<br/>createByteGuard()<br/>sees raw lines · redacts secrets"]
+    PARSE["Your parser · assemble / SDK"]
+    EVENT["Event mode<br/>guardEvents()<br/>tool policy on done"]
+    WIRE --> BYTE
+    WIRE --> PARSE --> EVENT
+  end
+
+  classDef wire fill:#0f172a,stroke:#38bdf8,color:#e0f2fe
+  classDef mode fill:#042f2e,stroke:#2dd4bf,color:#ccfbf1
+  class L1,L2,L3,L4,L5,L6 wire
+  class BYTE,PARSE,EVENT mode

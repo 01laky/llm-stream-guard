@@ -1,6 +1,7 @@
 # Static scanning
 
-**Status:** **0.5.0** — offline manifest audit and policy drift detection (not live stream middleware).
+**Status:** **0.7.0** — offline manifest audit and policy drift detection (not live stream middleware).  
+**CLI details:** [CLI reference § audit static](./cli-reference.md#audit-static) · **Diagram:** [static-audit-flow.svg](./img/static-audit-flow.svg)
 
 Catch unsafe tool definitions and allowlist drift **before deploy** — complement runtime `guardEvents()` / `scan` on captured streams.
 

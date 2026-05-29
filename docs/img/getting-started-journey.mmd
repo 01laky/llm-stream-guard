@@ -1,0 +1,18 @@
+flowchart LR
+  START([Clone repo or npm install]) --> GS[Read getting-started.md]
+  GS --> CHOOSE{Pick path}
+  CHOOSE -->|Proxy / SSE| BYTE[Byte mode example]
+  CHOOSE -->|Agent / tools| EVENT[Event mode example]
+  CHOOSE -->|CI only| CLI[CLI scan + audit static]
+  BYTE --> COOK1[Cookbook §2 proxies]
+  EVENT --> COOK2[Cookbook §3 agent gate]
+  CLI --> COOK3[Cookbook §11 CI]
+  COOK1 --> POL[Policy reference]
+  COOK2 --> POL
+  COOK3 --> POL
+  POL --> PROD[Production: mode + onViolation + profiles]
+
+  classDef step fill:#1e1b4b,stroke:#818cf8,color:#ede9fe
+  classDef action fill:#042f2e,stroke:#2dd4bf,color:#ccfbf1
+  class START,CHOOSE step
+  class GS,BYTE,EVENT,CLI,COOK1,COOK2,COOK3,POL,PROD action

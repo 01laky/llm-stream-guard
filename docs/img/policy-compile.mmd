@@ -1,12 +1,21 @@
 flowchart LR
-  file["Policy file\n.json / .yaml"]
+  file["Policy file<br/>.json / .yaml"]
   parse["parsePolicyFile"]
-  merge["resolve extends\nprofiles merge"]
-  validate["validatePolicy\nPOLICY_E* codes"]
-  compile["compilePolicy\n→ transforms + byteOptions"]
-  runtime["guardEvents /\ncreateByteGuard"]
-  cli["CLI scan / validate"]
+  merge["resolve extends<br/>profiles merge"]
+  validate{"validatePolicy<br/>POLICY_E001–E010"}
+  fail["Print errors · exit 1"]
+  compile["compilePolicy<br/>transforms + byteOptions"]
+  runtime["guardEvents() /<br/>createByteGuard()"]
+  cli["CLI scan · audit static"]
 
-  file --> parse --> merge --> validate --> compile
+  file --> parse --> merge --> validate
+  validate -->|invalid| fail
+  validate -->|ok| compile
   compile --> runtime
   compile --> cli
+
+  classDef ok fill:#042f2e,stroke:#2dd4bf,color:#ccfbf1
+  classDef err fill:#431407,stroke:#fb923c,color:#ffedd5
+  class file,parse,merge,compile,runtime,cli ok
+  class validate ok
+  class fail err

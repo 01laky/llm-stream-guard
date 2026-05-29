@@ -1,6 +1,7 @@
 # Integration cookbook
 
-**Status:** **0.5.0** — full adoption guide, typechecked examples under [`examples/`](../examples/README.md).
+**Status:** **0.7.0** — adoption guide with typechecked examples under [`examples/`](../examples/README.md).  
+**Prerequisite:** Read [Getting started](./getting-started.md) if you are new to byte vs event mode.
 
 Cookbook examples are **app-level only** — the guard package stays zero-dep and does not import assemble or provider SDKs.
 
@@ -28,6 +29,7 @@ Cookbook examples are **app-level only** — the guard package stays zero-dep an
 
 - Node **18+** (Web Streams, `Readable.fromWeb`)
 - `pnpm add llm-stream-guard` (or git install before npm publish)
+- Read [Getting started](./getting-started.md) — byte vs event, first examples
 - Choose **byte mode** (opaque SSE) vs **event mode** (parsed `GuardEvent`s) — [Mode decision guide](../README.md#mode-decision-guide)
 
 **Policy vs manual transforms:** Same rule factories; policy files add `extends`, CLI scan, and team `policyVersion`.

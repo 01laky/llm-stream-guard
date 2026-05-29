@@ -19,6 +19,7 @@
 | **LSG-ACT** | GitHub Action composite, CI docs, dogfood workflow      |
 | **LSG-REF** | 0.6.0 refactor re-export / shared module edges          |
 | **LSG-COV** | 0.7.0 exhaustive coverage matrix + stretch goals        |
+| **LSG-DOC** | 0.8.0 documentation completeness + link integrity       |
 | **LSG-REL** | Release / publish readiness                             |
 
 ## Phase 1 coverage
@@ -157,6 +158,20 @@ Test-only release — closes coverage gaps with programmatic matrices, CLI unit 
 | `test/release-readiness.test.ts`          | REL25–29   | 0.7.0 release gates              |
 
 Diagram: `docs/img/test-coverage.mmd` + SVG.
+
+### Phase 8 documentation (0.8.0)
+
+Beginner-friendly docs — **`LSG-DOC01–DOC20`** in `test/docs-readiness.test.ts` (planned), **`LSG-REL30–REL35`** release gates.
+
+| Doc                             | Purpose                                 |
+| ------------------------------- | --------------------------------------- |
+| `docs/getting-started.md`       | First 15 minutes: byte + event examples |
+| `docs/concepts-and-glossary.md` | SSE, GuardEvent, modes                  |
+| `docs/policy-reference.md`      | Rules, E001–E011, profiles              |
+| `docs/cli-reference.md`         | Commands, flags, exit codes             |
+| `docs/docs-map.md`              | Persona learning paths                  |
+
+New diagrams: `stream-anatomy`, `getting-started-journey`, `tool-call-lifecycle`, `policy-rules-map`, `static-audit-flow`. Prompt: `prompts/phase-8-documentation-prompt.md`.
 
 ### Test files (Phase 4)
 

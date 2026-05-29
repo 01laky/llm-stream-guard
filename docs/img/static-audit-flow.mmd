@@ -1,0 +1,45 @@
+flowchart TB
+  subgraph INPUTS["Inputs"]
+    POL[Policy file or policy-dir]
+    ROOT[Repo root walk]
+    MAN[Manifest JSON/YAML/MCP/OpenAPI]
+  end
+
+  subgraph SCAN["audit static"]
+    LOAD[loadPoliciesForScan]
+    DISC[resolveManifestFiles]
+    EXT[parseManifestFile · extract strings]
+    DRIFT[computeDrift]
+    DANG[scanDangerousStrings D001-D006]
+    BLOCK[scanBlockToolArgsStatic]
+  end
+
+  subgraph OUT["Outputs"]
+    JSON[JSON report --json]
+    HUMAN[Human summary]
+    SARIF[SARIF preview --sarif-out]
+    GH[GitHub annotations --annotate]
+  end
+
+  POL --> LOAD
+  ROOT --> DISC
+  MAN --> EXT
+  DISC --> EXT
+  EXT --> DANG
+  EXT --> BLOCK
+  LOAD --> DRIFT
+  EXT --> DRIFT
+
+  DRIFT --> JSON
+  DANG --> JSON
+  BLOCK --> JSON
+  JSON --> HUMAN
+  JSON --> SARIF
+  JSON --> GH
+
+  classDef in fill:#0f172a,stroke:#38bdf8,color:#e0f2fe
+  classDef proc fill:#042f2e,stroke:#2dd4bf,color:#ccfbf1
+  classDef out fill:#172554,stroke:#60a5fa,color:#dbeafe
+  class POL,ROOT,MAN in
+  class LOAD,DISC,EXT,DRIFT,DANG,BLOCK proc
+  class JSON,HUMAN,SARIF,GH out

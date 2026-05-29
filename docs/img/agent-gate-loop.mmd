@@ -1,9 +1,21 @@
 flowchart LR
-  A[Parse provider stream] --> B[guardEvents + transforms]
-  B --> C{tool_call.done?}
-  C -->|no| D[Forward text / reasoning]
-  C -->|yes| E{Policy OK?}
-  E -->|block/warn violation| F[error + finish policy_violation]
-  E -->|audit violation| G[onViolation log + pass event]
-  E -->|clean| H[executeTool]
-  G --> I[App decides execute]
+  A[Parse / map to GuardEvent] --> B[guardEvents + rule stack]
+  B --> C{text / reasoning}
+  C --> D[Forward to UI]
+  B --> E{tool_call phase}
+  E -->|start| F[allowTools / denyTools]
+  E -->|delta| G[maxToolArgsBytes]
+  E -->|done| H[blockToolArgs]
+  F --> I{violation?}
+  G --> I
+  H --> I
+  I -->|block/warn| J[policy_violation finish]
+  I -->|audit| K[onViolation + pass event]
+  I -->|clean| L[executeTool]
+  K --> M[App may still execute]
+
+  classDef flow fill:#042f2e,stroke:#2dd4bf,color:#ccfbf1
+  classDef decision fill:#1e1b4b,stroke:#818cf8,color:#ede9fe
+  class A,B,D,L,M flow
+  class C,E,I decision
+  class F,G,H,J,K flow

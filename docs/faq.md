@@ -1,6 +1,25 @@
 # FAQ
 
-**Status:** **Stable 0.5.0** — GitHub Action, static manifest audit, integration cookbook + runnable examples. Publish via [`docs/publishing.md`](./publishing.md).
+**Status:** **Stable 0.7.0** — 1100 tests, expanded docs (getting started, policy/CLI reference). Publish via [`docs/publishing.md`](./publishing.md).
+
+## Beginners
+
+### I am new to LLM streaming — where do I start?
+
+1. [Getting started](./getting-started.md) — 15-minute path with copy-paste examples.
+2. [Concepts & glossary](./concepts-and-glossary.md) — SSE, GuardEvent, block/warn/audit.
+3. [Documentation map](./docs-map.md) — choose a track (proxy, agent, CI).
+
+### Byte mode or event mode?
+
+- **Byte** — you forward raw `response.body` (SSE) without parsing tool JSON.
+- **Event** — you parse streams and execute tools; use `allowTools` / `blockToolArgs`.
+
+See [modes diagram](./img/modes.svg) and [Getting started § Which mode](./getting-started.md#which-mode-do-i-need).
+
+### Do I need this if I only use ChatGPT API once per request (non-streaming)?
+
+Usually **no** — guard targets **streams** (proxies, agents, SSE). For one-shot JSON responses, simpler output filtering may suffice. You can still use **CLI scan** on saved logs.
 
 ## General
 
@@ -22,7 +41,15 @@ pnpm add github:01laky/llm-stream-guard
 
 ### Is there a GitHub Action?
 
-Yes — **`01laky/llm-stream-guard/action@v0.5.0`** validates policy, scans event fixtures, and runs static manifest audit with optional SARIF preview and PR annotations. See [`docs/ci-github-action.md`](./ci-github-action.md). Manual CLI steps remain in [cookbook §11](./integration-cookbook.md#11-ci--github-action).
+Yes — **`01laky/llm-stream-guard/action@v0.7.0`** (or `@main`) validates policy, scans event fixtures, and runs static manifest audit with optional SARIF preview and PR annotations. See [`docs/ci-github-action.md`](./ci-github-action.md).
+
+### What works in 0.7.0?
+
+Everything in **0.6.0** plus exhaustive test coverage (**LSG-COV01–220**, 1100 tests), manifest **line numbers in SARIF**, `./audit` tarball smoke, expanded beginner docs. No API breaking changes.
+
+### What works in 0.6.0?
+
+Source refactor (`shared/`, `scan/`, `./audit` export), **LSG-REF01–REF25**. Tests: **782**.
 
 ### What works in 0.5.0?
 

@@ -1,17 +1,22 @@
 mindmap
   root((GuardEvent))
     text
-      delta
-      done
+      phase delta
+      phase done
+      redactSecrets applies
     tool_call
-      name policy
-      args JSON
-      delta / done
+      phase start · name policy
+      phase delta · argsText bytes
+      phase done · args JSON
+      allowTools denyTools
+      blockToolArgs maxToolArgsBytes
     reasoning
-      delta
-      done
+      phase delta / done
+      redactSecrets applies
     error
-      message
-      code optional
+      message code optional
+      sanitizeErrors applies
+      never redactSecrets
     finish
       reason optional
+      never redactSecrets

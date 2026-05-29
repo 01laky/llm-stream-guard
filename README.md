@@ -11,12 +11,15 @@
 
 > A standalone, zero-dependency TypeScript security filter for LLM proxy and agent pipelines. Byte mode: chunk-safe secret redaction on raw SSE. Event mode: tool allow/deny, arg blocking, PII & error sanitization on parsed streams. Policy files + `llm-stream-guard scan` for CI prep.
 
-**Status:** Stable `0.7.0` — exhaustive edge-case test coverage (LSG-COV01–220), stretch goals (schema contracts, fuzz, SARIF line tracking, `./audit` tarball smoke). No API or CLI changes. Review [CHANGELOG.md](./CHANGELOG.md) before upgrades.
+**Status:** Stable `0.7.0` — exhaustive edge-case test coverage (LSG-COV01–220). **Docs expanded for 0.8.0** — start at [Getting started](./docs/getting-started.md) if you are new to LLM streams. Review [CHANGELOG.md](./CHANGELOG.md) before upgrades.
+
+> **New to LLM streaming?** Read [Getting started](./docs/getting-started.md) (~15 min) → [Concepts & glossary](./docs/concepts-and-glossary.md) → [Documentation map](./docs/docs-map.md) for your role.
 
 ---
 
 ## Contents
 
+- [New to LLM streams?](#new-to-llm-streams)
 - [Why stream guard?](#why-stream-guard)
 - [Two modes](#two-modes)
 - [Architecture](#architecture)
@@ -31,6 +34,20 @@
 - [How this compares](#how-this-compares)
 - [Non-goals](#non-goals)
 - [Development](#development)
+
+---
+
+## New to LLM streams?
+
+If you have never worked with **streaming LLM APIs** (SSE, deltas, tool calls), start here — no prior guard knowledge required:
+
+| Step | Doc                                                                                           | Diagram                                           |
+| ---- | --------------------------------------------------------------------------------------------- | ------------------------------------------------- |
+| 1    | [**Getting started**](./docs/getting-started.md) — install, first byte guard, first tool gate | [Journey](./docs/img/getting-started-journey.svg) |
+| 2    | [**Concepts & glossary**](./docs/concepts-and-glossary.md) — SSE, GuardEvent, modes           | [Stream anatomy](./docs/img/stream-anatomy.svg)   |
+| 3    | [**Documentation map**](./docs/docs-map.md) — pick a path by role (proxy dev, agent dev, CI)  | —                                                 |
+
+Full reference: [Policy](./docs/policy-reference.md) · [CLI](./docs/cli-reference.md) · [Cookbook](./docs/integration-cookbook.md)
 
 ---
 
@@ -270,7 +287,17 @@ Use the [modes diagram](#two-modes) above, or:
 
 ## Documentation
 
-### CI & static audit (0.5.0)
+### Start here (0.8.0)
+
+| Guide                                                      | Audience                                                   |
+| ---------------------------------------------------------- | ---------------------------------------------------------- |
+| [**Getting started**](./docs/getting-started.md)           | First-time users — install, byte vs event, common mistakes |
+| [**Concepts & glossary**](./docs/concepts-and-glossary.md) | LLM streaming vocabulary + guard terms                     |
+| [**Documentation map**](./docs/docs-map.md)                | Learning paths by persona                                  |
+| [**Policy reference**](./docs/policy-reference.md)         | All rule types, error codes, profiles                      |
+| [**CLI reference**](./docs/cli-reference.md)               | Every command, flags, exit codes                           |
+
+### CI & static audit
 
 Policy drift detection, static tool manifest scanning, and a composite GitHub Action for PR gates:
 

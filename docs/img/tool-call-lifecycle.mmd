@@ -1,0 +1,29 @@
+sequenceDiagram
+  participant M as Model / provider
+  participant P as Your parser
+  participant G as guardEvents()
+  participant X as executeTool()
+
+  M->>P: tool_call start (name known)
+  P->>G: GuardEvent tool_call start
+  Note over G: allowTools / denyTools may block
+
+  M->>P: tool_call delta (argsText chunks)
+  P->>G: GuardEvent tool_call delta
+  Note over G: maxToolArgsBytes counts bytes
+
+  M->>P: tool_call done (full args JSON)
+  P->>G: GuardEvent tool_call done
+  Note over G: blockToolArgs matches args
+
+  alt policy violation block/warn
+    G-->>P: finish policy_violation
+    G-->>P: onViolation logged
+  else audit mode violation
+    G->>P: pass tool_call done
+    G-->>P: onViolation logged
+    P->>X: execute (app decides)
+  else clean
+    G->>P: pass tool_call done
+    P->>X: executeTool()
+  end

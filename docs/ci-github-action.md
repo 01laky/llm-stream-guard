@@ -1,6 +1,6 @@
 # GitHub Action — CI audit
 
-**Status:** **0.5.0** — composite action at [`action/`](../action/) wrapping `llm-stream-guard` CLI.
+**Status:** **0.7.0** — composite action at [`action/`](../action/) wrapping `llm-stream-guard` CLI. See also [Getting started](./getting-started.md) and [Documentation map](./docs-map.md).
 
 ![CI action flow](https://raw.githubusercontent.com/01laky/llm-stream-guard/main/docs/img/ci-action-flow.svg)
 

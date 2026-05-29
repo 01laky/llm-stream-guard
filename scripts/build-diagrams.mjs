@@ -20,6 +20,11 @@ const diagrams = [
 	"migration-path.mmd",
 	"ci-action-flow.mmd",
 	"test-coverage.mmd",
+	"stream-anatomy.mmd",
+	"getting-started-journey.mmd",
+	"tool-call-lifecycle.mmd",
+	"policy-rules-map.mmd",
+	"static-audit-flow.mmd",
 ];
 
 for (const name of diagrams) {
